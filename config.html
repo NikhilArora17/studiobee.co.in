@@ -628,7 +628,7 @@
 (function () {
 
   // Works whether opened via serve.mjs (:3000) or VS Code Live Server (:5500)
-  var API = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+  var API = (window.location.port === '5500') ? 'http://localhost:3000' : '';
 
   // ── Helpers ─────────────────────────────────────────────────────────────
 
@@ -1331,7 +1331,7 @@
 <script>
 (function() {
   var adminKey = window.__ADMIN_KEY__ || '';
-  var API = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+  var API = (window.location.port === '5500') ? 'http://localhost:3000' : '';
   var allData = [];
   var currentRange = 'today';
 
