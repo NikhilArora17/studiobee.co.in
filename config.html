@@ -737,7 +737,7 @@
   function checkServerStatus(badge) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', API + '/ping', true);
-    xhr.timeout = 2000;
+    xhr.timeout = 8000;
     xhr.onload = function () {
       if (xhr.status === 200) {
         badge.textContent = 'Server ready';
@@ -1054,7 +1054,7 @@
 
         xhr.onerror = function () {
           zoneText.textContent     = 'Upload image or video';
-          uploadStatus.textContent = '✗ No server response — restart: node serve.mjs';
+          uploadStatus.textContent = '✗ No server response — server may be waking up, try again in 30s';
           uploadStatus.className   = 'upload-status error';
         };
 
