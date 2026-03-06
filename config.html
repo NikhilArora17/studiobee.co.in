@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudioBee — Config</title>
+  <script src="content.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      background: #EEEDE8;
+      color: #0A0A0A;
+      font-size: 14px;
+    }
+
+    /* ── SIDEBAR ── */
+    aside {
+      width: 230px;
+      flex-shrink: 0;
+      background: #0A0A0A;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 28px 16px 24px;
+    }
+
+    .sb-brand {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(251,251,251,0.4);
+      margin-bottom: 32px;
+      padding: 0 4px;
+    }
+
+    .sb-nav-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(251,251,251,0.25);
+      margin-bottom: 6px;
+      padding: 0 4px;
+    }
+
+    .nav-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 9px 12px;
+      border: none;
+      background: transparent;
+      color: rgba(251,251,251,0.5);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      margin-bottom: 2px;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.06); color: #FBFBFB; }
+    .nav-btn.active { background: #2F48DF; color: #FBFBFB; font-weight: 600; }
+
+    .sb-spacer { flex: 1; min-height: 24px; }
+
+    .sb-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .action-btn {
+      display: block;
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: rgba(251,251,251,0.65);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .action-btn:hover { background: rgba(255,255,255,0.07); color: #FBFBFB; border-color: rgba(255,255,255,0.18); }
+    .action-btn.primary { background: #2F48DF; border-color: transparent; color: #fff; font-weight: 600; }
+    .action-btn.primary:hover { background: #3d57f0; }
+    .action-btn.danger { color: rgba(255,110,110,0.75); border-color: rgba(255,110,110,0.2); }
+    .action-btn.danger:hover { background: rgba(255,110,110,0.08); color: #ff6e6e; border-color: rgba(255,110,110,0.35); }
+
+    #save-status {
+      font-size: 12px;
+      color: rgba(251,251,251,0.3);
+      padding: 4px 4px 0;
+      min-height: 20px;
+      letter-spacing: 0.01em;
+    }
+    #save-status.saved { color: #4ade80; }
+    #save-status.error { color: #f87171; }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px 48px;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .panel-header { margin-bottom: 28px; }
+    .panel-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .panel-header p {
+      font-size: 13px;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* ── BLOCKS ── */
+    .section-block {
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.07);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .section-block > h2 {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      margin-bottom: 18px;
+    }
+
+    .item-card {
+      background: #F6F5F1;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 18px 20px;
+      margin-bottom: 10px;
+    }
+    .item-card:last-child { margin-bottom: 0; }
+
+    .card-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .card-hdr .card-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: #666;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ── FIELDS ── */
+    .field-group { margin-bottom: 12px; }
+    .field-group:last-child { margin-bottom: 0; }
+
+    .field-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .field-input {
+      display: block;
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.13);
+      background: #FFFFFF;
+      font-family: inherit;
+      font-size: 14px;
+      color: #0A0A0A;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    .field-input:focus {
+      outline: none;
+      border-color: #2F48DF;
+      box-shadow: 0 0 0 3px rgba(47,72,223,0.1);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    select.field-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+      cursor: pointer;
+    }
+
+    /* ── ICON PICKER ── */
+    .icon-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+    .icon-opt {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      border: 1.5px solid rgba(0,0,0,0.1);
+      background: #FFFFFF;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      color: #666;
+      padding: 0;
+    }
+    .icon-opt:hover { border-color: #2F48DF; color: #2F48DF; }
+    .icon-opt.selected { border-color: #2F48DF; background: rgba(47,72,223,0.09); color: #2F48DF; }
+    .icon-opt svg { width: 15px; height: 15px; }
+
+    /* ── TAGS ── */
+    .tags-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.13);
+      background: #FFFFFF;
+      cursor: text;
+      min-height: 40px;
+      align-items: center;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .tags-wrap:focus-within {
+      border-color: #2F48DF;
+      box-shadow: 0 0 0 3px rgba(47,72,223,0.1);
+    }
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 8px 3px 9px;
+      background: rgba(47,72,223,0.1);
+      color: #2F48DF;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .tag-x {
+      border: none;
+      background: none;
+      color: #2F48DF;
+      cursor: pointer;
+      padding: 0 1px;
+      font-size: 15px;
+      line-height: 1;
+      opacity: 0.5;
+      transition: opacity 0.1s;
+    }
+    .tag-x:hover { opacity: 1; }
+    .tag-input {
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 14px;
+      color: #0A0A0A;
+      background: transparent;
+      min-width: 80px;
+      flex: 1;
+      padding: 2px 0;
+    }
+
+    /* ── MEDIA PREVIEW ── */
+    .media-prev {
+      margin-top: 8px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #e8e7e2;
+      max-height: 150px;
+      display: flex;
+    }
+    .media-prev:empty { display: none; }
+    .media-prev img,
+    .media-prev video {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── UPLOAD ZONE ── */
+    .upload-zone {
+      position: relative;
+      border: 1.5px dashed rgba(47,72,223,0.28);
+      border-radius: 10px;
+      padding: 18px 16px 14px;
+      cursor: pointer;
+      background: rgba(47,72,223,0.03);
+      transition: border-color 0.15s ease, background 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      margin-top: 4px;
+      text-align: center;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: #2F48DF;
+      background: rgba(47,72,223,0.07);
+    }
+    .upload-zone input[type="file"] {
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+    }
+    .upload-zone-icon { color: #2F48DF; display: flex; pointer-events: none; }
+    .upload-zone-text {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #2F48DF;
+      pointer-events: none;
+    }
+    .upload-zone-sub {
+      font-size: 11px;
+      color: rgba(0,0,0,0.35);
+      pointer-events: none;
+      letter-spacing: 0.02em;
+    }
+    .upload-status {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      min-height: 16px;
+      padding: 3px 0;
+    }
+    .upload-status.uploading { color: #888; }
+    .upload-status.success   { color: #16a34a; }
+    .upload-status.error     { color: #dc2626; }
+
+    /* Server status badge inside upload zone */
+    .server-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 100px;
+      pointer-events: none;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+    .server-badge.ok      { background: rgba(22,163,74,0.1);  color: #16a34a; }
+    .server-badge.offline { background: rgba(220,38,38,0.1);  color: #dc2626; }
+    .server-badge.checking{ background: rgba(0,0,0,0.05);     color: #999; }
+    .server-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── BUTTONS ── */
+    .add-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1.5px dashed rgba(0,0,0,0.18);
+      background: transparent;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #999;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    .add-btn:hover { border-color: #2F48DF; color: #2F48DF; background: rgba(47,72,223,0.04); }
+
+    .btn-danger-sm {
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(210,50,50,0.2);
+      background: rgba(210,50,50,0.05);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #cc3333;
+      transition: background 0.15s;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .btn-danger-sm:hover { background: rgba(210,50,50,0.12); }
+
+    .icon-picker-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    /* ── Analytics panel ── */
+    .an-range-btn {
+      padding: 6px 14px; border-radius: 20px; border: 1.5px solid #ccc;
+      background: #fff; cursor: pointer; font-size: 13px; font-family: inherit;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .an-range-btn.active { background: #0A0A0A; color: #fff; border-color: #0A0A0A; }
+    .an-card {
+      background: #fff; border-radius: 10px; padding: 16px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    }
+    .an-label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .an-value { font-size: 28px; font-weight: 700; }
+    .an-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .an-table th { text-align: left; padding: 6px 8px; border-bottom: 2px solid #e0e0e0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; }
+    .an-table td { padding: 6px 8px; border-bottom: 1px solid #eee; }
+    .an-table tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+<aside>
+  <div class="sb-brand">StudioBee Config</div>
+  <div class="sb-nav-label">Sections</div>
+  <nav>
+    <button class="nav-btn active" data-panel="services">What We Do</button>
+    <button class="nav-btn" data-panel="projects">Projects</button>
+    <button class="nav-btn" data-panel="stats">Stats</button>
+    <button class="nav-btn" data-panel="process">Process</button>
+    <button class="nav-btn" data-panel="testimonials">Testimonials</button>
+    <button class="nav-btn" data-panel="team">Team</button>
+    <button class="nav-btn" data-panel="analytics">Analytics</button>
+  </nav>
+  <div class="sb-spacer"></div>
+  <div class="sb-actions">
+    <button class="action-btn primary" onclick="previewSite()">↗ Preview Site</button>
+    <button class="action-btn" onclick="exportJSON()">⬇ Export JSON</button>
+    <button class="action-btn danger" onclick="resetDefaults()">↺ Reset to Defaults</button>
+    <div id="save-status"></div>
+  </div>
+</aside>
+
+<main>
+
+  <!-- ── SERVICES ── -->
+  <section id="panel-services" class="panel active">
+    <div class="panel-header">
+      <h1>What We Do</h1>
+      <p>Edit the section heading, intro text, and individual service cards.</p>
+    </div>
+
+    <div class="section-block">
+      <h2>Section Header</h2>
+      <div class="field-group">
+        <label class="field-label">Heading</label>
+        <textarea id="svc-heading" class="field-input" rows="2" placeholder="Use \n for line breaks"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Subheading</label>
+        <textarea id="svc-subheading" class="field-input" rows="2"></textarea>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <h2>Service Cards</h2>
+      <div id="services-items"></div>
+      <button class="add-btn" onclick="addService()">+ Add Service</button>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ── -->
+  <section id="panel-projects" class="panel">
+    <div class="panel-header">
+      <h1>Projects</h1>
+      <p>Manage the project cards shown in the work carousel.</p>
+    </div>
+    <div class="section-block">
+      <h2>Project Cards</h2>
+      <div id="projects-items"></div>
+      <button class="add-btn" onclick="addProject()">+ Add Project</button>
+    </div>
+  </section>
+
+  <!-- ── STATS ── -->
+  <section id="panel-stats" class="panel">
+    <div class="panel-header">
+      <h1>Stats</h1>
+      <p>Control the numbers and labels shown in the stats bar.</p>
+    </div>
+    <div class="section-block">
+      <h2>Stat Items</h2>
+      <div id="stats-items"></div>
+      <button class="add-btn" onclick="addStat()">+ Add Stat</button>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ── -->
+  <section id="panel-process" class="panel">
+    <div class="panel-header">
+      <h1>Process</h1>
+      <p>Edit the process section heading and step cards.</p>
+    </div>
+
+    <div class="section-block">
+      <h2>Section Header</h2>
+      <div class="field-group">
+        <label class="field-label">Heading</label>
+        <textarea id="proc-heading" class="field-input" rows="2" placeholder="Use \n for line breaks"></textarea>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <h2>Process Steps</h2>
+      <div id="process-items"></div>
+      <button class="add-btn" onclick="addStep()">+ Add Step</button>
+    </div>
+  </section>
+
+  <!-- ── TEAM ── -->
+  <section id="panel-team" class="panel">
+    <div class="panel-header">
+      <h1>Meet the Team</h1>
+      <p>Manage team member cards shown in the Team section.</p>
+    </div>
+    <div class="section-block">
+      <h2>Team Members</h2>
+      <div id="team-items"></div>
+      <button class="add-btn" onclick="addTeamMember()">+ Add Member</button>
+    </div>
+  </section>
+
+  <!-- ── TESTIMONIALS ── -->
+  <section id="panel-testimonials" class="panel">
+    <div class="panel-header">
+      <h1>Testimonials</h1>
+      <p>Manage the client quotes shown in the stacked card carousel.</p>
+    </div>
+    <div class="section-block">
+      <h2>Testimonial Cards</h2>
+      <div id="testimonials-items"></div>
+      <button class="add-btn" onclick="addTestimonial()">+ Add Testimonial</button>
+    </div>
+  </section>
+
+  <section id="panel-analytics" class="panel">
+    <div class="panel-header">
+      <h1>Analytics</h1>
+      <p>Visitor data collected from your live site.</p>
+    </div>
+    <div class="section-block" style="margin-bottom:16px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+        <button class="an-range-btn active" data-range="today">Today</button>
+        <button class="an-range-btn" data-range="7">Last 7 days</button>
+        <button class="an-range-btn" data-range="30">Last 30 days</button>
+        <button class="an-range-btn" data-range="all">All time</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px;">
+        <div class="an-card"><div class="an-label">Total Visits</div><div class="an-value" id="an-visits">—</div></div>
+        <div class="an-card"><div class="an-label">Unique Sessions</div><div class="an-value" id="an-sessions">—</div></div>
+        <div class="an-card"><div class="an-label">Avg. Time on Page</div><div class="an-value" id="an-avgtime">—</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+        <div>
+          <h2 style="margin-bottom:8px;">Top Pages</h2>
+          <table class="an-table" id="an-pages"><thead><tr><th>Page</th><th>Visits</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div>
+          <h2 style="margin-bottom:8px;">Top Countries</h2>
+          <table class="an-table" id="an-countries"><thead><tr><th>Country</th><th>Visits</th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+      <h2 style="margin-bottom:8px;">Recent Visits</h2>
+      <table class="an-table" id="an-recent"><thead><tr><th>Time</th><th>Page</th><th>Country</th><th>Duration</th></tr></thead><tbody></tbody></table>
+      <p id="an-error" style="color:#cc3333;margin-top:12px;display:none;"></p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function () {
+
+  // Works whether opened via serve.mjs (:3000) or VS Code Live Server (:5500)
+  var API = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+
+  // ── Helpers ─────────────────────────────────────────────────────────────
+
+  function el(tag, props) {
+    var e = document.createElement(tag);
+    if (props) Object.assign(e, props);
+    return e;
+  }
+
+  function fieldGroup(labelText, inputType, value, onChange) {
+    var group = el('div', { className: 'field-group' });
+    group.appendChild(el('label', { className: 'field-label', textContent: labelText }));
+    var input;
+    if (inputType === 'textarea') {
+      input = el('textarea', { className: 'field-input', rows: 3 });
+      input.value = value != null ? value : '';
+    } else {
+      input = el('input', { className: 'field-input', type: inputType || 'text' });
+      input.value = value != null ? value : '';
+    }
+    input.oninput = function () { onChange(input.value); };
+    group.appendChild(input);
+    return group;
+  }
+
+  function iconPicker(selectedName, onSelect) {
+    var wrap = el('div', { className: 'field-group' });
+    wrap.appendChild(el('span', { className: 'icon-picker-label', textContent: 'Icon' }));
+    var picker = el('div', { className: 'icon-picker' });
+    var icons = window.SB_ICONS || {};
+    Object.keys(icons).forEach(function (name) {
+      var btn = el('button', { className: 'icon-opt' + (name === selectedName ? ' selected' : ''), title: name });
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + icons[name] + '</svg>';
+      btn.onclick = function () {
+        picker.querySelectorAll('.icon-opt').forEach(function (b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        onSelect(name);
+      };
+      picker.appendChild(btn);
+    });
+    wrap.appendChild(picker);
+    return wrap;
+  }
+
+  function tagsInput(values, onChange) {
+    var group = el('div', { className: 'field-group' });
+    group.appendChild(el('label', { className: 'field-label', textContent: 'Services / Tags' }));
+    var wrap = el('div', { className: 'tags-wrap' });
+
+    function rebuild() {
+      wrap.innerHTML = '';
+      values.forEach(function (v, i) {
+        var chip = el('span', { className: 'tag-chip' });
+        chip.textContent = v;
+        var x = el('button', { className: 'tag-x', textContent: '×' });
+        x.onclick = function (e) {
+          e.preventDefault();
+          values.splice(i, 1);
+          onChange([].concat(values));
+          rebuild();
+        };
+        chip.appendChild(x);
+        wrap.appendChild(chip);
+      });
+      var inp = el('input', { className: 'tag-input', type: 'text' });
+      inp.placeholder = values.length ? '' : 'Add tag, press Enter…';
+      inp.onkeydown = function (e) {
+        if ((e.key === 'Enter' || e.key === ',') && inp.value.trim()) {
+          e.preventDefault();
+          values.push(inp.value.trim());
+          onChange([].concat(values));
+          rebuild();
+        } else if (e.key === 'Backspace' && !inp.value && values.length) {
+          values.pop();
+          onChange([].concat(values));
+          rebuild();
+        }
+      };
+      wrap.appendChild(inp);
+    }
+    rebuild();
+    wrap.onclick = function () { wrap.querySelector('input').focus(); };
+    group.appendChild(wrap);
+    return group;
+  }
+
+  function mediaPreview(url, type) {
+    var prev = el('div', { className: 'media-prev' });
+    if (!url) return prev;
+    if (type === 'video') {
+      var v = el('video', { src: url, muted: true, loop: true, autoplay: true });
+      v.setAttribute('playsinline', '');
+      prev.appendChild(v);
+    } else {
+      var img = el('img', { src: url, alt: '' });
+      prev.appendChild(img);
+    }
+    return prev;
+  }
+
+  function refreshPreview(card, url, type) {
+    var old = card.querySelector('.media-prev');
+    if (old) old.replaceWith(mediaPreview(url, type));
+  }
+
+  function checkServerStatus(badge) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', API + '/ping', true);
+    xhr.timeout = 2000;
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        badge.textContent = 'Server ready';
+        badge.className   = 'server-badge ok';
+      } else {
+        badge.textContent = 'Server error';
+        badge.className   = 'server-badge offline';
+      }
+    };
+    xhr.onerror = xhr.ontimeout = function () {
+      badge.textContent = 'Server offline';
+      badge.className   = 'server-badge offline';
+    };
+    xhr.send();
+  }
+
+  // ── State ─────────────────────────────────────────────────────────────
+
+  var state = JSON.parse(JSON.stringify(window.SC || {}));
+
+  // ── Auto-publish on load ───────────────────────────────────────────────
+  // If localStorage has saved config, immediately push it to the server so
+  // mobile devices (different origin) also see the latest content.
+  (function() {
+    var existing = localStorage.getItem('studiobee_content');
+    if (existing) {
+      fetch(API + '/save-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Key': (window.__ADMIN_KEY__ || '') },
+        body: existing,
+      }).catch(function() {});
+    }
+  })();
+
+  // ── Auto-save ─────────────────────────────────────────────────────────
+
+  var saveTimer;
+  function queueSave() {
+    clearTimeout(saveTimer);
+    setStatus('Saving…', '');
+    saveTimer = setTimeout(commit, 600);
+  }
+
+  function commit() {
+    try {
+      var json = JSON.stringify(state);
+      localStorage.setItem('studiobee_content', json);
+      // Also save server-side so all devices (mobile, desktop) load the same config
+      fetch(API + '/save-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Key': (window.__ADMIN_KEY__ || '') },
+        body: json,
+      }).then(function(r) {
+        setStatus(r.ok ? '✓ Saved' : '⚠ Server save failed', r.ok ? 'saved' : 'error');
+      }).catch(function() {
+        setStatus('✓ Saved locally', 'saved');
+      });
+      setStatus('Saving…', '');
+    } catch (e) {
+      setStatus('⚠ Error saving', 'error');
+    }
+  }
+
+  function setStatus(msg, cls) {
+    var s = document.getElementById('save-status');
+    s.textContent = msg;
+    s.className = cls;
+  }
+
+  // ── Nav ───────────────────────────────────────────────────────────────
+
+  document.querySelectorAll('.nav-btn').forEach(function (btn) {
+    btn.onclick = function () {
+      document.querySelectorAll('.nav-btn').forEach(function (b) { b.classList.remove('active'); });
+      document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+    };
+  });
+
+  // ── Sidebar actions ───────────────────────────────────────────────────
+
+  window.previewSite = function () { window.open('index.html', '_blank'); };
+
+  window.exportJSON = function () {
+    var blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    var a = el('a', { href: URL.createObjectURL(blob), download: 'studiobee_content.json' });
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  window.resetDefaults = function () {
+    if (!confirm('Reset all content to defaults? This cannot be undone.')) return;
+    localStorage.removeItem('studiobee_content');
+    location.reload();
+  };
+
+  // ── SERVICES ──────────────────────────────────────────────────────────
+
+  function renderServices() {
+    var svcH = document.getElementById('svc-heading');
+    var svcS = document.getElementById('svc-subheading');
+    svcH.value = (state.services && state.services.heading) || '';
+    svcS.value = (state.services && state.services.subheading) || '';
+    svcH.oninput = function () {
+      if (!state.services) state.services = {};
+      state.services.heading = svcH.value;
+      queueSave();
+    };
+    svcS.oninput = function () {
+      if (!state.services) state.services = {};
+      state.services.subheading = svcS.value;
+      queueSave();
+    };
+
+    var container = document.getElementById('services-items');
+    container.innerHTML = '';
+    var items = (state.services && state.services.items) || [];
+
+    items.forEach(function (item, idx) {
+      var card = el('div', { className: 'item-card' });
+
+      var hdr = el('div', { className: 'card-hdr' });
+      hdr.appendChild(el('span', { className: 'card-num', textContent: 'Service ' + (idx + 1) }));
+      var rm = el('button', { className: 'btn-danger-sm', textContent: 'Remove' });
+      rm.onclick = function () { state.services.items.splice(idx, 1); renderServices(); queueSave(); };
+      hdr.appendChild(rm);
+      card.appendChild(hdr);
+
+      card.appendChild(iconPicker(item.iconName, function (name) {
+        state.services.items[idx].iconName = name;
+        queueSave();
+      }));
+
+      card.appendChild(fieldGroup('Title', 'text', item.title, function (v) {
+        state.services.items[idx].title = v; queueSave();
+      }));
+      card.appendChild(fieldGroup('Description', 'textarea', item.body, function (v) {
+        state.services.items[idx].body = v; queueSave();
+      }));
+      card.appendChild(fieldGroup('Link Text', 'text', item.linkText, function (v) {
+        state.services.items[idx].linkText = v; queueSave();
+      }));
+
+      container.appendChild(card);
+    });
+  }
+
+  window.addService = function () {
+    if (!state.services) state.services = { heading: '', subheading: '', items: [] };
+    if (!state.services.items) state.services.items = [];
+    state.services.items.push({ iconName: 'star', title: 'New Service', body: 'Describe this service.', linkText: 'Get started' });
+    renderServices();
+    queueSave();
+    document.getElementById('services-items').lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  // ── PROJECTS ──────────────────────────────────────────────────────────
+
+  function renderProjects() {
+    var container = document.getElementById('projects-items');
+    container.innerHTML = '';
+    var items = state.projects || [];
+
+    items.forEach(function (item, idx) {
+      var card = el('div', { className: 'item-card' });
+
+      var hdr = el('div', { className: 'card-hdr' });
+      hdr.appendChild(el('span', { className: 'card-num', textContent: 'Project ' + (idx + 1) }));
+      var rm = el('button', { className: 'btn-danger-sm', textContent: 'Remove' });
+      rm.onclick = function () { state.projects.splice(idx, 1); renderProjects(); queueSave(); };
+      hdr.appendChild(rm);
+      card.appendChild(hdr);
+
+      // Title + Type row
+      var row1 = el('div', { className: 'field-row' });
+      row1.appendChild(fieldGroup('Title', 'text', item.title, function (v) {
+        state.projects[idx].title = v; queueSave();
+      }));
+      row1.appendChild(fieldGroup('Type', 'text', item.type, function (v) {
+        state.projects[idx].type = v; queueSave();
+      }));
+      card.appendChild(row1);
+
+      // Owner
+      card.appendChild(fieldGroup('Owner / Client Name', 'text', item.owner, function (v) {
+        state.projects[idx].owner = v; queueSave();
+      }));
+
+      // Tags
+      var tagVals = [].concat(item.services || []);
+      card.appendChild(tagsInput(tagVals, function (vals) {
+        state.projects[idx].services = vals; queueSave();
+      }));
+
+      // Description
+      card.appendChild(fieldGroup('Description', 'textarea', item.desc, function (v) {
+        state.projects[idx].desc = v; queueSave();
+      }));
+
+      // ── Media: upload zone + URL fallback + type select ──────────────────
+
+      // Upload drop zone
+      var mediaGroup = el('div', { className: 'field-group' });
+      mediaGroup.appendChild(el('label', { className: 'field-label', textContent: 'Media' }));
+
+      var zone = el('div', { className: 'upload-zone' });
+      var fileInput = el('input');
+      fileInput.type   = 'file';
+      fileInput.accept = 'image/*,video/mp4,video/webm,video/quicktime,video/x-msvideo';
+      fileInput.style.cssText = 'position:absolute;top:0;right:0;bottom:0;left:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2;';
+
+      var iconWrap = el('span', { className: 'upload-zone-icon' });
+      iconWrap.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
+      var zoneText = el('span', { className: 'upload-zone-text', textContent: 'Upload image or video' });
+      var zoneSub  = el('div',  { className: 'upload-zone-sub',  textContent: 'JPG · PNG · WEBP · MP4 · MOV' });
+
+      var serverBadge = el('span', { className: 'server-badge checking', textContent: '…' });
+      zone.appendChild(fileInput);
+      zone.appendChild(serverBadge);
+      zone.appendChild(iconWrap);
+      zone.appendChild(zoneText);
+      zone.appendChild(zoneSub);
+      mediaGroup.appendChild(zone);
+      checkServerStatus(serverBadge);
+
+      // Drag-over visual feedback
+      fileInput.addEventListener('dragover',  function () { zone.classList.add('drag-over'); });
+      fileInput.addEventListener('dragleave', function () { zone.classList.remove('drag-over'); });
+      fileInput.addEventListener('drop',      function () { zone.classList.remove('drag-over'); });
+
+      // Upload status line
+      var uploadStatus = el('div', { className: 'upload-status' });
+      mediaGroup.appendChild(uploadStatus);
+      card.appendChild(mediaGroup);
+
+      // URL fallback + type select in a row
+      var row2 = el('div', { className: 'field-row' });
+
+      var urlGroup = el('div', { className: 'field-group' });
+      urlGroup.appendChild(el('label', { className: 'field-label', textContent: 'or URL' }));
+      var urlInput = el('input', { className: 'field-input', type: 'text', value: item.media || '', placeholder: 'https://… or /media/…' });
+      urlInput.oninput = function () {
+        state.projects[idx].media = urlInput.value;
+        refreshPreview(card, urlInput.value, state.projects[idx].mediaType);
+        queueSave();
+      };
+      urlGroup.appendChild(urlInput);
+      row2.appendChild(urlGroup);
+
+      var typeGroup = el('div', { className: 'field-group' });
+      typeGroup.appendChild(el('label', { className: 'field-label', textContent: 'Type' }));
+      var sel = el('select', { className: 'field-input' });
+      ['image', 'video'].forEach(function (opt) {
+        var o = el('option', { value: opt, textContent: opt.charAt(0).toUpperCase() + opt.slice(1) });
+        if (item.mediaType === opt) o.selected = true;
+        sel.appendChild(o);
+      });
+      sel.onchange = function () {
+        state.projects[idx].mediaType = sel.value;
+        refreshPreview(card, state.projects[idx].media, sel.value);
+        queueSave();
+      };
+      typeGroup.appendChild(sel);
+      row2.appendChild(typeGroup);
+
+      card.appendChild(row2);
+      card.appendChild(mediaPreview(item.media, item.mediaType));
+
+      // File upload handler — uses XHR for reliable binary upload + progress
+      fileInput.onchange = function () {
+        var file = fileInput.files[0];
+        if (!file) return;
+
+        var isVideo = file.type.startsWith('video/');
+        state.projects[idx].mediaType = isVideo ? 'video' : 'image';
+        sel.value = isVideo ? 'video' : 'image';
+
+        uploadStatus.textContent = 'Uploading…';
+        uploadStatus.className   = 'upload-status uploading';
+        zoneText.textContent     = 'Uploading…';
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', API + '/upload', true);
+        xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
+
+        xhr.upload.onprogress = function (e) {
+          if (e.lengthComputable && e.total > 100000) {
+            uploadStatus.textContent = 'Uploading… ' + Math.round(e.loaded / e.total * 100) + '%';
+          }
+        };
+
+        xhr.onload = function () {
+          zoneText.textContent = 'Upload image or video';
+          if (xhr.status === 200) {
+            try {
+              var data = JSON.parse(xhr.responseText);
+              state.projects[idx].media = data.url;
+              urlInput.value            = data.url;
+              refreshPreview(card, data.url, state.projects[idx].mediaType);
+              uploadStatus.textContent = '✓ ' + file.name;
+              uploadStatus.className   = 'upload-status success';
+              setTimeout(function () { uploadStatus.textContent = ''; }, 4000);
+              queueSave();
+            } catch (e) {
+              uploadStatus.textContent = '✗ Bad server response';
+              uploadStatus.className   = 'upload-status error';
+            }
+          } else {
+            uploadStatus.textContent = '✗ Error ' + xhr.status + (xhr.responseText ? ': ' + xhr.responseText.slice(0, 80) : '');
+            uploadStatus.className   = 'upload-status error';
+          }
+        };
+
+        xhr.onerror = function () {
+          zoneText.textContent     = 'Upload image or video';
+          uploadStatus.textContent = '✗ No server response — restart: node serve.mjs';
+          uploadStatus.className   = 'upload-status error';
+        };
+
+        xhr.send(file);
+      };
+      container.appendChild(card);
+    });
+  }
+
+  window.addProject = function () {
+    if (!state.projects) state.projects = [];
+    state.projects.push({ title: 'New Project', type: 'Type', owner: '', services: [], desc: 'Project description.', media: '', mediaType: 'image' });
+    renderProjects();
+    queueSave();
+    document.getElementById('projects-items').lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  // ── STATS ─────────────────────────────────────────────────────────────
+
+  function renderStats() {
+    var container = document.getElementById('stats-items');
+    container.innerHTML = '';
+    var items = state.stats || [];
+
+    items.forEach(function (item, idx) {
+      var card = el('div', { className: 'item-card' });
+
+      var hdr = el('div', { className: 'card-hdr' });
+      hdr.appendChild(el('span', { className: 'card-num', textContent: 'Stat ' + (idx + 1) }));
+      var rm = el('button', { className: 'btn-danger-sm', textContent: 'Remove' });
+      rm.onclick = function () { state.stats.splice(idx, 1); renderStats(); queueSave(); };
+      hdr.appendChild(rm);
+      card.appendChild(hdr);
+
+      card.appendChild(fieldGroup('Number', 'text', item.number, function (v) {
+        state.stats[idx].number = v; queueSave();
+      }));
+      card.appendChild(fieldGroup('Label', 'textarea', item.label, function (v) {
+        state.stats[idx].label = v; queueSave();
+      }));
+
+      container.appendChild(card);
+    });
+  }
+
+  window.addStat = function () {
+    if (!state.stats) state.stats = [];
+    state.stats.push({ number: '0', label: 'New stat description' });
+    renderStats();
+    queueSave();
+    document.getElementById('stats-items').lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  // ── PROCESS ───────────────────────────────────────────────────────────
+
+  function renderProcess() {
+    var ph = document.getElementById('proc-heading');
+    ph.value = (state.process && state.process.heading) || '';
+    ph.oninput = function () {
+      if (!state.process) state.process = {};
+      state.process.heading = ph.value;
+      queueSave();
+    };
+
+    var container = document.getElementById('process-items');
+    container.innerHTML = '';
+    var items = (state.process && state.process.items) || [];
+
+    items.forEach(function (item, idx) {
+      var card = el('div', { className: 'item-card' });
+
+      var hdr = el('div', { className: 'card-hdr' });
+      hdr.appendChild(el('span', { className: 'card-num', textContent: 'Step ' + (idx + 1) }));
+      var rm = el('button', { className: 'btn-danger-sm', textContent: 'Remove' });
+      rm.onclick = function () { state.process.items.splice(idx, 1); renderProcess(); queueSave(); };
+      hdr.appendChild(rm);
+      card.appendChild(hdr);
+
+      card.appendChild(fieldGroup('Title', 'text', item.title, function (v) {
+        state.process.items[idx].title = v; queueSave();
+      }));
+      card.appendChild(fieldGroup('Body', 'textarea', item.body, function (v) {
+        state.process.items[idx].body = v; queueSave();
+      }));
+
+      container.appendChild(card);
+    });
+  }
+
+  window.addStep = function () {
+    if (!state.process) state.process = { heading: '', items: [] };
+    if (!state.process.items) state.process.items = [];
+    state.process.items.push({ title: 'New Step', body: 'Describe this step.' });
+    renderProcess();
+    queueSave();
+    document.getElementById('process-items').lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  // ── Testimonials ──────────────────────────────────────────────────────
+
+  function renderTestimonials() {
+    if (!state.testimonials) state.testimonials = [];
+    var container = document.getElementById('testimonials-items');
+    container.innerHTML = '';
+    state.testimonials.forEach(function (item, idx) {
+      var card = el('div', { className: 'item-card' });
+      var rm = el('button', { className: 'remove-btn', textContent: '×' });
+      rm.onclick = function () { state.testimonials.splice(idx, 1); renderTestimonials(); queueSave(); };
+      card.appendChild(rm);
+      card.appendChild(fieldGroup('Quote', 'textarea', item.quote, function (v) { state.testimonials[idx].quote = v; queueSave(); }, { rows: 3, placeholder: 'Enter client quote…' }));
+      card.appendChild(fieldGroup('Name', 'text', item.name, function (v) { state.testimonials[idx].name = v; queueSave(); }, { placeholder: 'e.g. James Morton' }));
+      card.appendChild(fieldGroup('Role / Company', 'text', item.role, function (v) { state.testimonials[idx].role = v; queueSave(); }, { placeholder: 'e.g. Founder, Meridian Financial' }));
+      container.appendChild(card);
+    });
+  }
+
+  window.addTestimonial = function () {
+    if (!state.testimonials) state.testimonials = [];
+    state.testimonials.push({ quote: 'Enter client quote here.', name: 'Client Name', role: 'Role, Company' });
+    renderTestimonials();
+    queueSave();
+    document.getElementById('testimonials-items').lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  // ── TEAM ──────────────────────────────────────────────────────────────
+
+  function renderTeam() {
+    if (!state.team) state.team = [];
+    var container = document.getElementById('team-items');
+    container.innerHTML = '';
+    state.team.forEach(function (member, idx) {
+      var card = el('div', { className: 'item-card' });
+
+      var hdr = el('div', { className: 'card-hdr' });
+      hdr.appendChild(el('span', { className: 'card-num', textContent: 'Member ' + (idx + 1) }));
+      var rm = el('button', { className: 'btn-danger-sm', textContent: 'Remove' });
+      rm.onclick = function () { state.team.splice(idx, 1); renderTeam(); queueSave(); };
+      hdr.appendChild(rm);
+      card.appendChild(hdr);
+
+      // Name + Role row
+      var row1 = el('div', { className: 'field-row' });
+      row1.appendChild(fieldGroup('Name', 'text', member.name, function (v) {
+        state.team[idx].name = v; queueSave();
+      }));
+      row1.appendChild(fieldGroup('Role / Title', 'text', member.role, function (v) {
+        state.team[idx].role = v; queueSave();
+      }));
+      card.appendChild(row1);
+
+      // Bio
+      card.appendChild(fieldGroup('Bio', 'textarea', member.bio, function (v) {
+        state.team[idx].bio = v; queueSave();
+      }));
+
+      // LinkedIn
+      card.appendChild(fieldGroup('LinkedIn URL', 'text', member.linkedin, function (v) {
+        state.team[idx].linkedin = v; queueSave();
+      }));
+
+      // Skills tags
+      var skillVals = [].concat(member.skills || []);
+      card.appendChild(tagsInput(skillVals, function (vals) {
+        state.team[idx].skills = vals; queueSave();
+      }));
+
+      // Photo upload zone
+      var mediaGroup = el('div', { className: 'field-group' });
+      mediaGroup.appendChild(el('label', { className: 'field-label', textContent: 'Photo' }));
+
+      var zone = el('div', { className: 'upload-zone' });
+      var fileInput = el('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.cssText = 'position:absolute;top:0;right:0;bottom:0;left:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2;';
+
+      var iconWrap = el('span', { className: 'upload-zone-icon' });
+      iconWrap.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
+      var zoneText  = el('span', { className: 'upload-zone-text', textContent: 'Upload photo' });
+      var zoneSub   = el('div',  { className: 'upload-zone-sub',  textContent: 'JPG · PNG · WEBP' });
+      var serverBadge2 = el('span', { className: 'server-badge checking', textContent: '…' });
+
+      zone.appendChild(fileInput);
+      zone.appendChild(serverBadge2);
+      zone.appendChild(iconWrap);
+      zone.appendChild(zoneText);
+      zone.appendChild(zoneSub);
+      mediaGroup.appendChild(zone);
+      checkServerStatus(serverBadge2);
+
+      var uploadStatus2 = el('div', { className: 'upload-status' });
+      mediaGroup.appendChild(uploadStatus2);
+      card.appendChild(mediaGroup);
+
+      // URL + preview row
+      var row2 = el('div', { className: 'field-row' });
+      var urlGroup = el('div', { className: 'field-group' });
+      urlGroup.appendChild(el('label', { className: 'field-label', textContent: 'or URL' }));
+      var urlInput2 = el('input', { className: 'field-input', type: 'text', value: member.photo || '', placeholder: 'https://… or /media/…' });
+      urlInput2.oninput = function () {
+        state.team[idx].photo = urlInput2.value;
+        refreshPreview(card, urlInput2.value, 'image');
+        queueSave();
+      };
+      urlGroup.appendChild(urlInput2);
+      row2.appendChild(urlGroup);
+      card.appendChild(row2);
+      card.appendChild(mediaPreview(member.photo, 'image'));
+
+      fileInput.onchange = function () {
+        var file = fileInput.files[0];
+        if (!file) return;
+        uploadStatus2.textContent = 'Uploading…';
+        uploadStatus2.className   = 'upload-status uploading';
+        zoneText.textContent      = 'Uploading…';
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', API + '/upload', true);
+        xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
+        xhr.onload = function () {
+          zoneText.textContent = 'Upload photo';
+          if (xhr.status === 200) {
+            try {
+              var data = JSON.parse(xhr.responseText);
+              state.team[idx].photo = data.url;
+              urlInput2.value = data.url;
+              refreshPreview(card, data.url, 'image');
+              uploadStatus2.textContent = '✓ ' + file.name;
+              uploadStatus2.className   = 'upload-status success';
+              setTimeout(function () { uploadStatus2.textContent = ''; }, 4000);
+              queueSave();
+            } catch (e) {
+              uploadStatus2.textContent = '✗ Bad server response';
+              uploadStatus2.className   = 'upload-status error';
+            }
+          } else {
+            uploadStatus2.textContent = '✗ Error ' + xhr.status;
+            uploadStatus2.className   = 'upload-status error';
+          }
+        };
+        xhr.onerror = function () {
+          zoneText.textContent      = 'Upload photo';
+          uploadStatus2.textContent = '✗ No server response';
+          uploadStatus2.className   = 'upload-status error';
+        };
+        xhr.send(file);
+      };
+
+      container.appendChild(card);
+    });
+  }
+
+  window.addTeamMember = function () {
+    if (!state.team) state.team = [];
+    state.team.push({ name: 'New Member', role: 'Role', bio: 'Bio goes here.', skills: [], photo: '', linkedin: '' });
+    renderTeam();
+    queueSave();
+    document.getElementById('team-items').lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  // ── Init ──────────────────────────────────────────────────────────────
+
+  renderServices();
+  renderProjects();
+  renderStats();
+  renderProcess();
+  renderTestimonials();
+  renderTeam();
+  setStatus('', '');
+
+})();
+</script>
+
+<!-- ── Analytics Tab JS ── -->
+<script>
+(function() {
+  var adminKey = window.__ADMIN_KEY__ || '';
+  var API = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+  var allData = [];
+  var currentRange = 'today';
+
+  function fetchAnalytics() {
+    var errEl = document.getElementById('an-error');
+    fetch(API + '/analytics', { headers: { 'X-Admin-Key': adminKey } })
+      .then(function(r) {
+        if (!r.ok) { errEl.textContent = 'Cannot load analytics (status ' + r.status + '). Is the server running?'; errEl.style.display = ''; return null; }
+        return r.json();
+      })
+      .then(function(data) {
+        if (!data) return;
+        errEl.style.display = 'none';
+        allData = data;
+        renderAnalytics(currentRange);
+      })
+      .catch(function() {
+        errEl.textContent = 'Cannot load analytics — is the server running with the admin key injected?';
+        errEl.style.display = '';
+      });
+  }
+
+  function filterByRange(data, range) {
+    if (range === 'all') return data;
+    var now = Date.now();
+    var ms = range === 'today' ? 86400000 : parseInt(range) * 86400000;
+    return data.filter(function(d) { return now - new Date(d.ts).getTime() < ms; });
+  }
+
+  function renderAnalytics(range) {
+    var filtered = filterByRange(allData, range);
+
+    // Summary
+    document.getElementById('an-visits').textContent = filtered.length;
+    var sessions = new Set(filtered.map(function(d) { return d.sid; })).size;
+    document.getElementById('an-sessions').textContent = sessions;
+    var withDur = filtered.filter(function(d) { return d.duration > 0; });
+    var avg = withDur.length ? Math.round(withDur.reduce(function(s, d) { return s + d.duration; }, 0) / withDur.length) : 0;
+    document.getElementById('an-avgtime').textContent = avg + 's';
+
+    // Top pages
+    var pages = {};
+    filtered.forEach(function(d) { pages[d.page] = (pages[d.page] || 0) + 1; });
+    var pRows = Object.entries(pages).sort(function(a,b){return b[1]-a[1];}).slice(0, 10);
+    document.querySelector('#an-pages tbody').innerHTML = pRows.map(function(r) {
+      return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
+    }).join('') || '<tr><td colspan="2" style="color:#aaa">No data</td></tr>';
+
+    // Top countries
+    var countries = {};
+    filtered.forEach(function(d) { if (d.country) countries[d.country] = (countries[d.country] || 0) + 1; });
+    var cRows = Object.entries(countries).sort(function(a,b){return b[1]-a[1];}).slice(0, 10);
+    document.querySelector('#an-countries tbody').innerHTML = cRows.map(function(r) {
+      return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
+    }).join('') || '<tr><td colspan="2" style="color:#aaa">No data</td></tr>';
+
+    // Recent visits
+    var recent = filtered.slice(-50).reverse();
+    document.querySelector('#an-recent tbody').innerHTML = recent.map(function(d) {
+      var t = d.ts ? new Date(d.ts).toLocaleString() : '—';
+      return '<tr><td>' + t + '</td><td>' + (d.page || '—') + '</td><td>' + (d.country || '—') + '</td><td>' + (d.duration || 0) + 's</td></tr>';
+    }).join('') || '<tr><td colspan="4" style="color:#aaa">No data</td></tr>';
+  }
+
+  // Wire up range buttons
+  document.querySelectorAll('.an-range-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.an-range-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentRange = btn.dataset.range;
+      renderAnalytics(currentRange);
+    });
+  });
+
+  // Load analytics when tab is activated
+  var analyticsLoaded = false;
+  document.querySelectorAll('.nav-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (btn.dataset.panel === 'analytics' && !analyticsLoaded) {
+        analyticsLoaded = true;
+        fetchAnalytics();
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

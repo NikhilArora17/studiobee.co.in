@@ -1,0 +1,2564 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>studiobee — Creative Studio, Gurgaon</title>
+  <meta name="description" content="studiobee is a full-service creative studio in Gurgaon — branding, social media, video production, studio rental, and AI automations for modern brands." />
+  <meta name="keywords" content="creative studio Gurgaon, branding agency Delhi NCR, social media management, video production India, AI automations, studio rental Gurgaon" />
+  <link rel="canonical" href="https://studiobee.co.in/" />
+  <meta name="theme-color" content="#2F48DF" />
+  <link rel="icon" type="image/png" href="/studiobee.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://studiobee.co.in/" />
+  <meta property="og:title" content="studiobee — Creative Studio, Gurgaon" />
+  <meta property="og:description" content="Branding, social media, video production, studio rental, and AI automations — all under one roof in Gurgaon." />
+  <meta property="og:image" content="https://studiobee.co.in/studiobee.png" />
+  <meta property="og:site_name" content="studiobee" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="studiobee — Creative Studio, Gurgaon" />
+  <meta name="twitter:description" content="Branding, social media, video production, studio rental, and AI automations — all under one roof in Gurgaon." />
+  <meta name="twitter:image" content="https://studiobee.co.in/studiobee.png" />
+
+  <!-- GEO -->
+  <meta name="geo.region" content="IN-HR" />
+  <meta name="geo.placename" content="Gurgaon, Haryana, India" />
+  <meta name="geo.position" content="28.4595;77.0266" />
+  <meta name="ICBM" content="28.4595, 77.0266" />
+
+  <script src="content.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Kulim+Park:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #2F48DF;
+      --blue-dark: #1e33b8;
+      --blue-light: #4f64f0;
+      --dark: #0A0A0A;
+      --light: #FBFBFB;
+      --gray: #E9E9E9;
+      --cream: #f3e9d9;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    img, video { -webkit-user-drag: none; user-select: none; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Kulim Park', sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .f-display { font-family: 'DM Sans', sans-serif; }
+
+    /* ── Grain texture overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: overlay;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 22px 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(47, 72, 223, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .nav-links { display: flex; gap: 36px; align-items: center; }
+    .nav-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #0A0A0A;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-link:hover { color: #0A0A0A; }
+    .nav-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #FBFBFB;
+      background: #0A0A0A;
+      border: 1px solid #0A0A0A;
+      padding: 10px 24px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .nav-cta:hover {
+      background: #222;
+      border-color: #222;
+      transform: scale(1.04);
+    }
+    .nav-cta:active { transform: scale(0.97); }
+    .nav-cta:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+
+    /* ── Hero panel wave animation ── */
+
+    /* 20 strips of 7945.png wave continuously right→left across the hero */
+    .intro-strip {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      background: url('7945.png') center / cover no-repeat;
+      pointer-events: none;
+      animation: stripWave 9s ease-in-out infinite;
+    }
+    @keyframes stripWave {
+      0%   { opacity: 0; }
+      30%  { opacity: 1; }
+      70%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* Hero content fades in on load */
+    .hero-inner {
+      animation: contentReveal 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s both;
+    }
+    @keyframes contentReveal {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    /* ── Nav logo: white base + column-by-column inversion overlay ── */
+    .nav-logo-wrap { position: relative; display: flex; align-items: center; }
+    .nav-logo-light { height: 26px; display: block; }
+
+    /* Overlay covers full nav width, contains 20 strip-clipped blue logos.
+       When scrolled, wipes left→right (left inset grows) revealing white logo. */
+    .nav-logo-invert {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      clip-path: inset(0 0% 0 0%);
+      transition: clip-path 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav-logo-invert-strip {
+      position: absolute; inset: 0;
+      animation: stripWave 9s ease-in-out infinite;
+    }
+    /* When scrolled: wipe blue logo away from left→right, showing white underneath l→r */
+    nav.scrolled .nav-logo-invert { clip-path: inset(0 0% 0 100%); }
+
+    /* ── Nav CTA dark overlay (synced to rightmost strip area) ── */
+    .nav-cta-wrap { position: relative; display: inline-flex; }
+    .nav-cta-dark {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 500;
+      color: #0A0A0A;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(10,10,10,0.1);
+      border-radius: 100px;
+      text-decoration: none;
+      white-space: nowrap;
+      pointer-events: none;
+      animation: stripWave 9s ease-in-out infinite;
+      animation-delay: -8.1s; /* synced to strip 18, rightmost area */
+    }
+    /* Hide dark nav button when scrolled past hero (nav has its own bg) */
+    nav.scrolled .nav-cta-dark { opacity: 0; }
+
+    /* ── Hero text inversion overlay ── */
+    .hero-text-invert { position: absolute; inset: 0; z-index: 20; pointer-events: none; }
+    .invert-strip { position: absolute; inset: 0; animation: stripWave 9s ease-in-out infinite; }
+    .hero-inner-dark {
+      position: absolute; inset: 0;
+      display: flex; align-items: center;
+      width: 100%;
+    }
+    .dark-content {
+      max-width: 1280px; width: 100%;
+      margin: 0 auto;
+      padding: 140px 56px 100px;
+    }
+    /* Dark-state color overrides (panels = white bg) */
+    .hero-inner-dark .hero-eyebrow { color: rgba(47,72,223,0.65); }
+    .hero-inner-dark .hero-eyebrow::before { background: rgba(47,72,223,0.35); }
+    .hero-inner-dark .hero-h1 { color: #0A0A0A; }
+    .hero-inner-dark .hero-h1 em { color: #2F48DF; }
+    .hero-inner-dark .hero-sub { color: rgba(10,10,10,0.55); }
+    .hero-inner-dark .btn-dark { background: #0A0A0A; color: #FBFBFB; box-shadow: 0 8px 24px rgba(10,10,10,0.15); }
+    .hero-inner-dark .btn-ghost { color: #0A0A0A; border-color: rgba(10,10,10,0.25); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      background-color: #2F48DF;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 15% 55%, rgba(79,100,255,0.55) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 85% 15%, rgba(15,30,160,0.9) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 70% at 65% 85%, rgba(100,120,255,0.35) 0%, transparent 50%);
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Vertical bar grid */
+    .bar-grid {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      gap: 3px;
+      padding: 0 10px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .bar-grid .bar {
+      flex: 1;
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.04) 30%,
+        rgba(255,255,255,0.1) 55%,
+        rgba(255,255,255,0.04) 75%,
+        rgba(255,255,255,0) 100%
+      );
+    }
+
+    .hero-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 140px 56px 100px;
+      position: relative;
+      z-index: 10;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: rgba(255,255,255,0.35);
+    }
+
+    .hero-h1 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: clamp(64px, 9.5vw, 120px);
+      color: #FBFBFB;
+      line-height: 0.94;
+      letter-spacing: -0.045em;
+      margin-bottom: 36px;
+      max-width: 1000px;
+    }
+    .hero-h1 em {
+      font-style: italic;
+      font-weight: 400;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .hero-sub {
+      font-family: 'Kulim Park', sans-serif;
+      font-size: 19px;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.6);
+      max-width: 500px;
+      margin-bottom: 52px;
+    }
+
+    .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+
+    .btn-dark {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #FBFBFB;
+      background: #0A0A0A;
+      padding: 16px 36px;
+      border-radius: 100px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+      box-shadow: 0 8px 32px rgba(10,10,10,0.2);
+    }
+    .btn-dark:hover {
+      transform: scale(1.05) translateY(-1px);
+      box-shadow: 0 16px 48px rgba(10,10,10,0.3);
+    }
+    .btn-dark:active { transform: scale(0.97); }
+    .btn-dark:focus-visible { outline: 2px solid white; outline-offset: 3px; border-radius: 100px; }
+
+    .btn-ghost {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: #0A0A0A;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 24px;
+      border-radius: 100px;
+      transition: color 0.2s ease;
+    }
+    /* Only slide the arrow, not the whole button — prevents ghost doubling from invert strips */
+    .btn-ghost span { display: inline-block; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    .btn-ghost:hover { color: #0A0A0A; }
+    .btn-ghost:hover span { transform: translateX(5px); }
+    .btn-ghost:focus-visible { outline: 2px solid white; outline-offset: 3px; border-radius: 100px; }
+
+    .hero-bottom-fade {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, transparent, #FBFBFB);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* ── Section shared ── */
+    .section { padding: 100px 56px; }
+    .section-max { max-width: 1280px; margin: 0 auto; }
+
+    .section-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .section-h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: clamp(34px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    /* ── Scramble headings ── */
+    .scramble-heading { text-transform: uppercase; }
+
+    /* ── Services ── */
+    .services-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 32px;
+      margin-bottom: 56px;
+      flex-wrap: wrap;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 18px;
+    }
+    .services-grid .service-card { grid-column: span 2; }
+
+    .service-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 44px 36px 36px;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease, border-color 0.3s ease;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25), 0 1px 3px rgba(0,0,0,0.15);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(47,72,223,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 28px 72px rgba(0,0,0,0.35), 0 4px 16px rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.22);
+    }
+
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(47,72,223,0.28);
+      border-radius: 12px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .service-h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 21px;
+      font-weight: 600;
+      color: #FBFBFB;
+      letter-spacing: -0.025em;
+      margin-bottom: 12px;
+    }
+
+    .service-p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: rgba(251,251,251,0.52);
+    }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #2F48DF;
+      text-decoration: none;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      width: 100%;
+      transition: gap 0.25s ease, opacity 0.2s ease;
+    }
+    .service-link:hover { gap: 12px; }
+    .service-link:focus-visible { outline: 2px solid #2F48DF; outline-offset: 3px; border-radius: 4px; }
+
+    /* ── Work ── */
+    .work-section {
+      background: #2F48DF;
+      padding: 72px 0 80px;
+      overflow: hidden;
+    }
+
+    .work-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding: 0 56px;
+      margin-bottom: 40px;
+    }
+
+    .work-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Chevron buttons */
+    .wc-chevrons { display: flex; gap: 8px; }
+    .wc-chev {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      font-size: 19px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      line-height: 1;
+      padding: 0;
+      font-family: inherit;
+    }
+    .wc-chev:hover { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.5); transform: scale(1.09); }
+    .wc-chev:active { transform: scale(0.94); }
+    .wc-chev:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+
+    .btn-outline-dark {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 12px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .btn-outline-dark:hover { color: #fff; border-color: rgba(255,255,255,0.45); transform: scale(1.04); }
+    .btn-outline-dark:active { transform: scale(0.97); }
+    .btn-outline-dark:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+
+    /* Cards strip */
+    .wc-track { overflow: hidden; position: relative; padding: 4px 0; }
+    .wc-marquee {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      will-change: transform;
+    }
+
+    /* Side fade gradients */
+    .wc-fade-left {
+      pointer-events: none;
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 10vw;
+      z-index: 10;
+      background: linear-gradient(90deg, #2F48DF 20%, transparent);
+    }
+    .wc-fade-right {
+      pointer-events: none;
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 10vw;
+      z-index: 10;
+      background: linear-gradient(270deg, #2F48DF 20%, transparent);
+    }
+
+    /* Individual cards — portrait 9:16 */
+    .wc-card {
+      width: clamp(190px, 18vw, 256px);
+      aspect-ratio: 9 / 16;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .wc-card img,
+    .wc-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .wc-card:hover img,
+    .wc-card:hover video { transform: scale(1.05); }
+
+    /* Info overlay — always visible base, more on hover */
+    .wc-info {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 14px;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        transparent 45%,
+        rgba(0,0,0,0.55) 70%,
+        rgba(0,0,0,0.88) 100%);
+      transition: background 0.4s ease;
+    }
+    .wc-card:hover .wc-info {
+      background: linear-gradient(180deg,
+        rgba(0,0,0,0.12) 0%,
+        rgba(0,0,0,0.18) 35%,
+        rgba(0,0,0,0.62) 62%,
+        rgba(0,0,0,0.93) 100%);
+    }
+
+    .wc-info-top { display: flex; }
+
+    .wc-badge-type {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.92);
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 4px 10px;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .wc-info-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+      margin-bottom: 0;
+    }
+
+    .wc-info-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.52;
+      margin-top: 7px;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.4s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.35s ease;
+    }
+    .wc-card:hover .wc-info-desc { max-height: 90px; opacity: 1; }
+
+    .wc-info-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 8px;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.4s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.35s ease 0.04s;
+    }
+    .wc-card:hover .wc-info-tags { max-height: 60px; opacity: 1; }
+
+    .wc-badge-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      background: rgba(255,255,255,0.12);
+      border-radius: 100px;
+      padding: 3px 8px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* ── Stats ── */
+    .stats-section {
+      background: #FBFBFB;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid #E9E9E9;
+      padding: 72px 56px;
+    }
+    .stats-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+    }
+    .stat-num {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: clamp(48px, 5vw, 64px);
+      letter-spacing: -0.05em;
+      color: #2F48DF;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .stat-label {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(10,10,10,0.48);
+    }
+    .stat-divider {
+      width: 40px;
+      height: 3px;
+      background: #2F48DF;
+      margin-bottom: 24px;
+      border-radius: 2px;
+    }
+
+    /* ── Process ── */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: #E9E9E9;
+      border: 1px solid #E9E9E9;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 56px;
+    }
+    .process-step {
+      background: #FBFBFB;
+      padding: 52px 40px;
+      transition: background 0.3s ease;
+      position: relative;
+    }
+    .process-step::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 40px; right: 40px;
+      height: 0;
+      background: #2F48DF;
+      transition: height 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      border-radius: 2px 2px 0 0;
+    }
+    .process-step:hover { background: #fff; }
+    .process-step:hover::after { height: 3px; }
+    .process-num {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #2F48DF;
+      margin-bottom: 28px;
+    }
+    .process-h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 19px;
+      font-weight: 600;
+      color: #0A0A0A;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .process-p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: rgba(10,10,10,0.52);
+    }
+
+    /* ── Testimonials (glass cards, dark bg, centered) ── */
+    .testimonials-section {
+      background: var(--dark);
+      padding: 100px 56px 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Atmospheric glow behind the card stack */
+    .testimonials-section::before {
+      content: '';
+      position: absolute;
+      width: 900px;
+      height: 700px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -42%);
+      background:
+        radial-gradient(ellipse 60% 55% at 50% 50%, rgba(47,72,223,0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 35% 40% at 45% 40%, rgba(79,100,255,0.12) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .testi-header {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    /* Stack wrapper — extra padding-right/bottom for the fan offset */
+    .testi-stack-wrap {
+      position: relative;
+      z-index: 2;
+      padding-right: 36px;
+      padding-bottom: 28px;
+    }
+    .testi-stack {
+      position: relative;
+      width: clamp(340px, 42vw, 540px);
+      height: 310px;
+    }
+
+    /* Individual glass card */
+    .testi-card {
+      position: absolute;
+      top: 0; left: 0;
+      width: clamp(340px, 42vw, 540px);
+      height: 310px;
+      border-radius: 22px;
+      padding: 34px 38px 30px;
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.11);
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.35),
+        0 12px 40px rgba(0,0,0,0.45),
+        0 40px 80px rgba(0,0,0,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.09);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      transition:
+        transform 0.45s cubic-bezier(0.34,1.56,0.64,1),
+        opacity   0.35s ease,
+        box-shadow 0.35s ease;
+      will-change: transform, opacity;
+      user-select: none;
+      touch-action: none;
+    }
+    .testi-card[data-pos="front"] {
+      z-index: 3;
+      transform: rotate(-4deg) translate(-6px, 0);
+      cursor: grab;
+    }
+    .testi-card[data-pos="front"]:active { cursor: grabbing; }
+    .testi-card[data-pos="middle"] {
+      z-index: 2;
+      transform: rotate(1deg) translate(16px, 12px);
+    }
+    .testi-card[data-pos="back"] {
+      z-index: 1;
+      transform: rotate(5deg) translate(32px, 22px);
+    }
+    .testi-card[data-pos="hidden"] {
+      z-index: 0;
+      transform: rotate(5deg) translate(32px, 22px);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .testi-card.is-dragging {
+      cursor: grabbing;
+      transition: box-shadow 0.15s ease;
+      box-shadow:
+        0 4px 12px rgba(0,0,0,0.4),
+        0 24px 60px rgba(47,72,223,0.18),
+        0 60px 120px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.14);
+    }
+
+    .testi-quote-mark {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 48px;
+      line-height: 1;
+      color: rgba(255,255,255,0.18);
+      font-weight: 700;
+      display: block;
+      margin-bottom: -6px;
+    }
+    .testi-quote-text {
+      font-family: 'Kulim Park', sans-serif;
+      font-size: 15px;
+      line-height: 1.72;
+      color: rgba(255,255,255,0.72);
+      flex: 1;
+      margin-top: 6px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      line-clamp: 4;
+      -webkit-box-orient: vertical;
+    }
+    .testi-author-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.09);
+    }
+    .testi-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #FBFBFB;
+      letter-spacing: -0.01em;
+    }
+    .testi-role {
+      font-size: 12px;
+      color: rgba(255,255,255,0.38);
+      margin-top: 2px;
+      font-family: 'Kulim Park', sans-serif;
+    }
+    .testi-card-num {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.08em;
+    }
+
+    /* Footer: dots + hint */
+    .testi-footer {
+      position: relative;
+      z-index: 2;
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .testi-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .testi-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      transition: background 0.3s ease, width 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .testi-dot.active {
+      background: rgba(255,255,255,0.8);
+      width: 20px;
+      border-radius: 4px;
+    }
+    .testi-drag-hint {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.28);
+      letter-spacing: 0.02em;
+      user-select: none;
+    }
+    .testi-drag-hint-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .testi-drag-hint-icon svg { display: block; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background-color: #2F48DF;
+      background-image:
+        radial-gradient(ellipse 70% 60% at 75% 55%, rgba(79,100,255,0.5) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 20% 30%, rgba(15,30,160,0.85) 0%, transparent 55%);
+      padding: 120px 56px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .cta-inner { max-width: 680px; margin: 0 auto; position: relative; z-index: 2; }
+    .cta-h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: clamp(40px, 6vw, 72px);
+      color: #FBFBFB;
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+      margin-bottom: 24px;
+    }
+    .cta-sub {
+      font-size: 18px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.58);
+      margin-bottom: 48px;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: #0A0A0A;
+      background: #FBFBFB;
+      padding: 20px 52px;
+      border-radius: 100px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 40px rgba(10,10,10,0.2);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+    }
+    .btn-cta:hover {
+      transform: scale(1.05) translateY(-2px);
+      box-shadow: 0 20px 64px rgba(10,10,10,0.3);
+    }
+    .btn-cta:active { transform: scale(0.97); }
+    .btn-cta:focus-visible { outline: 2px solid white; outline-offset: 4px; border-radius: 100px; }
+
+    /* ── CTA Form ── */
+    .cta-inner { max-width: 640px; }
+    .cta-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+    }
+    .cta-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .cta-field { display: flex; flex-direction: column; gap: 7px; }
+    .cta-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+    }
+    .cta-input, .cta-textarea {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: #FBFBFB;
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.30);
+      border-radius: 10px;
+      padding: 13px 18px;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .cta-input::placeholder, .cta-textarea::placeholder { color: rgba(255,255,255,0.45); }
+    .cta-input:focus, .cta-textarea:focus {
+      border-color: rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.18);
+    }
+    .cta-input.err, .cta-textarea.err { border-color: rgba(255,80,80,0.65); }
+    .cta-textarea { resize: vertical; min-height: 108px; }
+    .cta-form-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .cta-form-msg { font-size: 13px; color: rgba(255,255,255,0.5); }
+    .cta-form-msg.ok  { color: rgba(120,255,160,0.85); }
+    .cta-form-msg.err { color: rgba(255,100,100,0.85); }
+    /* ── Contact success state ── */
+    @keyframes ctaSuccessIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes ctaSuccessOut {
+      from { opacity: 1; transform: translateY(0); }
+      to   { opacity: 0; transform: translateY(-12px); }
+    }
+    @keyframes checkCircleDraw {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes checkMarkDraw {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes progressDrain {
+      from { width: 100%; }
+      to   { width: 0%; }
+    }
+    .cta-success {
+      text-align: center;
+      padding: 56px 0 24px;
+      animation: ctaSuccessIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    .cta-success.out {
+      animation: ctaSuccessOut 0.35s ease forwards;
+    }
+    .cta-success-icon {
+      width: 72px; height: 72px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .check-circle-anim {
+      stroke-dasharray: 175.93;
+      stroke-dashoffset: 175.93;
+      animation: checkCircleDraw 0.55s cubic-bezier(0.65,0,0.35,1) 0.1s forwards;
+    }
+    .check-mark-anim {
+      stroke-dasharray: 42;
+      stroke-dashoffset: 42;
+      animation: checkMarkDraw 0.4s cubic-bezier(0.65,0,0.35,1) 0.55s forwards;
+    }
+    .cta-success-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 28px; font-weight: 600;
+      color: #FBFBFB; margin-bottom: 10px;
+    }
+    .cta-success-body { font-size: 16px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+    .cta-success-progress {
+      height: 2px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 2px;
+      margin: 28px auto 0;
+      max-width: 140px;
+      overflow: hidden;
+    }
+    .cta-success-progress-bar {
+      height: 100%;
+      background: rgba(255,255,255,0.4);
+      border-radius: 2px;
+      animation: progressDrain 5s linear 0.3s both;
+    }
+
+    /* ── Meet the Team section ── */
+    .team-section {
+      background: #f3e9d9;
+      padding: 120px 56px;
+    }
+    .team-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+    }
+    .team-card {
+      position: relative;
+      cursor: pointer;
+    }
+    .team-photo {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      aspect-ratio: 3 / 4;
+      background: #111;
+    }
+    .team-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.55s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .team-card:hover .team-photo img,
+    .team-card.active .team-photo img { transform: scale(1.06); }
+
+    .team-hover-panel {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(165deg, rgba(47,72,223,0.96) 0%, rgba(18,30,150,0.98) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px 22px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
+    }
+    .team-card:hover .team-hover-panel,
+    .team-card.active .team-hover-panel {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .team-hover-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 18px; font-weight: 700;
+      color: #FBFBFB; margin-bottom: 2px;
+      letter-spacing: -0.02em;
+    }
+    .team-hover-role {
+      font-size: 10px; font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .team-hover-bio {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .team-hover-tags {
+      display: flex; flex-wrap: wrap; gap: 5px;
+      margin-bottom: 14px;
+    }
+    .team-hover-tag {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.1);
+      padding: 3px 9px; border-radius: 100px;
+    }
+    .team-hover-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px; font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .team-hover-link:hover { color: #FBFBFB; }
+
+    .team-base { padding: 14px 2px 0; }
+    .team-base-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px; font-weight: 600;
+      color: #2F48DF; margin-bottom: 3px;
+      letter-spacing: -0.01em;
+    }
+    .team-base-role { font-size: 13px; color: rgba(47,72,223,0.5); }
+
+    /* ── Footer ── */
+    footer {
+      background: #0A0A0A;
+      padding: 72px 56px 44px;
+    }
+    .footer-top {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+      flex-wrap: wrap;
+      margin-bottom: 64px;
+    }
+    .footer-tagline {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.35);
+      max-width: 240px;
+      margin-top: 18px;
+    }
+    .footer-cols { display: flex; gap: 72px; flex-wrap: wrap; }
+    .footer-col-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      margin-bottom: 20px;
+    }
+    .footer-col { display: flex; flex-direction: column; gap: 12px; }
+    .footer-link {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .footer-link:hover { color: rgba(255,255,255,0.9); }
+    .footer-link:focus-visible { outline: 2px solid #2F48DF; outline-offset: 3px; border-radius: 2px; }
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: rgba(255,255,255,0.22);
+    }
+
+    /* ── Mobile Responsive ───────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      /* Nav */
+      nav { padding: 14px 20px; }
+      .nav-links { gap: 18px; }
+
+      /* Hero — fix padding so dark-content overlay aligns with hero-inner */
+      .hero-inner { padding: 100px 24px 64px; }
+      .dark-content { padding: 100px 24px 64px; }
+      .hero-h1 { font-size: clamp(42px, 11vw, 72px); letter-spacing: -0.04em; }
+      .hero-sub { font-size: 15px; line-height: 1.7; max-width: 100%; margin-bottom: 36px; }
+      .hero-actions { gap: 10px; flex-direction: column; align-items: flex-start; }
+
+      /* Generic section padding */
+      .section { padding: 64px 20px; }
+
+      /* Services — 2 columns */
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .services-grid .service-card { grid-column: span 1; }
+      .service-card { padding: 28px 22px 24px; }
+
+      /* Work header side padding */
+      .work-header { padding: 0 20px; }
+
+      /* Stats — 2×2 */
+      .stats-section { padding: 56px 20px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+
+      /* Process — 2 columns */
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      .process-step { padding: 36px 28px; }
+      .process-step::after { left: 28px; right: 28px; }
+
+      /* Testimonials */
+      .testimonials-section { padding: 80px 20px 100px; }
+
+      /* Team */
+      .team-section { padding: 80px 20px; }
+      .team-grid { grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+      .team-hover-bio { display: none; }
+
+      /* CTA / contact form */
+      .cta-section { padding: 80px 20px; }
+
+      /* Footer */
+      footer { padding: 56px 20px 36px; }
+      .footer-cols { gap: 40px; }
+    }
+
+    @media (max-width: 480px) {
+      /* Nav — hide text links on very small screens */
+      .nav-link { display: none; }
+
+      /* Services — single column */
+      .services-grid { grid-template-columns: 1fr; }
+
+      /* Process — single column */
+      .process-grid { grid-template-columns: 1fr; }
+      .process-step { padding: 32px 24px; }
+      .process-step::after { left: 24px; right: 24px; }
+
+      /* Contact form fields stack vertically */
+      .cta-form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── Lightbox ─────────────────────────────────────────────────────────── */
+    .lb-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .lb-overlay.lb-open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .lb-inner {
+      position: relative;
+      width: min(88vw, 400px);
+      max-height: 88vh;
+      aspect-ratio: 9 / 16;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      transform: scale(0.88) translateY(20px);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.8), 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .lb-overlay.lb-open .lb-inner { transform: scale(1) translateY(0); }
+    .lb-inner video,
+    .lb-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .lb-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, transform 0.2s ease;
+      z-index: 10001;
+      line-height: 1;
+      font-family: sans-serif;
+    }
+    .lb-close:hover { background: rgba(255,255,255,0.22); transform: scale(1.1); }
+    .lb-close:active { transform: scale(0.92); }
+    @media (max-width: 480px) {
+      .lb-inner { width: 95vw; border-radius: 12px; }
+      .lb-close { top: 12px; right: 12px; width: 40px; height: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ───────── NAV ───────── -->
+  <nav id="main-nav">
+    <div class="nav-logo-wrap">
+      <img src="studiobee%20white.png" alt="studiobee" class="nav-logo-light" />
+    </div>
+    <div class="nav-links">
+      <a href="#work" class="nav-link">Work</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#process" class="nav-link">Process</a>
+      <a href="#team" class="nav-link">Team</a>
+      <a href="#contact" class="nav-cta">Start a project</a>
+    </div>
+  </nav>
+
+  <!-- ───────── HERO ───────── -->
+  <section class="hero">
+    <!-- 20 strips of 7945 wave continuously across the hero, right→left -->
+    <div class="intro-strip" style="clip-path:inset(0 95% 0 0%);  animation-delay:0s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 90% 0 5%);  animation-delay:-0.45s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 85% 0 10%); animation-delay:-0.9s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 80% 0 15%); animation-delay:-1.35s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 75% 0 20%); animation-delay:-1.8s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 70% 0 25%); animation-delay:-2.25s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 65% 0 30%); animation-delay:-2.7s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 60% 0 35%); animation-delay:-3.15s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 55% 0 40%); animation-delay:-3.6s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 50% 0 45%); animation-delay:-4.05s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 45% 0 50%); animation-delay:-4.5s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 40% 0 55%); animation-delay:-4.95s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 35% 0 60%); animation-delay:-5.4s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 30% 0 65%); animation-delay:-5.85s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 25% 0 70%); animation-delay:-6.3s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 20% 0 75%); animation-delay:-6.75s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 15% 0 80%); animation-delay:-7.2s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 10% 0 85%); animation-delay:-7.65s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 5%  0 90%); animation-delay:-8.1s"></div>
+    <div class="intro-strip" style="clip-path:inset(0 0%  0 95%); animation-delay:-8.55s"></div>
+
+    <div class="bar-grid">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Design Studio</p>
+      <h1 class="hero-h1">Ideas shaped<br/>with <em>intent.</em></h1>
+      <p class="hero-sub">We build brands, create content, and automate workflows — a full-service creative studio for businesses ready to grow.</p>
+      <div class="hero-actions">
+        <a href="#work" class="btn-dark">View our work <span style="opacity:0.55;">→</span></a>
+        <a href="#services" class="btn-ghost">Our services <span>→</span></a>
+      </div>
+    </div>
+
+    <!-- Text inversion strips — populated by JS below -->
+    <div class="hero-text-invert" id="hero-text-invert"></div>
+
+    <div class="hero-bottom-fade"></div>
+  </section>
+
+  <!-- ───────── SERVICES ───────── -->
+  <section id="services" class="section" style="background:#0A0A0A;">
+    <div class="section-max">
+      <div class="services-header">
+        <div>
+          <p class="section-label" style="color:#2F48DF;">What we do</p>
+          <h2 id="cfg-services-heading" class="section-h2 scramble-heading" style="color:#FBFBFB; max-width:420px;"></h2>
+        </div>
+        <p id="cfg-services-body" style="font-size:16px; line-height:1.75; color:rgba(10,10,10,0.5); max-width:340px;">From social content and brand identity to video, studio space, and AI automation — everything under one roof.</p>
+      </div>
+
+      <div id="cfg-services-grid" class="services-grid"><!-- rendered by content.js --></div>
+    </div>
+  </section>
+
+  <!-- ───────── WORK ───────── -->
+  <section id="work" class="work-section">
+
+    <!-- Header -->
+    <div class="work-header">
+      <div>
+        <p class="section-label" style="color:rgba(255,255,255,0.6);">Selected work</p>
+        <h2 class="section-h2 scramble-heading" style="color:#FBFBFB;">Projects we're<br/>proud of.</h2>
+      </div>
+      <div class="work-header-actions">
+        <div class="wc-chevrons">
+          <button class="wc-chev" id="wcPrev" aria-label="Previous project">&#8592;</button>
+          <button class="wc-chev" id="wcNext" aria-label="Next project">&#8594;</button>
+        </div>
+        <a href="case-studies.html" class="btn-outline-dark">All case studies →</a>
+      </div>
+    </div>
+
+    <!-- Cards strip -->
+    <div class="wc-track">
+      <div class="wc-fade-left"></div>
+      <div class="wc-fade-right"></div>
+      <div class="wc-marquee" id="wcWrap"><!-- rendered by content.js --></div>
+    </div>
+
+  </section>
+
+  <!-- ───────── STATS ───────── -->
+  <section class="stats-section">
+    <div id="cfg-stats-grid" class="stats-grid"><!-- rendered by content.js --></div>
+  </section>
+
+  <!-- ───────── PROCESS ───────── -->
+  <section id="process" class="section" style="background:#FBFBFB;">
+    <div class="section-max">
+      <p class="section-label" style="color:#2F48DF;">How we work</p>
+      <h2 id="cfg-process-heading" class="section-h2 scramble-heading" style="color:#0A0A0A; max-width:460px;"></h2>
+
+      <div id="cfg-process-grid" class="process-grid">
+<!-- rendered by content.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── TESTIMONIALS ───────── -->
+  <section id="testimonials" class="testimonials-section">
+
+    <!-- Centred heading -->
+    <div class="testi-header">
+      <p class="section-label" style="color:rgba(255,255,255,0.3); margin-bottom:14px;">What clients say</p>
+      <h2 class="section-h2 scramble-heading" style="color:#FBFBFB;">Trusted by brands<br/>that move fast.</h2>
+    </div>
+
+    <!-- Card stack — the visual centrepiece -->
+    <div class="testi-stack-wrap">
+      <div class="testi-stack" id="testiStack">
+        <!-- Populated by content renderer -->
+      </div>
+    </div>
+
+    <!-- Dots + drag hint below the stack -->
+    <div class="testi-footer">
+      <div class="testi-dots" id="testiDots"></div>
+      <div class="testi-drag-hint" aria-hidden="true">
+        <span class="testi-drag-hint-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/><line x1="2" y1="12" x2="22" y2="12"/>
+          </svg>
+        </span>
+        Drag to explore
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ───────── TEAM ───────── -->
+  <section id="team" class="team-section">
+    <div class="team-inner">
+      <p class="section-label" style="color:rgba(47,72,223,0.6); margin-bottom:14px;">The people</p>
+      <h2 class="section-h2 scramble-heading" style="color:#2F48DF;">The team behind<br/>studiobee.</h2>
+      <div class="team-grid" id="teamGrid">
+        <!-- Populated by content renderer -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── CTA ───────── -->
+  <section id="contact" class="cta-section">
+    <div class="bar-grid" style="opacity:0.2; position:absolute; inset:0; pointer-events:none;">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+    <div class="cta-inner">
+      <p class="section-label" style="color:rgba(255,255,255,0.4); margin-bottom:20px; text-align:center;">Start a project</p>
+      <h2 class="cta-h2 scramble-heading" style="margin-bottom:36px;">Ready to build<br/>something<br/>meaningful?</h2>
+      <form class="cta-form" id="ctaForm" novalidate>
+        <div class="cta-form-row">
+          <div class="cta-field">
+            <label class="cta-label" for="cf-name">Name *</label>
+            <input class="cta-input" type="text" id="cf-name" name="name" placeholder="Your name" autocomplete="name" />
+          </div>
+          <div class="cta-field">
+            <label class="cta-label" for="cf-phone">Phone *</label>
+            <input class="cta-input" type="tel" id="cf-phone" name="phone" placeholder="+91 98765 43210" autocomplete="tel" />
+          </div>
+        </div>
+        <div class="cta-form-row">
+          <div class="cta-field">
+            <label class="cta-label" for="cf-email">Email *</label>
+            <input class="cta-input" type="email" id="cf-email" name="email" placeholder="you@company.com" autocomplete="email" />
+          </div>
+          <div class="cta-field">
+            <label class="cta-label" for="cf-city">City *</label>
+            <input class="cta-input" type="text" id="cf-city" name="city" placeholder="Mumbai" autocomplete="address-level2" />
+          </div>
+        </div>
+        <div class="cta-field">
+          <label class="cta-label" for="cf-message">Message *</label>
+          <textarea class="cta-textarea" id="cf-message" name="message" placeholder="Tell us about your project, timeline, and budget…" rows="4"></textarea>
+        </div>
+        <div class="cta-form-foot">
+          <span class="cta-form-msg" id="ctaMsg"></span>
+          <button type="submit" class="btn-cta" id="ctaBtn">
+            Submit <span style="opacity:0.5;">→</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ───────── FOOTER ───────── -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <img src="studiobee%20white.png" alt="studiobee" style="height:24px; display:block;" />
+        <p class="footer-tagline">A full-service creative studio — branding, social, video, studio hire, and AI automations.</p>
+      </div>
+      <div class="footer-cols">
+        <div>
+          <p class="footer-col-label">Studio</p>
+          <div class="footer-col">
+            <a href="#work" class="footer-link">Work</a>
+            <a href="case-studies.html" class="footer-link">Case Studies</a>
+            <a href="#services" class="footer-link">Services</a>
+            <a href="#process" class="footer-link">Process</a>
+            <a href="#contact" class="footer-link">Contact</a>
+          </div>
+        </div>
+        <div>
+          <p class="footer-col-label">Connect</p>
+          <div class="footer-col">
+            <a href="#" class="footer-link">LinkedIn</a>
+            <a href="#" class="footer-link">Twitter</a>
+            <a href="#" class="footer-link">Instagram</a>
+            <a href="#" class="footer-link">Dribbble</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 studiobee. All rights reserved.</p>
+      <p class="footer-copy">arora.nikhil@studiobee.ai</p>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+  </script>
+
+  <!-- Hero text inversion: clone hero content into 20 wave-synced strips with dark colors -->
+  <script>
+    (() => {
+      const clips  = [
+        'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
+        'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
+        'inset(0 55% 0 40%)','inset(0 50% 0 45%)','inset(0 45% 0 50%)','inset(0 40% 0 55%)',
+        'inset(0 35% 0 60%)','inset(0 30% 0 65%)','inset(0 25% 0 70%)','inset(0 20% 0 75%)',
+        'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
+      ];
+      const delays = [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
+                      -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
+
+      const src  = document.querySelector('.hero-inner').innerHTML;
+      const wrap = document.getElementById('hero-text-invert');
+
+      for (let i = 0; i < 20; i++) {
+        const strip = document.createElement('div');
+        strip.className = 'invert-strip';
+        strip.style.cssText = `clip-path:${clips[i]};animation-delay:${delays[i]}s`;
+
+        const inner = document.createElement('div');
+        inner.className = 'hero-inner-dark';
+
+        const content = document.createElement('div');
+        content.className = 'dark-content';
+        content.innerHTML = src;
+
+        inner.appendChild(content);
+        strip.appendChild(inner);
+        wrap.appendChild(strip);
+      }
+    })();
+  </script>
+
+  <!-- Nav logo column-by-column inversion: 20 strips synchronized with hero wave -->
+  <script>
+    (() => {
+      const clips  = [
+        'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
+        'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
+        'inset(0 55% 0 40%)','inset(0 50% 0 45%)','inset(0 45% 0 50%)','inset(0 40% 0 55%)',
+        'inset(0 35% 0 60%)','inset(0 30% 0 65%)','inset(0 25% 0 70%)','inset(0 20% 0 75%)',
+        'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
+      ];
+      const delays = [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
+                      -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
+
+      const nav       = document.getElementById('main-nav');
+      const logoLight = nav.querySelector('.nav-logo-light');
+      const logoRect  = logoLight.getBoundingClientRect();
+      const navRect   = nav.getBoundingClientRect();
+      const logoLeft  = logoRect.left - navRect.left;
+      const logoTop   = logoRect.top  - navRect.top;
+
+      const overlay = document.createElement('div');
+      overlay.className = 'nav-logo-invert';
+
+      for (let i = 0; i < 20; i++) {
+        const strip = document.createElement('div');
+        strip.className = 'nav-logo-invert-strip';
+        strip.style.cssText = `clip-path:${clips[i]};animation-delay:${delays[i]}s;`;
+
+        const logo = document.createElement('img');
+        logo.src = 'studiobee.png';
+        logo.alt = '';
+        logo.style.cssText = `height:26px;position:absolute;top:${logoTop}px;left:${logoLeft}px;`;
+
+        strip.appendChild(logo);
+        overlay.appendChild(strip);
+      }
+
+      nav.appendChild(overlay);
+    })();
+  </script>
+
+
+  <!-- ── Content renderer ── -->
+  <script>
+    (function () {
+      var SC = window.SC || {};
+      // HTML-escape helper — prevents XSS when inserting user content via innerHTML
+      function esc(s) {
+        return String(s == null ? '' : s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+      function icon(name) {
+        // SB_ICONS values are hardcoded SVG path data — safe to inject as-is
+        var p = (window.SB_ICONS || {})[name] || '';
+        return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F48DF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
+      }
+      // Services
+      var sh = document.getElementById('cfg-services-heading');
+      if (sh && SC.services) sh.innerHTML = esc(SC.services.heading).replace(/\n/g, '<br/>');
+      var ss = document.getElementById('cfg-services-body');
+      if (ss && SC.services) ss.textContent = SC.services.subheading;
+      var sg = document.getElementById('cfg-services-grid');
+      if (sg && SC.services && SC.services.items) {
+        sg.innerHTML = SC.services.items.map(function(item, i) {
+          return '<div class="service-card">' +
+            '<span style="position:absolute;top:36px;right:36px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:700;color:rgba(47,72,223,0.3);letter-spacing:0.06em;">' + String(i+1).padStart(2,'0') + '</span>' +
+            '<div class="service-icon">' + icon(item.iconName) + '</div>' +
+            '<h3 class="service-h3">' + esc(item.title) + '</h3>' +
+            '<p class="service-p">' + esc(item.body) + '</p>' +
+            '<a href="#contact" class="service-link">' + esc(item.linkText) + ' <span>→</span></a>' +
+            '</div>';
+        }).join('');
+      }
+      // Projects
+      var ww = document.getElementById('wcWrap');
+      if (ww && SC.projects) {
+        ww.innerHTML = SC.projects.map(function(p) {
+          var media = p.mediaType === 'video'
+            ? '<video src="' + esc(p.media) + '" autoplay muted loop playsinline></video>'
+            : '<img src="' + esc(p.media) + '" alt="' + esc(p.title) + '" />';
+          var tags = (p.services || []).map(function(s) { return '<span class="wc-badge-tag">' + esc(s) + '</span>'; }).join('');
+          return '<div class="wc-card" data-media="' + esc(p.media) + '" data-media-type="' + esc(p.mediaType || 'image') + '">' + media +
+            '<div class="wc-info">' +
+              '<div class="wc-info-top"><span class="wc-badge-type">' + esc(p.type) + '</span></div>' +
+              '<div>' +
+                '<p class="wc-info-title">' + esc(p.title) + '</p>' +
+                '<p class="wc-info-desc">' + esc(p.desc) + '</p>' +
+                '<div class="wc-info-tags">' + tags + '</div>' +
+              '</div>' +
+            '</div></div>';
+        }).join('');
+      }
+      // Stats
+      var stg = document.getElementById('cfg-stats-grid');
+      if (stg && SC.stats) {
+        stg.innerHTML = SC.stats.map(function(s) {
+          return '<div><div class="stat-divider"></div><div class="stat-num">' + esc(s.number) + '</div><p class="stat-label">' + esc(s.label) + '</p></div>';
+        }).join('');
+      }
+      // Process
+      var ph = document.getElementById('cfg-process-heading');
+      if (ph && SC.process) ph.innerHTML = esc(SC.process.heading).replace(/\n/g, '<br/>');
+      var pg = document.getElementById('cfg-process-grid');
+      if (pg && SC.process && SC.process.items) {
+        pg.innerHTML = SC.process.items.map(function(step, i) {
+          return '<div class="process-step"><p class="process-num">' + String(i+1).padStart(2,'0') + '</p><h3 class="process-h3">' + esc(step.title) + '</h3><p class="process-p">' + esc(step.body) + '</p></div>';
+        }).join('');
+      }
+      // Testimonials
+      var ts = document.getElementById('testiStack');
+      var td = document.getElementById('testiDots');
+      if (ts && SC.testimonials && SC.testimonials.length) {
+        var items = SC.testimonials;
+        // Positions: front, middle, back; rest hidden
+        var posMap = ['front', 'middle', 'back'];
+        ts.innerHTML = items.map(function(t, i) {
+          var pos = i < 3 ? posMap[i] : 'hidden';
+          return '<div class="testi-card" data-pos="' + pos + '" data-idx="' + i + '">' +
+            '<div>' +
+              '<span class="testi-quote-mark">\u201C</span>' +
+              '<p class="testi-quote-text">' + esc(t.quote) + '</p>' +
+            '</div>' +
+            '<div class="testi-author-row">' +
+              '<div>' +
+                '<p class="testi-name">' + esc(t.name) + '</p>' +
+                '<p class="testi-role">' + esc(t.role) + '</p>' +
+              '</div>' +
+              '<span class="testi-card-num">' + String(i+1).padStart(2,'0') + '/' + String(items.length).padStart(2,'0') + '</span>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+        // Dots
+        if (td) {
+          td.innerHTML = items.map(function(_, i) {
+            return '<span class="testi-dot' + (i === 0 ? ' active' : '') + '" data-dot="' + i + '"></span>';
+          }).join('');
+        }
+      }
+      // Team
+      var tg = document.getElementById('teamGrid');
+      if (tg && SC.team && SC.team.length) {
+        var liSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>';
+        tg.innerHTML = SC.team.map(function(m, i) {
+          var tags = (m.skills || []).map(function(s) {
+            return '<span class="team-hover-tag">' + esc(s) + '</span>';
+          }).join('');
+          var link = m.linkedin
+            ? '<a href="' + esc(m.linkedin) + '" class="team-hover-link" target="_blank" rel="noopener">' + liSvg + ' LinkedIn</a>'
+            : '';
+          var imgSrc = esc(m.photo || 'https://placehold.co/400x500/111827/374151');
+          return '<div class="team-card" data-idx="' + i + '">' +
+            '<div class="team-photo">' +
+              '<img src="' + imgSrc + '" alt="' + esc(m.name) + '" loading="lazy" />' +
+              '<div class="team-hover-panel">' +
+                '<p class="team-hover-name">' + esc(m.name) + '</p>' +
+                '<p class="team-hover-role">' + esc(m.role) + '</p>' +
+                '<p class="team-hover-bio">' + esc(m.bio || '') + '</p>' +
+                '<div class="team-hover-tags">' + tags + '</div>' +
+                link +
+              '</div>' +
+            '</div>' +
+            '<div class="team-base">' +
+              '<p class="team-base-name">' + esc(m.name) + '</p>' +
+              '<p class="team-base-role">' + esc(m.role) + '</p>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+        // Mobile tap-to-toggle
+        tg.querySelectorAll('.team-card').forEach(function(card) {
+          card.addEventListener('click', function() {
+            var isActive = card.classList.contains('active');
+            tg.querySelectorAll('.team-card').forEach(function(c) { c.classList.remove('active'); });
+            if (!isActive) card.classList.add('active');
+          });
+        });
+      }
+    })();
+  </script>
+  <!-- ── Work carousel marquee ── -->
+  <script>
+    (function () {
+      var marquee = document.getElementById('wcWrap');
+      var track   = marquee && marquee.parentElement;
+      var prevBtn = document.getElementById('wcPrev');
+      var nextBtn = document.getElementById('wcNext');
+      if (!marquee || !track) return;
+
+      var SPEED = 0.45; // px per frame
+      var GAP   = 16;   // must match CSS gap
+
+      function init() {
+        var origCards = Array.from(marquee.children);
+        if (!origCards.length) return;
+
+        // Triple-clone so we always have cards to fill the viewport in both directions
+        origCards.forEach(function(c) { marquee.appendChild(c.cloneNode(true)); });
+        origCards.forEach(function(c) { marquee.appendChild(c.cloneNode(true)); });
+
+        var cardW  = origCards[0].getBoundingClientRect().width + GAP;
+        var setW   = origCards.length * cardW;
+
+        var offset   = 0;
+        var paused   = false;
+        var chevAnim = null; // { start, end, startTime, dur }
+
+        function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+        function tick(now) {
+          if (chevAnim) {
+            if (chevAnim.startTime === null) chevAnim.startTime = now;
+            var t = Math.min(1, (now - chevAnim.startTime) / chevAnim.dur);
+            offset = chevAnim.start + (chevAnim.end - chevAnim.start) * ease(t);
+            if (t >= 1) {
+              offset = chevAnim.end;
+              // Normalize into [0, setW) after animation completes
+              offset = ((offset % setW) + setW) % setW;
+              chevAnim = null;
+            }
+          } else if (!paused) {
+            offset += SPEED;
+            if (offset >= setW) offset -= setW;
+          }
+          marquee.style.transform = 'translateX(' + (-offset) + 'px)';
+          requestAnimationFrame(tick);
+        }
+
+        track.addEventListener('mouseenter', function() { paused = true; });
+        track.addEventListener('mouseleave', function() { paused = false; });
+
+        function chevClick(dir) {
+          if (chevAnim) return;
+          // Normalize current offset, snap to nearest card boundary
+          var norm    = ((offset % setW) + setW) % setW;
+          var snapped = Math.round(norm / cardW) * cardW;
+          var raw     = snapped + dir * cardW;
+          // If going backward from near 0, shift into the second set to stay positive
+          if (raw < 0) { snapped += setW; raw += setW; }
+          offset = snapped; // snap before animating to avoid jump
+          chevAnim = { start: snapped, end: raw, startTime: null, dur: 480 };
+        }
+
+        prevBtn && prevBtn.addEventListener('click', function() { chevClick(-1); });
+        nextBtn && nextBtn.addEventListener('click', function() { chevClick(1); });
+
+        requestAnimationFrame(tick);
+      }
+
+      // Wait for images to paint so offsetWidth is accurate
+      if (document.readyState === 'complete') {
+        requestAnimationFrame(init);
+      } else {
+        window.addEventListener('load', function() { requestAnimationFrame(init); });
+      }
+    })();
+  </script>
+
+  <!-- ── Testimonials stacked card drag/shuffle ── -->
+  <script>
+  (function () {
+    var stack  = document.getElementById('testiStack');
+    var dotsEl = document.getElementById('testiDots');
+    if (!stack) return;
+
+    // Wait until content renderer has populated the stack
+    function init() {
+      var cards = Array.from(stack.querySelectorAll('.testi-card'));
+      if (!cards.length) return;
+      var total = cards.length;
+      // frontIdx = index into cards[] of the card currently at front
+      var frontIdx = 0;
+
+      function posOf(offset) {
+        // offset: 0=front,1=middle,2=back, >=3=hidden
+        if (offset === 0) return 'front';
+        if (offset === 1) return 'middle';
+        if (offset === 2) return 'back';
+        return 'hidden';
+      }
+
+      function updatePositions() {
+        cards.forEach(function (card, i) {
+          var offset = ((i - frontIdx) % total + total) % total;
+          card.setAttribute('data-pos', posOf(offset));
+        });
+        // Update dots
+        if (dotsEl) {
+          var dots = dotsEl.querySelectorAll('.testi-dot');
+          dots.forEach(function (d, i) {
+            d.classList.toggle('active', i === frontIdx);
+          });
+        }
+      }
+
+      function advance() {
+        frontIdx = (frontIdx + 1) % total;
+        updatePositions();
+      }
+
+      // Auto-cycle every 4 seconds (pauses on hover)
+      var autoTimer = null;
+      function startAuto() {
+        stopAuto();
+        autoTimer = setInterval(advance, 4000);
+      }
+      function stopAuto() {
+        if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+      }
+      startAuto();
+
+      stack.addEventListener('mouseenter', stopAuto);
+      stack.addEventListener('mouseleave', startAuto);
+
+      // Click on non-front cards to bring them to front
+      cards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          var pos = card.getAttribute('data-pos');
+          if (pos === 'front') return;
+          // find how many steps to advance
+          var idx = cards.indexOf(card);
+          var offset = ((idx - frontIdx) % total + total) % total;
+          for (var s = 0; s < offset; s++) advance();
+        });
+      });
+
+      // Pointer drag — drag front card left to advance
+      var drag = null;
+      var THRESHOLD = 60; // px to trigger shuffle
+
+      function getFrontCard() {
+        return cards.find(function(c) { return c.getAttribute('data-pos') === 'front'; });
+      }
+
+      stack.addEventListener('pointerdown', function (e) {
+        var card = getFrontCard();
+        if (!card || e.target.closest('.testi-card') !== card) return;
+        stopAuto();
+        drag = { startX: e.clientX, startY: e.clientY, card: card, dx: 0, dy: 0 };
+        card.setPointerCapture(e.pointerId);
+        card.classList.add('is-dragging');
+        e.preventDefault();
+      });
+
+      stack.addEventListener('pointermove', function (e) {
+        if (!drag) return;
+        drag.dx = e.clientX - drag.startX;
+        drag.dy = e.clientY - drag.startY;
+        var card = drag.card;
+        // rotate slightly as you drag; drag.dx negative = dragging left
+        var rot    = -4 + drag.dx * 0.04;
+        var tx     = -8 + drag.dx * 0.7;
+        var ty     = drag.dy * 0.3;
+        var fadeOp = drag.dx < 0 ? Math.max(0.4, 1 + drag.dx / (THRESHOLD * 1.5)) : 1;
+        card.style.transition = 'none';
+        card.style.transform  = 'rotate(' + rot + 'deg) translate(' + tx + 'px, ' + ty + 'px)';
+        card.style.opacity    = fadeOp;
+        e.preventDefault();
+      });
+
+      function endDrag(commit) {
+        if (!drag) return;
+        var card = drag.card;
+        card.classList.remove('is-dragging');
+        card.style.transition = '';
+        card.style.transform  = '';
+        card.style.opacity    = '';
+        if (commit) {
+          // animate card flying out, then advance
+          card.style.transition = 'transform 0.35s cubic-bezier(0.55,0,1,0.45), opacity 0.3s ease';
+          card.style.transform  = 'rotate(-14deg) translate(-320px, ' + (drag.dy * 0.5) + 'px)';
+          card.style.opacity    = '0';
+          setTimeout(function () {
+            card.style.transition = '';
+            card.style.transform  = '';
+            card.style.opacity    = '';
+            advance();
+            startAuto();
+          }, 340);
+        } else {
+          startAuto();
+        }
+        drag = null;
+      }
+
+      stack.addEventListener('pointerup', function (e) {
+        if (!drag) return;
+        endDrag(drag.dx < -THRESHOLD);
+      });
+      stack.addEventListener('pointercancel', function () {
+        endDrag(false);
+      });
+    }
+
+    // Give content renderer time to run
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  </script>
+
+  <!-- ── Config: apply localStorage content before scramble initialises ── -->
+  <script>
+  (function() {
+    const ICONS = {
+      share:    `<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>`,
+      smile:    `<circle cx="12" cy="12" r="10"/><path d="M8.5 14.5s1.5 2 3.5 2 3.5-2 3.5-2"/><path d="M9 9h.01M15 9h.01"/>`,
+      video:    `<path d="M15 10l4.553-2.276A1 1 0 0121 8.723v6.554a1 1 0 01-1.447.894L15 14v-4z"/><rect x="2" y="7" width="13" height="10" rx="2"/>`,
+      home:     `<path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/>`,
+      cpu:      `<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><path d="M12 12v3m-3-1.5h6"/>`,
+      star:     `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`,
+      globe:    `<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>`,
+      mail:     `<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>`,
+      chart:    `<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>`,
+      code:     `<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>`,
+      camera:   `<path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>`,
+      zap:      `<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>`,
+      layers:   `<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>`,
+      paint:    `<path d="M2 16.5A4.5 4.5 0 006.5 21c2 0 3.5-1.5 3.5-3v-1h9a1 1 0 000-2h-1V8a1 1 0 00-1-1h-1V4a2 2 0 00-4 0v3h-1a1 1 0 00-1 1v7H8v1c0 .55-.45 1-1 1s-1-.45-1-1"/>`,
+      settings: `<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>`,
+    };
+
+    function iconSvg(name) {
+      return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F48DF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ICONS.star}</svg>`;
+    }
+
+    // HTML-escape helper — prevents XSS when inserting user content via innerHTML
+    function esc(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    var cfg;
+    try { cfg = JSON.parse(localStorage.getItem('studiobee_config') || 'null'); } catch(e) {}
+    if (!cfg) return;
+
+    // ── Services ──
+    var s = cfg.services;
+    if (s) {
+      var sh = document.getElementById('cfg-services-heading');
+      if (sh && s.heading) sh.innerHTML = esc(s.heading);
+      var sb = document.getElementById('cfg-services-body');
+      if (sb && s.body) sb.textContent = s.body;
+      if (s.cards && s.cards.length) {
+        var grid = document.getElementById('cfg-services-grid');
+        if (grid) {
+          grid.innerHTML = s.cards.map(function(card, i) {
+            var num = String(i + 1).padStart(2, '0');
+            var mediaEl = card.mediaType === 'video'
+              ? '<video src="' + esc(card.mediaSrc) + '" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></video>'
+              : '<img src="' + esc(card.mediaSrc || '') + '" alt="' + esc(card.title || '') + '" />';
+            return '<div class="service-card">' +
+              '<span style="position:absolute;top:36px;right:36px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:700;color:rgba(47,72,223,0.25);letter-spacing:0.06em;">' + num + '</span>' +
+              '<div class="service-icon">' + iconSvg(card.icon || 'star') + '</div>' +
+              '<h3 class="service-h3">' + esc(card.title || '') + '</h3>' +
+              '<p class="service-p">' + esc(card.description || '') + '</p>' +
+              '<a href="#contact" class="service-link">' + esc(card.cta || 'Get started') + ' <span>→</span></a>' +
+            '</div>';
+          }).join('');
+        }
+      }
+    }
+
+    // ── Projects ──
+    var proj = cfg.projects;
+    if (proj && proj.cards && proj.cards.length) {
+      var wrap = document.getElementById('wcWrap');
+      if (wrap) {
+        wrap.innerHTML = proj.cards.map(function(card) {
+          var services = Array.isArray(card.services)
+            ? card.services
+            : String(card.services || '').split(',').map(function(x){return x.trim();}).filter(Boolean);
+          var badges = services.map(function(sv) {
+            return '<span class="wc-badge wc-badge-secondary">' + esc(sv) + '</span>';
+          }).join('');
+          var mediaEl = card.mediaType === 'video'
+            ? '<video src="' + esc(card.mediaSrc) + '" autoplay muted loop playsinline></video>'
+            : '<img src="' + esc(card.mediaSrc || '') + '" alt="' + esc(card.title || '') + '" />';
+          return '<div class="wc-card" data-media="' + esc(card.mediaSrc || '') + '" data-media-type="' + esc(card.mediaType || 'image') + '">' +
+            mediaEl +
+            '<div class="wc-reveal">' +
+              '<div class="wc-reveal-group">' +
+                '<p class="wc-reveal-label">Type</p>' +
+                '<div class="wc-reveal-badges"><span class="wc-badge wc-badge-primary">' + esc(card.typeBadge || '') + '</span></div>' +
+              '</div>' +
+              '<div class="wc-reveal-group">' +
+                '<p class="wc-reveal-label">Services</p>' +
+                '<div class="wc-reveal-badges">' + badges + '</div>' +
+              '</div>' +
+              '<p class="wc-reveal-title">' + esc(card.title || '') + '</p>' +
+              '<p class="wc-reveal-desc">' + esc(card.description || '') + '</p>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+      }
+    }
+
+    // ── Stats ──
+    var st = cfg.stats;
+    if (st && st.items && st.items.length) {
+      var statGrid = document.getElementById('cfg-stats-grid');
+      if (statGrid) {
+        statGrid.innerHTML = st.items.map(function(item) {
+          return '<div>' +
+            '<div class="stat-divider"></div>' +
+            '<div class="stat-num">' + esc(item.num || '') + '</div>' +
+            '<p class="stat-label">' + esc(item.label || '') + '</p>' +
+          '</div>';
+        }).join('');
+      }
+    }
+
+    // ── Process ──
+    var pr = cfg.process;
+    if (pr) {
+      var ph = document.getElementById('cfg-process-heading');
+      if (ph && pr.heading) ph.innerHTML = esc(pr.heading);
+      if (pr.steps && pr.steps.length) {
+        var procGrid = document.getElementById('cfg-process-grid');
+        if (procGrid) {
+          procGrid.innerHTML = pr.steps.map(function(step, i) {
+            var num = String(i + 1).padStart(2, '0');
+            return '<div class="process-step">' +
+              '<p class="process-num">' + num + '</p>' +
+              '<h3 class="process-h3">' + esc(step.title || '') + '</h3>' +
+              '<p class="process-p">' + esc(step.description || '') + '</p>' +
+            '</div>';
+          }).join('');
+        }
+      }
+    }
+  })();
+  </script>
+
+  <!-- ── Text scramble headings ── -->
+  <script>
+    (() => {
+      const CHARS   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      const STEPS   = 20;
+      const STEP_MS = 100;
+
+      function getVisualLines(el) {
+        const range = document.createRange();
+        const lines = [];
+        let current = '', prevY = null;
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        let node;
+        while ((node = walker.nextNode())) {
+          for (let i = 0; i < node.textContent.length; i++) {
+            range.setStart(node, i); range.setEnd(node, i + 1);
+            const y = Math.round(range.getBoundingClientRect().top);
+            if (prevY !== null && y !== prevY) { lines.push(current); current = node.textContent[i]; }
+            else { current += node.textContent[i]; }
+            prevY = y;
+          }
+        }
+        if (current) lines.push(current);
+        return lines.length ? lines : [el.textContent];
+      }
+
+      function startScramble(el, trueHTML, elWidth) {
+        el.innerHTML = trueHTML;
+        const lines = getVisualLines(el);
+        const totalChars = lines.reduce((sum, l) => sum + l.length, 0);
+        let step = 0;
+        const iv = setInterval(() => {
+          const progress = step / STEPS;
+          let gi = 0;
+          const html = lines.map(line => {
+            let out = '';
+            for (let i = 0; i < line.length; i++) {
+              const ch = line[i];
+              if (ch === ' ') out += ' ';
+              else if (progress * totalChars > gi) out += ch;
+              else out += CHARS[Math.floor(Math.random() * CHARS.length)];
+              gi++;
+            }
+            return `<span style="display:block;white-space:nowrap;overflow:hidden;width:${elWidth}px">${out}</span>`;
+          }).join('');
+          el.innerHTML = html;
+          step++;
+          if (step > STEPS) { clearInterval(iv); el.innerHTML = trueHTML; }
+        }, STEP_MS);
+        return iv;
+      }
+
+      document.querySelectorAll('.scramble-heading').forEach(el => {
+        const trueHTML = el.innerHTML;
+        const elWidth  = el.offsetWidth;
+        let loopId = null, activeIv = null;
+
+        function kick() {
+          if (activeIv) { clearInterval(activeIv); activeIv = null; }
+          activeIv = startScramble(el, trueHTML, elWidth);
+        }
+
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (e.isIntersecting && !loopId) {
+              kick();
+              loopId = setInterval(kick, 4000);
+            } else if (!e.isIntersecting && loopId) {
+              clearInterval(loopId); loopId = null;
+              if (activeIv) { clearInterval(activeIv); activeIv = null; }
+              el.innerHTML = trueHTML;
+            }
+          });
+        }, { threshold: 0.3 });
+        io.observe(el);
+      });
+    })();
+  </script>
+
+  <!-- ── Contact form submission ── -->
+  <script>
+  (function () {
+    // Works whether served from serve.mjs (:3000) or VS Code Live Server (:5500)
+    var API = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+
+    var form = document.getElementById('ctaForm');
+    var btn  = document.getElementById('ctaBtn');
+    var msg  = document.getElementById('ctaMsg');
+    if (!form) return;
+
+    var fieldIds = ['cf-name', 'cf-phone', 'cf-email', 'cf-city', 'cf-message'];
+
+    // Clear error state on input
+    fieldIds.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', function () { el.classList.remove('err'); });
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var data  = {};
+      var valid = true;
+
+      fieldIds.forEach(function (id) {
+        var el  = document.getElementById(id);
+        var val = el.value.trim();
+        var key = id.replace('cf-', '');
+        data[key] = val;
+        if (!val) { valid = false; el.classList.add('err'); }
+        else { el.classList.remove('err'); }
+      });
+
+      if (!valid) {
+        msg.textContent = 'Please fill in all required fields.';
+        msg.className   = 'cta-form-msg err';
+        return;
+      }
+
+      btn.disabled    = true;
+      btn.textContent = 'Sending…';
+      msg.textContent = '';
+      msg.className   = 'cta-form-msg';
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', API + '/contact', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          var successDiv = document.createElement('div');
+          successDiv.className = 'cta-success';
+          successDiv.innerHTML =
+            '<div class="cta-success-icon">' +
+              '<svg width="72" height="72" viewBox="0 0 64 64" fill="none">' +
+                '<circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.12)" stroke-width="2.5"/>' +
+                '<circle class="check-circle-anim" cx="32" cy="32" r="28" stroke="#FBFBFB" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="175.93" stroke-dashoffset="175.93"/>' +
+                '<path class="check-mark-anim" d="M19 33l9 9 18-20" stroke="#FBFBFB" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="42" stroke-dashoffset="42"/>' +
+              '</svg>' +
+            '</div>' +
+            '<p class="cta-success-title">Message sent!</p>' +
+            '<p class="cta-success-body">We\'ll get back to you within one business day.</p>' +
+            '<div class="cta-success-progress"><div class="cta-success-progress-bar"></div></div>';
+
+          form.style.display = 'none';
+          form.parentNode.insertBefore(successDiv, form);
+
+          // Auto-dismiss after 5 s
+          setTimeout(function () {
+            successDiv.classList.add('out');
+            setTimeout(function () {
+              if (successDiv.parentNode) successDiv.parentNode.removeChild(successDiv);
+              form.reset();
+              form.style.display = '';
+              btn.disabled = false;
+              btn.innerHTML = 'Submit <span style="opacity:0.5;">→</span>';
+              msg.textContent = '';
+              msg.className = 'cta-form-msg';
+            }, 380);
+          }, 5000);
+        } else {
+          btn.disabled  = false;
+          btn.innerHTML = 'Submit <span style="opacity:0.5;">→</span>';
+          msg.textContent = 'Something went wrong. Please try again.';
+          msg.className   = 'cta-form-msg err';
+        }
+      };
+
+      xhr.onerror = function () {
+        btn.disabled  = false;
+        btn.innerHTML = 'Submit <span style="opacity:0.5;">→</span>';
+        msg.textContent = 'Could not connect — is the server running?';
+        msg.className   = 'cta-form-msg err';
+      };
+
+      xhr.send(JSON.stringify(data));
+    });
+  })();
+  </script>
+
+  <!-- ── Lightbox ── -->
+  <div id="lb" class="lb-overlay" role="dialog" aria-modal="true" aria-label="Media viewer">
+    <button class="lb-close" id="lbClose" aria-label="Close">✕</button>
+    <div class="lb-inner" id="lbInner"></div>
+  </div>
+  <script>
+  (function () {
+    var lb      = document.getElementById('lb');
+    var lbInner = document.getElementById('lbInner');
+    var lbClose = document.getElementById('lbClose');
+    if (!lb || !lbInner || !lbClose) return;
+
+    function openLb(mediaSrc, mediaType) {
+      lbInner.innerHTML = '';
+      if (mediaType === 'video') {
+        var v = document.createElement('video');
+        v.src = mediaSrc;
+        v.controls = true;
+        v.autoplay = true;
+        v.setAttribute('playsinline', '');
+        v.setAttribute('controlsList', 'nodownload');
+        v.setAttribute('oncontextmenu', 'return false');
+        lbInner.appendChild(v);
+      } else {
+        var img = document.createElement('img');
+        img.src = mediaSrc;
+        img.alt = '';
+        lbInner.appendChild(img);
+      }
+      lb.classList.add('lb-open');
+      document.body.style.overflow = 'hidden';
+      lbClose.focus();
+    }
+
+    function closeLb() {
+      lb.classList.remove('lb-open');
+      document.body.style.overflow = '';
+      var v = lbInner.querySelector('video');
+      if (v) { v.pause(); v.src = ''; }
+      setTimeout(function () { lbInner.innerHTML = ''; }, 350);
+    }
+
+    lbClose.addEventListener('click', closeLb);
+    lb.addEventListener('click', function (e) { if (e.target === lb) closeLb(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && lb.classList.contains('lb-open')) closeLb();
+    });
+    document.addEventListener('click', function (e) {
+      var card = e.target.closest('[data-media]');
+      if (!card) return;
+      e.preventDefault();
+      openLb(card.dataset.media, card.dataset.mediaType || 'image');
+    });
+  })();
+  </script>
+
+
+  <!-- ── Schema.org Structured Data ── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "LocalBusiness",
+        "name": "studiobee",
+        "description": "Full-service creative studio offering branding, social media management, video production, studio rental, and AI automations.",
+        "url": "https://studiobee.co.in",
+        "logo": "https://studiobee.co.in/studiobee.png",
+        "image": "https://studiobee.co.in/studiobee.png",
+        "email": "arora.nikhil@studiobee.ai",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Gurgaon",
+          "addressRegion": "Haryana",
+          "addressCountry": "IN"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": 28.4595, "longitude": 77.0266 },
+        "areaServed": ["Gurgaon", "Delhi", "NCR", "India"],
+        "priceRange": "$$",
+        "sameAs": []
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What services does studiobee offer?",
+            "acceptedAnswer": { "@type": "Answer", "text": "studiobee offers social media management, branding, video production, studio rental, and business AI automations." }
+          },
+          {
+            "@type": "Question",
+            "name": "Where is studiobee located?",
+            "acceptedAnswer": { "@type": "Answer", "text": "studiobee is based in Gurgaon, Haryana, India, serving clients across Delhi NCR and beyond." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I rent a studio space at studiobee?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — studiobee offers a fully equipped creative studio available by the hour or day with professional lighting, backdrops, and gear." }
+          }
+        ]
+      },
+      {
+        "@type": "AggregateRating",
+        "itemReviewed": { "@type": "LocalBusiness", "name": "studiobee" },
+        "ratingValue": "5",
+        "bestRating": "5",
+        "ratingCount": "40"
+      }
+    ]
+  }
+  </script>
+
+  <!-- ── Analytics tracking ── -->
+  <script>
+  (function() {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
+    var sid = sessionStorage.getItem('_sb_sid') || (function() {
+      var id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      sessionStorage.setItem('_sb_sid', id); return id;
+    })();
+    var start = Date.now();
+    var page = location.pathname + location.search;
+    function send(duration) {
+      try {
+        navigator.sendBeacon('/analytics', JSON.stringify({
+          sessionId: sid, page: page,
+          referrer: document.referrer || '',
+          duration: duration || 0,
+          locale: navigator.language || '',
+          tz: Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+        }));
+      } catch(e) {}
+    }
+    send(0);
+    window.addEventListener('pagehide', function() { send(Math.round((Date.now() - start) / 1000)); });
+  })();
+  </script>
+
+  <!-- ── Download protection ── -->
+  <script>
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') e.preventDefault();
+  });
+  document.addEventListener('dragstart', function(e) {
+    if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') e.preventDefault();
+  });
+  </script>
+
+</body>
+</html>

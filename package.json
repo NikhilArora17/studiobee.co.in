@@ -1,0 +1,19 @@
+{
+  "name": "studiobee-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "serve.mjs",
+  "scripts": {
+    "start": "node serve.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "nodemailer": "^8.0.1"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.37.5"
+  }
+}

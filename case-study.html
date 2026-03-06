@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Case Study — studiobee</title>
+  <meta name="description" content="studiobee case study" />
+  <link rel="canonical" href="https://studiobee.co.in/case-study.html" />
+  <meta name="theme-color" content="#2F48DF" />
+  <link rel="icon" type="image/png" href="/studiobee.png" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Case Study — studiobee" />
+  <meta property="og:description" content="studiobee case study" />
+  <meta property="og:image" content="https://studiobee.co.in/studiobee.png" />
+  <meta property="og:site_name" content="studiobee" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Case Study — studiobee" />
+  <meta name="twitter:description" content="studiobee case study" />
+  <meta name="twitter:image" content="https://studiobee.co.in/studiobee.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    img, video { -webkit-user-drag: none; user-select: none; }
+
+    :root {
+      --blue:  #2F48DF;
+      --dark:  #0A0A0A;
+      --cream: #FBFBFB;
+    }
+
+    body {
+      background-color: var(--dark);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse 65% 55% at 5% 15%, rgba(47,72,223,0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 45% at 95% 80%, rgba(12,24,140,0.28) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 55% 50%, rgba(47,72,223,0.07) 0%, transparent 60%);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Nav ─────────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 56px;
+      transition: background 0.3s ease, backdrop-filter 0.3s ease;
+    }
+    nav.scrolled {
+      background: rgba(10,10,10,0.88);
+      backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-logo { height: 24px; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-link:hover { color: #fff; }
+    .nav-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      background: var(--cream);
+      padding: 10px 22px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+    }
+    .nav-cta:hover { transform: scale(1.04); box-shadow: 0 8px 32px rgba(251,251,251,0.12); }
+    .nav-cta:active { transform: scale(0.97); }
+    .nav-cta:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+
+    /* ── Main layout ──────────────────────────────────────────────────────── */
+    .detail-wrap {
+      padding-top: 112px;
+      padding-bottom: 96px;
+      max-width: 1360px;
+      margin: 0 auto;
+      padding-left: 56px;
+      padding-right: 56px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: clamp(280px, 30vw, 400px) 1fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    /* ── Media column ─────────────────────────────────────────────────────── */
+    .media-col {
+      position: sticky;
+      top: 96px;
+    }
+
+    .media-aspect {
+      aspect-ratio: 9 / 16;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      background: #0d0d0d;
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.5),
+        0 12px 40px rgba(0,0,0,0.55),
+        0 40px 96px rgba(12,24,140,0.25);
+    }
+
+    .media-aspect video,
+    .media-aspect img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* gradient overlay on media */
+    .media-grad {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.55) 0%,
+        rgba(0,0,0,0.0)  45%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* video controls */
+    .media-controls {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      display: flex;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .ctrl-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: background 0.2s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .ctrl-btn:hover  { background: rgba(255,255,255,0.22); transform: scale(1.08); }
+    .ctrl-btn:active { transform: scale(0.93); }
+    .ctrl-btn:focus-visible { outline: 2px solid rgba(255,255,255,0.6); outline-offset: 3px; }
+
+    /* ── Info column ──────────────────────────────────────────────────────── */
+    .info-col {
+      padding-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(251,251,251,0.35);
+    }
+
+    .detail-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(40px, 5vw, 72px);
+      font-weight: 400;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--cream);
+      margin-top: -8px;
+    }
+
+    .owner-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(251,251,251,0.45);
+      font-size: 15px;
+      font-weight: 400;
+      margin-top: -8px;
+    }
+
+    .owner-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+
+    .services-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .svc-pill {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(251,251,251,0.65);
+      background: rgba(47,72,223,0.18);
+      border: 1px solid rgba(47,72,223,0.38);
+      padding: 6px 14px;
+      border-radius: 100px;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .svc-pill:hover {
+      background: rgba(47,72,223,0.3);
+      border-color: rgba(47,72,223,0.6);
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    .detail-desc {
+      font-size: 16px;
+      line-height: 1.78;
+      color: rgba(251,251,251,0.5);
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--cream);
+      background: var(--blue);
+      padding: 16px 40px;
+      border-radius: 100px;
+      text-decoration: none;
+      align-self: flex-start;
+      box-shadow:
+        0 2px 4px rgba(0,0,0,0.25),
+        0 8px 32px rgba(47,72,223,0.4);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: scale(1.04) translateY(-2px);
+      box-shadow: 0 16px 56px rgba(47,72,223,0.55);
+    }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-primary:focus-visible { outline: 2px solid white; outline-offset: 4px; border-radius: 100px; }
+
+    .back-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(251,251,251,0.32);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: -8px;
+      transition: color 0.2s ease;
+    }
+    .back-link:hover { color: rgba(251,251,251,0.65); }
+    .back-link:focus-visible { outline: 2px solid rgba(255,255,255,0.4); outline-offset: 3px; }
+
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+    footer {
+      margin-top: 80px;
+      background: rgba(0,0,0,0.45);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 52px 56px 40px;
+    }
+    .foot-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .foot-logo { height: 22px; opacity: 0.3; }
+    .foot-copy { font-size: 13px; color: rgba(255,255,255,0.2); }
+    .foot-back {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s ease;
+    }
+    .foot-back:hover { color: rgba(255,255,255,0.65); }
+
+    /* ── Responsive ──────────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .detail-grid {
+        grid-template-columns: clamp(240px, 45vw, 340px) 1fr;
+        gap: 48px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 18px 24px; }
+      .detail-wrap { padding: 88px 24px 72px; }
+      .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .media-col {
+        position: relative;
+        top: auto;
+        max-width: 300px;
+        width: 100%;
+        margin: 0 auto;
+      }
+      .detail-title { font-size: clamp(32px, 9vw, 52px); }
+      footer { padding: 44px 24px 32px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links .nav-link { display: none; }
+      .media-col { max-width: 260px; }
+      .detail-wrap { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ── -->
+  <nav id="cs-nav">
+    <a href="index.html">
+      <img src="studiobee%20white.png" alt="studiobee" class="nav-logo" />
+    </a>
+    <div class="nav-links">
+      <a href="index.html#work"     class="nav-link">Work</a>
+      <a href="index.html#services" class="nav-link">Services</a>
+      <a href="index.html#process"  class="nav-link">Process</a>
+      <a href="index.html#contact"  class="nav-cta">Start a project</a>
+    </div>
+  </nav>
+
+  <!-- ── Detail layout ── -->
+  <div class="detail-wrap">
+    <div class="detail-grid" id="detailGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <div class="foot-inner">
+      <img src="studiobee%20white.png" alt="studiobee" class="foot-logo" />
+      <p class="foot-copy">© 2025 studiobee. All rights reserved.</p>
+      <a href="case-studies.html" class="foot-back">← All case studies</a>
+    </div>
+  </footer>
+
+  <script src="content.js"></script>
+  <script>
+    // Nav scroll
+    var nav = document.getElementById('cs-nav');
+    window.addEventListener('scroll', function () {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Parse URL param
+    var params = new URLSearchParams(window.location.search);
+    var idx = parseInt(params.get('i'), 10);
+
+    // Validate
+    if (!window.SC || !SC.projects || isNaN(idx) || idx < 0 || idx >= SC.projects.length) {
+      window.location.replace('case-studies.html');
+    }
+
+    var p = SC.projects[idx];
+
+    // Update page title and meta tags dynamically
+    var ptitle = (p.title || 'Case Study') + ' — studiobee';
+    var pdesc = (p.desc || p.title || 'Case Study') + ' — A studiobee case study.';
+    var purl = 'https://studiobee.co.in/case-study.html?i=' + idx;
+    document.title = ptitle;
+    var setMeta = function(sel, val) { var el = document.querySelector(sel); if (el) el.setAttribute('content', val); };
+    setMeta('meta[name="description"]', pdesc);
+    setMeta('meta[property="og:title"]', ptitle);
+    setMeta('meta[property="og:description"]', pdesc);
+    setMeta('meta[property="og:url"]', purl);
+    setMeta('meta[name="twitter:title"]', ptitle);
+    setMeta('meta[name="twitter:description"]', pdesc);
+    var canon = document.querySelector('link[rel="canonical"]');
+    if (canon) canon.setAttribute('href', purl);
+
+    // BreadcrumbList schema
+    var bcScript = document.createElement('script');
+    bcScript.type = 'application/ld+json';
+    bcScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://studiobee.co.in" },
+        { "@type": "ListItem", "position": 2, "name": "Case Studies", "item": "https://studiobee.co.in/case-studies.html" },
+        { "@type": "ListItem", "position": 3, "name": p.title || 'Case Study' }
+      ]
+    });
+    document.head.appendChild(bcScript);
+
+    // HTML escape helper
+    function esc(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Media HTML
+    var mediaHtml;
+    if (p.mediaType === 'video') {
+      mediaHtml =
+        '<video id="detailVideo" src="' + esc(p.media) + '" playsinline loop controlsList="nodownload" oncontextmenu="return false"></video>' +
+        '<div class="media-grad"></div>' +
+        '<div class="media-controls">' +
+          '<button class="ctrl-btn" id="playBtn" aria-label="Play / Pause" title="Play / Pause">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>' +
+          '</button>' +
+          '<button class="ctrl-btn" id="muteBtn" aria-label="Unmute" title="Toggle sound">' +
+            '<svg id="muteIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>' +
+          '</button>' +
+        '</div>';
+    } else {
+      mediaHtml = '<img src="' + esc(p.media) + '" alt="' + esc(p.title) + '" />' +
+        '<div class="media-grad"></div>';
+    }
+
+    // Service pills
+    var pillsHtml = (p.services || []).map(function (s) {
+      return '<span class="svc-pill">' + esc(s) + '</span>';
+    }).join('');
+
+    // Owner row
+    var ownerHtml = p.owner
+      ? '<div class="owner-row">' +
+          '<svg class="owner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+            '<circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>' +
+          '</svg>' +
+          '<span>' + esc(p.owner) + '</span>' +
+        '</div>'
+      : '';
+
+    // Render
+    document.getElementById('detailGrid').innerHTML =
+      '<div class="media-col">' +
+        '<div class="media-aspect">' + mediaHtml + '</div>' +
+      '</div>' +
+      '<div class="info-col">' +
+        '<p class="eyebrow">' + esc(p.type || '') + '</p>' +
+        '<h1 class="detail-title">' + esc(p.title || '') + '</h1>' +
+        ownerHtml +
+        '<div class="services-list">' + pillsHtml + '</div>' +
+        '<div class="divider"></div>' +
+        '<p class="detail-desc">' + esc(p.desc || '') + '</p>' +
+        '<a href="index.html#contact" class="btn-primary">Start a project <span style="opacity:0.55;">→</span></a>' +
+        '<a href="case-studies.html" class="back-link">← All case studies</a>' +
+      '</div>';
+
+    // Video controls
+    var vid = document.getElementById('detailVideo');
+    if (vid) {
+      var playBtn  = document.getElementById('playBtn');
+      var muteBtn  = document.getElementById('muteBtn');
+      var playIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>';
+      var pauseIcon= '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+      var muteOffIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+      var muteOnIcon  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
+
+      vid.muted = false;
+
+      playBtn.addEventListener('click', function () {
+        if (vid.paused) {
+          vid.play();
+          playBtn.innerHTML = pauseIcon;
+        } else {
+          vid.pause();
+          playBtn.innerHTML = playIcon;
+        }
+      });
+
+      muteBtn.addEventListener('click', function () {
+        vid.muted = !vid.muted;
+        muteBtn.innerHTML = vid.muted ? muteOffIcon : muteOnIcon;
+      });
+
+      // Attempt autoplay with sound; fall back gracefully if browser blocks it
+      vid.play().then(function () {
+        playBtn.innerHTML = pauseIcon;
+        muteBtn.innerHTML = muteOnIcon;
+      }).catch(function () {
+        // Autoplay blocked — video stays paused, play button stays as ▶
+      });
+    }
+  </script>
+
+  <!-- ── Analytics tracking ── -->
+  <script>
+  (function() {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
+    var sid = sessionStorage.getItem('_sb_sid') || (function() {
+      var id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      sessionStorage.setItem('_sb_sid', id); return id;
+    })();
+    var start = Date.now();
+    var page = location.pathname + location.search;
+    function send(duration) {
+      try {
+        navigator.sendBeacon('/analytics', JSON.stringify({
+          sessionId: sid, page: page,
+          referrer: document.referrer || '',
+          duration: duration || 0,
+          locale: navigator.language || '',
+          tz: Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+        }));
+      } catch(e) {}
+    }
+    send(0);
+    window.addEventListener('pagehide', function() { send(Math.round((Date.now() - start) / 1000)); });
+  })();
+  </script>
+
+  <!-- ── Download protection ── -->
+  <script>
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') e.preventDefault();
+  });
+  document.addEventListener('dragstart', function(e) {
+    if (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO') e.preventDefault();
+  });
+  </script>
+
+</body>
+</html>

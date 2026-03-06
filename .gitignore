@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Puppeteer browser binary (dev-only, not needed on server)
+.cache/
+
+# Secrets — never commit these
+smtp-config.json
+
+# Runtime data — contains customer PII
+contacts.json
+analytics.json
+
+# Config snapshot (regenerated at runtime from config panel)
+config.json
+
+# Uploaded media files
+media/
+
+# Screenshots (dev only)
+screenshots/
+Phone screenshots/
+
+# Local Claude project data
+.claude/
+
+# VS Code workspace settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
