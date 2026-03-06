@@ -10,6 +10,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT      = parseInt(process.env.PORT) || 3000;
 const MEDIA_DIR = path.join(__dirname, 'media');
 
+process.on('uncaughtException',  e => console.error('Uncaught exception:', e));
+process.on('unhandledRejection', e => console.error('Unhandled rejection:', e));
+
 fs.mkdirSync(MEDIA_DIR, { recursive: true });
 
 // ── Security constants ────────────────────────────────────────────────────────
@@ -339,31 +342,44 @@ const server = http.createServer((req, res) => {
     let totalSize = 0;
     const chunks = [];
     let aborted = false;
+    req.on('error', () => {
+      if (!res.headersSent) { res.writeHead(400); res.end('Upload error'); }
+    });
     req.on('data', c => {
       if (aborted) return;
       totalSize += c.length;
       if (totalSize > MAX_UPLOAD_BYTES) {
         aborted = true;
-        req.destroy();
         res.writeHead(413, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'File too large (max 50 MB)' }));
+        req.destroy();
         return;
       }
       chunks.push(c);
     });
     req.on('end', () => {
       if (aborted) return;
-      const body = Buffer.concat(chunks);
-      const base = path.basename(rawName, ext)
-                       .replace(/[^a-zA-Z0-9._-]/g, '_')
-                       .slice(0, 80);
-      const name = Date.now() + '-' + base + ext;
-      const dest = path.join(MEDIA_DIR, name);
-      fs.writeFile(dest, body, err => {
-        if (err) { res.writeHead(500); res.end('Upload failed'); return; }
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ url: '/media/' + name }));
-      });
+      try {
+        fs.mkdirSync(MEDIA_DIR, { recursive: true });
+        const body = Buffer.concat(chunks);
+        const base = path.basename(rawName, ext)
+                         .replace(/[^a-zA-Z0-9._-]/g, '_')
+                         .slice(0, 80);
+        const name = Date.now() + '-' + base + ext;
+        const dest = path.join(MEDIA_DIR, name);
+        fs.writeFile(dest, body, err => {
+          if (err) {
+            console.error('Upload write error:', err);
+            if (!res.headersSent) { res.writeHead(500); res.end('Upload failed'); }
+            return;
+          }
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ url: '/media/' + name }));
+        });
+      } catch (e) {
+        console.error('Upload handler error:', e);
+        if (!res.headersSent) { res.writeHead(500); res.end('Upload failed'); }
+      }
     });
     return;
   }
