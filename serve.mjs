@@ -182,7 +182,6 @@ const server = http.createServer((req, res) => {
   if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
 
   // ── GET /ping ─────────────────────────────────────────────────────────────
-  console.log('REQ', req.method, JSON.stringify(urlPath));
   if ((req.method === 'GET' || req.method === 'HEAD') && urlPath === '/ping') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ ok: true }));
