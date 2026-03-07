@@ -339,10 +339,24 @@ const server = http.createServer((req, res) => {
       res.end(JSON.stringify({ error: 'File type not allowed' }));
       return;
     }
+    try {
+      fs.mkdirSync(MEDIA_DIR, { recursive: true });
+    } catch (e) {
+      console.error('Cannot create media dir:', e);
+      res.writeHead(500); res.end('Upload failed');
+      return;
+    }
+    const base = path.basename(rawName, ext).replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
+    const name = Date.now() + '-' + base + ext;
+    const dest = path.join(MEDIA_DIR, name);
+    const writeStream = fs.createWriteStream(dest);
     let totalSize = 0;
-    const chunks = [];
     let aborted = false;
+
     req.on('error', () => {
+      aborted = true;
+      writeStream.destroy();
+      fs.unlink(dest, () => {});
       if (!res.headersSent) { res.writeHead(400); res.end('Upload error'); }
     });
     req.on('data', c => {
@@ -350,36 +364,29 @@ const server = http.createServer((req, res) => {
       totalSize += c.length;
       if (totalSize > MAX_UPLOAD_BYTES) {
         aborted = true;
+        writeStream.destroy();
+        fs.unlink(dest, () => {});
         res.writeHead(413, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'File too large (max 50 MB)' }));
         req.destroy();
         return;
       }
-      chunks.push(c);
+      writeStream.write(c);
     });
     req.on('end', () => {
       if (aborted) return;
-      try {
-        fs.mkdirSync(MEDIA_DIR, { recursive: true });
-        const body = Buffer.concat(chunks);
-        const base = path.basename(rawName, ext)
-                         .replace(/[^a-zA-Z0-9._-]/g, '_')
-                         .slice(0, 80);
-        const name = Date.now() + '-' + base + ext;
-        const dest = path.join(MEDIA_DIR, name);
-        fs.writeFile(dest, body, err => {
-          if (err) {
-            console.error('Upload write error:', err);
-            if (!res.headersSent) { res.writeHead(500); res.end('Upload failed'); }
-            return;
-          }
-          res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ url: '/media/' + name }));
-        });
-      } catch (e) {
-        console.error('Upload handler error:', e);
-        if (!res.headersSent) { res.writeHead(500); res.end('Upload failed'); }
-      }
+      writeStream.end();
+    });
+    writeStream.on('finish', () => {
+      if (aborted) return;
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ url: '/media/' + name }));
+    });
+    writeStream.on('error', err => {
+      console.error('Upload write error:', err);
+      aborted = true;
+      fs.unlink(dest, () => {});
+      if (!res.headersSent) { res.writeHead(500); res.end('Upload failed'); }
     });
     return;
   }
