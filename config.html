@@ -641,7 +641,7 @@
     var keyInput = document.getElementById('admin-key-input');
     if (!keyInput) return;
     keyInput.value = SB_ADMIN_KEY;
-    keyInput.addEventListener('change', function() {
+    keyInput.addEventListener('input', function() {
       SB_ADMIN_KEY = keyInput.value.trim();
       localStorage.setItem('sb_admin_key', SB_ADMIN_KEY);
     });
