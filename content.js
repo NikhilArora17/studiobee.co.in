@@ -131,4 +131,23 @@
 
   window.SC         = (override && Object.keys(override).length) ? merge(DEFAULT, override) : DEFAULT;
   window.SC_DEFAULT = DEFAULT;
+
+  // On production (Vercel), server-side config injection is unavailable.
+  // Fetch config from /api/config, update localStorage if changed, reload once.
+  // Subsequent page loads skip the reload (localStorage already matches).
+  if (typeof window.__SITE_CONFIG__ === 'undefined'
+      && location.hostname !== 'localhost'
+      && location.hostname !== '127.0.0.1') {
+    fetch('/api/config')
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(cfg) {
+        if (!cfg) return;
+        var incoming = JSON.stringify(cfg);
+        var current  = localStorage.getItem('studiobee_content') || 'null';
+        if (incoming === current) return;
+        localStorage.setItem('studiobee_content', incoming);
+        location.reload();
+      })
+      .catch(function() {});
+  }
 })();

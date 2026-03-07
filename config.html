@@ -479,6 +479,11 @@
     <button class="nav-btn" data-panel="analytics">Analytics</button>
   </nav>
   <div class="sb-spacer"></div>
+  <div style="padding:12px 16px;margin-bottom:8px;">
+    <div class="sb-nav-label" style="margin-bottom:6px;">Admin Key</div>
+    <input id="admin-key-input" type="password" placeholder="Enter admin key"
+      style="width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:7px 10px;color:#FBFBFB;font-size:12px;font-family:inherit;box-sizing:border-box;" />
+  </div>
   <div class="sb-actions">
     <button class="action-btn primary" onclick="previewSite()">↗ Preview Site</button>
     <button class="action-btn" onclick="exportJSON()">⬇ Export JSON</button>
@@ -630,6 +635,18 @@
   // Works whether opened via serve.mjs (:3000) or VS Code Live Server (:5500)
   var API = (window.location.port === '5500') ? 'http://localhost:3000' : '';
 
+  // Admin key — persisted in localStorage; falls back to server-injected value on local dev
+  var SB_ADMIN_KEY = localStorage.getItem('sb_admin_key') || (typeof window.__ADMIN_KEY__ !== 'undefined' ? window.__ADMIN_KEY__ : '') || '';
+  (function() {
+    var keyInput = document.getElementById('admin-key-input');
+    if (!keyInput) return;
+    keyInput.value = SB_ADMIN_KEY;
+    keyInput.addEventListener('change', function() {
+      SB_ADMIN_KEY = keyInput.value.trim();
+      localStorage.setItem('sb_admin_key', SB_ADMIN_KEY);
+    });
+  })();
+
   // ── Helpers ─────────────────────────────────────────────────────────────
 
   function el(tag, props) {
@@ -766,7 +783,7 @@
     if (existing) {
       fetch(API + '/save-config', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Admin-Key': (window.__ADMIN_KEY__ || '') },
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Key': SB_ADMIN_KEY },
         body: existing,
       }).catch(function() {});
     }
@@ -788,7 +805,7 @@
       // Also save server-side so all devices (mobile, desktop) load the same config
       fetch(API + '/save-config', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Admin-Key': (window.__ADMIN_KEY__ || '') },
+        headers: { 'Content-Type': 'application/json', 'X-Admin-Key': SB_ADMIN_KEY },
         body: json,
       }).then(function(r) {
         setStatus(r.ok ? '✓ Saved' : '⚠ Server save failed', r.ok ? 'saved' : 'error');
@@ -1020,45 +1037,63 @@
         uploadStatus.className   = 'upload-status uploading';
         zoneText.textContent     = 'Uploading…';
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', API + '/upload', true);
-        xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
-
-        xhr.upload.onprogress = function (e) {
-          if (e.lengthComputable && e.total > 100000) {
-            uploadStatus.textContent = 'Uploading… ' + Math.round(e.loaded / e.total * 100) + '%';
-          }
-        };
-
-        xhr.onload = function () {
-          zoneText.textContent = 'Upload image or video';
-          if (xhr.status === 200) {
-            try {
-              var data = JSON.parse(xhr.responseText);
-              state.projects[idx].media = data.url;
-              urlInput.value            = data.url;
-              refreshPreview(card, data.url, state.projects[idx].mediaType);
-              uploadStatus.textContent = '✓ ' + file.name;
-              uploadStatus.className   = 'upload-status success';
-              setTimeout(function () { uploadStatus.textContent = ''; }, 4000);
-              queueSave();
-            } catch (e) {
-              uploadStatus.textContent = '✗ Bad server response';
-              uploadStatus.className   = 'upload-status error';
-            }
-          } else {
-            uploadStatus.textContent = '✗ Error ' + xhr.status + (xhr.responseText ? ': ' + xhr.responseText.slice(0, 80) : '');
-            uploadStatus.className   = 'upload-status error';
-          }
-        };
-
-        xhr.onerror = function () {
+        function onUploadDone(publicUrl) {
+          state.projects[idx].media = publicUrl;
+          urlInput.value            = publicUrl;
+          refreshPreview(card, publicUrl, state.projects[idx].mediaType);
+          uploadStatus.textContent = '✓ ' + file.name;
+          uploadStatus.className   = 'upload-status success';
           zoneText.textContent     = 'Upload image or video';
-          uploadStatus.textContent = '✗ No server response — server may be waking up, try again in 30s';
+          setTimeout(function () { uploadStatus.textContent = ''; }, 4000);
+          queueSave();
+        }
+        function onUploadError(msg) {
+          zoneText.textContent     = 'Upload image or video';
+          uploadStatus.textContent = '✗ ' + msg;
           uploadStatus.className   = 'upload-status error';
-        };
+        }
 
-        xhr.send(file);
+        if (API !== '') {
+          // LOCAL (serve.mjs): direct binary POST
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', API + '/upload', true);
+          xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
+          xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable && e.total > 100000)
+              uploadStatus.textContent = 'Uploading… ' + Math.round(e.loaded / e.total * 100) + '%';
+          };
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              try { onUploadDone(JSON.parse(xhr.responseText).url); }
+              catch (e) { onUploadError('Bad server response'); }
+            } else { onUploadError('Error ' + xhr.status); }
+          };
+          xhr.onerror = function () { onUploadError('No server response'); };
+          xhr.send(file);
+        } else {
+          // PRODUCTION (Vercel): get presigned URL, then PUT directly to Supabase Storage
+          fetch('/upload', {
+            method: 'POST',
+            headers: { 'X-Filename': encodeURIComponent(file.name), 'X-Admin-Key': SB_ADMIN_KEY }
+          })
+          .then(function(r) { return r.ok ? r.json() : Promise.reject('Error ' + r.status); })
+          .then(function(data) {
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open('PUT', data.uploadUrl, true);
+            xhr2.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+            xhr2.upload.onprogress = function (e) {
+              if (e.lengthComputable && e.total > 100000)
+                uploadStatus.textContent = 'Uploading… ' + Math.round(e.loaded / e.total * 100) + '%';
+            };
+            xhr2.onload = function () {
+              if (xhr2.status >= 200 && xhr2.status < 300) { onUploadDone(data.publicUrl); }
+              else { onUploadError('Upload failed (' + xhr2.status + ')'); }
+            };
+            xhr2.onerror = function () { onUploadError('Upload error'); };
+            xhr2.send(file);
+          })
+          .catch(function(err) { onUploadError(String(err)); });
+        }
       };
       container.appendChild(card);
     });
@@ -1270,36 +1305,55 @@
         uploadStatus2.textContent = 'Uploading…';
         uploadStatus2.className   = 'upload-status uploading';
         zoneText.textContent      = 'Uploading…';
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', API + '/upload', true);
-        xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
-        xhr.onload = function () {
-          zoneText.textContent = 'Upload photo';
-          if (xhr.status === 200) {
-            try {
-              var data = JSON.parse(xhr.responseText);
-              state.team[idx].photo = data.url;
-              urlInput2.value = data.url;
-              refreshPreview(card, data.url, 'image');
-              uploadStatus2.textContent = '✓ ' + file.name;
-              uploadStatus2.className   = 'upload-status success';
-              setTimeout(function () { uploadStatus2.textContent = ''; }, 4000);
-              queueSave();
-            } catch (e) {
-              uploadStatus2.textContent = '✗ Bad server response';
-              uploadStatus2.className   = 'upload-status error';
-            }
-          } else {
-            uploadStatus2.textContent = '✗ Error ' + xhr.status;
-            uploadStatus2.className   = 'upload-status error';
-          }
-        };
-        xhr.onerror = function () {
+        function onPhotoDone(publicUrl) {
+          state.team[idx].photo = publicUrl;
+          urlInput2.value       = publicUrl;
+          refreshPreview(card, publicUrl, 'image');
+          uploadStatus2.textContent = '✓ ' + file.name;
+          uploadStatus2.className   = 'upload-status success';
           zoneText.textContent      = 'Upload photo';
-          uploadStatus2.textContent = '✗ No server response';
+          setTimeout(function () { uploadStatus2.textContent = ''; }, 4000);
+          queueSave();
+        }
+        function onPhotoError(msg) {
+          zoneText.textContent      = 'Upload photo';
+          uploadStatus2.textContent = '✗ ' + msg;
           uploadStatus2.className   = 'upload-status error';
-        };
-        xhr.send(file);
+        }
+
+        if (API !== '') {
+          // LOCAL (serve.mjs): direct binary POST
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', API + '/upload', true);
+          xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              try { onPhotoDone(JSON.parse(xhr.responseText).url); }
+              catch (e) { onPhotoError('Bad server response'); }
+            } else { onPhotoError('Error ' + xhr.status); }
+          };
+          xhr.onerror = function () { onPhotoError('No server response'); };
+          xhr.send(file);
+        } else {
+          // PRODUCTION (Vercel): get presigned URL, then PUT directly to Supabase Storage
+          fetch('/upload', {
+            method: 'POST',
+            headers: { 'X-Filename': encodeURIComponent(file.name), 'X-Admin-Key': SB_ADMIN_KEY }
+          })
+          .then(function(r) { return r.ok ? r.json() : Promise.reject('Error ' + r.status); })
+          .then(function(data) {
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open('PUT', data.uploadUrl, true);
+            xhr2.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+            xhr2.onload = function () {
+              if (xhr2.status >= 200 && xhr2.status < 300) { onPhotoDone(data.publicUrl); }
+              else { onPhotoError('Upload failed (' + xhr2.status + ')'); }
+            };
+            xhr2.onerror = function () { onPhotoError('Upload error'); };
+            xhr2.send(file);
+          })
+          .catch(function(err) { onPhotoError(String(err)); });
+        }
       };
 
       container.appendChild(card);
@@ -1330,7 +1384,7 @@
 <!-- ── Analytics Tab JS ── -->
 <script>
 (function() {
-  var adminKey = window.__ADMIN_KEY__ || '';
+  var adminKey = localStorage.getItem('sb_admin_key') || (typeof window.__ADMIN_KEY__ !== 'undefined' ? window.__ADMIN_KEY__ : '') || '';
   var API = (window.location.port === '5500') ? 'http://localhost:3000' : '';
   var allData = [];
   var currentRange = 'today';
