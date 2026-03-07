@@ -1,5 +1,5 @@
-import nodemailer from 'nodemailer';
-import { supabase, checkRateLimit, getIp } from './_lib/supabase.js';
+const nodemailer = require('nodemailer');
+const { supabase, checkRateLimit, getIp } = require('./_lib/supabase');
 
 function escHtml(s) {
   return String(s)
@@ -7,7 +7,6 @@ function escHtml(s) {
     .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// SMTP transport — same priority as serve.mjs (env vars)
 let transport = null;
 if (process.env.SMTP_HOST) {
   transport = nodemailer.createTransport({
@@ -18,7 +17,7 @@ if (process.env.SMTP_HOST) {
   });
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
   if (!checkRateLimit(getIp(req) + ':contact', 5)) {
     return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
@@ -31,7 +30,6 @@ export default async function handler(req, res) {
   const city    = String(body.city    || '').trim().slice(0, 100);
   const message = String(body.message || '').trim().slice(0, 5000);
 
-  // Save to Supabase
   const { error } = await supabase.from('contacts').insert({ name, email, phone, city, message });
   if (error) {
     console.error('Contact insert failed:', error.message);
@@ -39,14 +37,13 @@ export default async function handler(req, res) {
   }
   console.log(`New contact: ${name} <${email}> — ${city}`);
 
-  // Send email if SMTP configured
   if (transport) {
     const smtpTo   = process.env.SMTP_TO   || 'arora.nikhil@studiobee.ai';
     const smtpFrom = process.env.SMTP_FROM || process.env.SMTP_USER;
     try {
       await transport.sendMail({
-        from:    `"studiobee Website" <${smtpFrom}>`,
-        to:      smtpTo,
+        from: `"studiobee Website" <${smtpFrom}>`,
+        to: smtpTo,
         subject: `New Project Inquiry — ${escHtml(name)}`,
         html: `
           <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:32px;">
@@ -65,11 +62,10 @@ export default async function handler(req, res) {
           </div>
         `,
       });
-      console.log(`Email sent to ${smtpTo}`);
     } catch (e) {
       console.error('Email failed:', e.message);
     }
   }
 
   res.status(200).json({ ok: true });
-}
+};

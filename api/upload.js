@@ -1,8 +1,8 @@
-import { supabase, checkAdmin, checkRateLimit, getIp } from './_lib/supabase.js';
+const { supabase, checkAdmin, checkRateLimit, getIp } = require('./_lib/supabase');
 
 const ALLOWED_EXTS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.mp4', '.webm', '.mov', '.avi', '.mkv']);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
   if (!checkAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
   if (!checkRateLimit(getIp(req) + ':upload', 10)) return res.status(429).json({ error: 'Too many requests' });
@@ -22,9 +22,11 @@ export default async function handler(req, res) {
     .from('media')
     .createSignedUploadUrl(filename);
 
-  if (error) return res.status(500).json({ error: 'Could not create upload URL' });
+  if (error) {
+    console.error('Supabase upload URL error:', error.message);
+    return res.status(500).json({ error: 'Could not create upload URL' });
+  }
 
   const publicUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/media/${filename}`;
-
   res.status(200).json({ uploadUrl: data.signedUrl, publicUrl });
-}
+};
