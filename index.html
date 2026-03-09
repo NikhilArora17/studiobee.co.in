@@ -78,7 +78,7 @@
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 200;
+      z-index: 1002;
       padding: 22px 56px;
       display: flex;
       align-items: center;
@@ -1435,14 +1435,13 @@
       display: none;
       position: relative;
       width: 44px; height: 44px;
-      background: #FBFBFB;
-      border: none; border-radius: 10px;
+      background: none;
+      border: none;
       cursor: pointer; padding: 0;
-      z-index: 1001; flex-shrink: 0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08);
-      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      transition: opacity 0.2s ease;
     }
-    .hamburger:active { transform: scale(0.93); }
+    .hamburger:active { opacity: 0.6; }
     .hamburger span {
       position: absolute;
       left: 12px;
@@ -1476,6 +1475,7 @@
     .mob-menu-links { display: flex; flex-direction: column; gap: 4px; flex: 1; position: relative; }
     .mob-menu-link {
       font-family: 'DM Serif Display', serif;
+      font-style: italic;
       font-size: clamp(40px, 11vw, 60px);
       color: rgba(251,251,251,0.45);
       text-decoration: none;
@@ -1517,9 +1517,6 @@
 
   <!-- ───────── NAV ───────── -->
   <nav id="main-nav">
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
     <div class="nav-logo-wrap">
       <img src="studiobee%20white.png" alt="studiobee" class="nav-logo-light" />
     </div>
@@ -1530,6 +1527,9 @@
       <a href="#team" class="nav-link">Team</a>
       <a href="#contact" class="nav-cta">Start a project</a>
     </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- ── Mobile menu ── -->
