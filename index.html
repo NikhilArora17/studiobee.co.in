@@ -1874,15 +1874,20 @@
             card._dismissTimer = setTimeout(function() { card.classList.remove('active'); }, 5000);
           }
         }
-        // touchstart: most reliable on iOS/Android, no 300ms delay
-        tg.addEventListener('touchstart', function(e) {
+        // touchend = finger lifts = definitive tap, no 300ms delay
+        // Flag blocks the synthetic click that fires after touch on mobile
+        var _teamTouchDone = false;
+        tg.addEventListener('touchend', function(e) {
           var card = e.target.closest('.team-card');
           if (!card) return;
           e.preventDefault();
+          _teamTouchDone = true;
           applyTeamTap(card);
+          setTimeout(function() { _teamTouchDone = false; }, 600);
         }, { passive: false });
-        // click fallback for desktop hover
+        // click: desktop only — skipped if touch already handled it
         tg.addEventListener('click', function(e) {
+          if (_teamTouchDone) return;
           var card = e.target.closest('.team-card');
           if (!card) return;
           applyTeamTap(card);
