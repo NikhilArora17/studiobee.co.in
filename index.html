@@ -1314,7 +1314,8 @@
 
       /* Team */
       .team-grid { grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
-      .team-hover-bio { display: none; }
+      .team-hover-bio { display: block; }
+      .team-hover-name, .team-hover-role { display: none; }
 
       /* Footer */
       .footer-cols { gap: 32px; }
@@ -1860,12 +1861,17 @@
             '</div>' +
           '</div>';
         }).join('');
-        // Mobile tap-to-toggle
+        // Mobile tap-to-toggle, auto-dismiss after 5s
+        var dismissTimer = null;
         tg.querySelectorAll('.team-card').forEach(function(card) {
           card.addEventListener('click', function() {
             var isActive = card.classList.contains('active');
             tg.querySelectorAll('.team-card').forEach(function(c) { c.classList.remove('active'); });
-            if (!isActive) card.classList.add('active');
+            clearTimeout(dismissTimer);
+            if (!isActive) {
+              card.classList.add('active');
+              dismissTimer = setTimeout(function() { card.classList.remove('active'); }, 5000);
+            }
           });
         });
       }
@@ -2346,7 +2352,7 @@
   <script>
   (function () {
     // Works whether served from serve.mjs (:3000) or VS Code Live Server (:5500)
-    var API = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+    var API = (location.hostname === 'localhost' && location.port !== '3000') ? 'http://localhost:3000' : '';
 
     var form = document.getElementById('ctaForm');
     var btn  = document.getElementById('ctaBtn');
