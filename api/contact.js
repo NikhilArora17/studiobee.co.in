@@ -37,11 +37,13 @@ module.exports = async function handler(req, res) {
   }
   console.log(`New contact: ${name} <${email}> — ${city}`);
 
+  // Respond immediately — email sends in background so the form feels instant
+  res.status(200).json({ ok: true });
+
   if (transport) {
     const smtpTo   = process.env.SMTP_TO   || 'arora.nikhil@studiobee.ai';
     const smtpFrom = process.env.SMTP_FROM || process.env.SMTP_USER;
-    try {
-      await transport.sendMail({
+    transport.sendMail({
         from: `"studiobee Website" <${smtpFrom}>`,
         to: smtpTo,
         subject: `New Project Inquiry — ${escHtml(name)}`,
@@ -61,11 +63,8 @@ module.exports = async function handler(req, res) {
             <p style="margin-top:32px;font-size:12px;color:#bbb;">Sent from studiobee.co.in</p>
           </div>
         `,
-      });
-    } catch (e) {
+    }).catch(function(e) {
       console.error('Email failed:', e.message);
-    }
+    });
   }
-
-  res.status(200).json({ ok: true });
 };
