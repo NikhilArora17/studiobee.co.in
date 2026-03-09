@@ -1863,13 +1863,8 @@
           '</div>';
         }).join('');
         // Mobile tap-to-toggle, auto-dismiss after 5s
-        // pointerdown fires immediately (no 300ms delay), works for touch + mouse
-        tg.addEventListener('pointerdown', function(e) {
-          var card = e.target.closest('.team-card');
-          if (!card) return;
-          e.preventDefault();
+        function applyTeamTap(card) {
           var isActive = card.classList.contains('active');
-          // Clear all active cards and their timers
           tg.querySelectorAll('.team-card').forEach(function(c) {
             c.classList.remove('active');
             clearTimeout(c._dismissTimer);
@@ -1878,6 +1873,19 @@
             card.classList.add('active');
             card._dismissTimer = setTimeout(function() { card.classList.remove('active'); }, 5000);
           }
+        }
+        // touchstart: most reliable on iOS/Android, no 300ms delay
+        tg.addEventListener('touchstart', function(e) {
+          var card = e.target.closest('.team-card');
+          if (!card) return;
+          e.preventDefault();
+          applyTeamTap(card);
+        }, { passive: false });
+        // click fallback for desktop hover
+        tg.addEventListener('click', function(e) {
+          var card = e.target.closest('.team-card');
+          if (!card) return;
+          applyTeamTap(card);
         });
       }
     })();
