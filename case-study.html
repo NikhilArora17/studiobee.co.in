@@ -354,22 +354,27 @@
     /* ── Mobile hamburger ── */
     .hamburger {
       display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 5px;
+      position: relative;
       width: 44px; height: 44px;
-      background: none; border: none;
+      background: #FBFBFB;
+      border: none; border-radius: 10px;
       cursor: pointer; padding: 0;
       z-index: 1001; flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s ease;
     }
+    .hamburger:active { transform: scale(0.93); }
     .hamburger span {
-      display: block;
-      width: 22px; height: 2px;
-      background: #FBFBFB;
+      position: absolute;
+      left: 12px;
+      width: 20px; height: 2px;
+      background: #0A0A0A;
       border-radius: 2px;
-      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.2s ease;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
     }
+    .hamburger span:nth-child(1) { top: 14px; }
+    .hamburger span:nth-child(2) { top: 21px; }
+    .hamburger span:nth-child(3) { top: 28px; }
     .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -377,46 +382,51 @@
       position: fixed; inset: 0; z-index: 1000;
       background: #0A0A0A;
       display: flex; flex-direction: column;
-      padding: 100px 40px 60px;
+      padding: 120px 40px 64px;
       opacity: 0; pointer-events: none;
-      transform: translateY(-10px);
-      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+      transform: translateX(-24px);
+      transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1);
     }
-    .mob-menu.open { opacity: 1; pointer-events: all; transform: translateY(0); }
-    .mob-menu-links { display: flex; flex-direction: column; gap: 0; flex: 1; }
+    .mob-menu::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 60% 50% at 20% 50%, rgba(47,72,223,0.18) 0%, transparent 70%);
+    }
+    .mob-menu.open { opacity: 1; pointer-events: all; transform: translateX(0); }
+    .mob-menu-links { display: flex; flex-direction: column; gap: 4px; flex: 1; position: relative; }
     .mob-menu-link {
       font-family: 'DM Serif Display', serif;
-      font-size: clamp(36px, 10vw, 52px);
-      color: rgba(251,251,251,0.28);
+      font-size: clamp(40px, 11vw, 60px);
+      color: rgba(251,251,251,0.45);
       text-decoration: none;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      padding: 6px 0;
-      opacity: 0; transform: translateY(18px);
-      transition: color 0.2s ease, opacity 0.35s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      opacity: 0; transform: translateX(-20px);
+      transition: color 0.25s ease, opacity 0.4s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
     }
-    .mob-menu.open .mob-menu-link { opacity: 1; transform: translateY(0); }
-    .mob-menu.open .mob-menu-link:nth-child(1) { transition-delay: 0.04s; }
-    .mob-menu.open .mob-menu-link:nth-child(2) { transition-delay: 0.08s; }
-    .mob-menu.open .mob-menu-link:nth-child(3) { transition-delay: 0.12s; }
-    .mob-menu.open .mob-menu-link:nth-child(4) { transition-delay: 0.16s; }
+    .mob-menu.open .mob-menu-link { opacity: 1; transform: translateX(0); }
+    .mob-menu.open .mob-menu-link:nth-child(1) { transition-delay: 0.06s; }
+    .mob-menu.open .mob-menu-link:nth-child(2) { transition-delay: 0.12s; }
+    .mob-menu.open .mob-menu-link:nth-child(3) { transition-delay: 0.18s; }
+    .mob-menu.open .mob-menu-link:nth-child(4) { transition-delay: 0.24s; }
     .mob-menu-link:hover { color: #FBFBFB; }
-    .mob-menu-link:focus-visible { outline: 2px solid #2F48DF; outline-offset: 4px; }
+    .mob-menu-link:active { color: #2F48DF; }
     .mob-menu-cta {
-      display: inline-flex; align-items: center; justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       background: #2F48DF; color: #FBFBFB;
       font-family: 'DM Sans', sans-serif;
-      font-size: 16px; font-weight: 600;
-      padding: 18px 40px; border-radius: 100px;
-      text-decoration: none; align-self: flex-start;
-      margin-top: 32px;
-      opacity: 0; transform: translateY(18px);
-      transition: background 0.2s ease, opacity 0.35s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1);
-      box-shadow: 0 4px 24px rgba(47,72,223,0.4);
+      font-size: 17px; font-weight: 600;
+      padding: 20px 40px; border-radius: 100px;
+      text-decoration: none;
+      margin-top: 40px; position: relative;
+      opacity: 0; transform: translateY(16px);
+      transition: background 0.2s ease, opacity 0.4s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 0.2s ease;
+      box-shadow: 0 4px 32px rgba(47,72,223,0.45);
     }
-    .mob-menu.open .mob-menu-cta { opacity: 1; transform: translateY(0); transition-delay: 0.22s; }
-    .mob-menu-cta:hover { background: #4a5fe8; }
-    .mob-menu-cta:active { transform: scale(0.97); }
+    .mob-menu.open .mob-menu-cta { opacity: 1; transform: translateY(0); transition-delay: 0.32s; }
+    .mob-menu-cta:hover { background: #4a5fe8; box-shadow: 0 8px 48px rgba(47,72,223,0.6); }
+    .mob-menu-cta:active { transform: scale(0.97); background: #2439c8; }
     @media (max-width: 480px) {
       .hamburger { display: flex; }
       .nav-cta { display: none; }
@@ -427,12 +437,12 @@
 
   <!-- ── Nav ── -->
   <nav id="cs-nav">
-    <a href="index.html">
-      <img src="studiobee%20white.png" alt="studiobee" class="nav-logo" />
-    </a>
     <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
+    <a href="index.html">
+      <img src="studiobee%20white.png" alt="studiobee" class="nav-logo" />
+    </a>
     <div class="nav-links">
       <a href="index.html#work"     class="nav-link">Work</a>
       <a href="index.html#services" class="nav-link">Services</a>
