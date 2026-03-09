@@ -1448,14 +1448,17 @@
       width: 20px; height: 2px;
       background: #0A0A0A;
       border-radius: 2px;
-      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease, background 0.25s ease;
     }
     .hamburger span:nth-child(1) { top: 14px; }
     .hamburger span:nth-child(2) { top: 21px; }
     .hamburger span:nth-child(3) { top: 28px; }
+    nav.scrolled .hamburger span { background: #FBFBFB; }
+    .hamburger.open span { background: #FBFBFB; }
     .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    nav.menu-open .nav-logo-wrap { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
     /* ── Mobile menu overlay ── */
     .mob-menu {
       position: fixed; inset: 0; z-index: 1000;
@@ -1475,7 +1478,6 @@
     .mob-menu-links { display: flex; flex-direction: column; gap: 4px; flex: 1; position: relative; }
     .mob-menu-link {
       font-family: 'DM Serif Display', serif;
-      font-style: italic;
       font-size: clamp(40px, 11vw, 60px);
       color: rgba(251,251,251,0.45);
       text-decoration: none;
@@ -2741,15 +2743,18 @@
       var btn  = document.getElementById('hamburger');
       var menu = document.getElementById('mobMenu');
       if (!btn || !menu) return;
+      var nav = btn.closest('nav');
       function openMenu() {
         menu.classList.add('open');
         btn.classList.add('open');
+        nav.classList.add('menu-open');
         btn.setAttribute('aria-expanded', 'true');
         document.body.style.overflow = 'hidden';
       }
       function closeMenu() {
         menu.classList.remove('open');
         btn.classList.remove('open');
+        nav.classList.remove('menu-open');
         btn.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
       }
