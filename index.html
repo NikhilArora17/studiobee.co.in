@@ -1279,14 +1279,18 @@
       .nav-links { gap: 18px; }
 
       /* Hero — fix padding so dark-content overlay aligns with hero-inner */
-      .hero-inner { padding: 100px 24px 64px; }
-      .dark-content { padding: 100px 24px 64px; }
+      .hero-inner { padding: 100px 20px 64px; }
+      .dark-content { padding: 100px 20px 64px; }
       .hero-h1 { font-size: clamp(42px, 11vw, 72px); letter-spacing: -0.04em; }
       .hero-sub { font-size: 15px; line-height: 1.7; max-width: 100%; margin-bottom: 36px; }
       .hero-actions { gap: 10px; flex-direction: column; align-items: flex-start; }
 
       /* Generic section padding */
       .section { padding: 64px 20px; }
+
+      /* Services — tighten header on mobile */
+      .services-header { gap: 16px; margin-bottom: 32px; }
+      #cfg-services-body { font-size: 14px; }
 
       /* Services — 2 columns */
       .services-grid { grid-template-columns: 1fr 1fr; }
@@ -1476,7 +1480,7 @@
           <p class="section-label" style="color:#2F48DF;">What we do</p>
           <h2 id="cfg-services-heading" class="section-h2 scramble-heading" style="color:#FBFBFB; max-width:420px;"></h2>
         </div>
-        <p id="cfg-services-body" style="font-size:16px; line-height:1.75; color:rgba(10,10,10,0.5); max-width:340px;">From social content and brand identity to video, studio space, and AI automation — everything under one roof.</p>
+        <p id="cfg-services-body" style="font-size:16px; line-height:1.75; color:rgba(251,251,251,0.45); max-width:340px;">From social content and brand identity to video, studio space, and AI automation — everything under one roof.</p>
       </div>
 
       <div id="cfg-services-grid" class="services-grid"><!-- rendered by content.js --></div>
@@ -1925,6 +1929,38 @@
 
         track.addEventListener('mouseenter', function() { paused = true; });
         track.addEventListener('mouseleave', function() { paused = false; });
+
+        // ── Touch drag support ──
+        var touchStartX   = 0;
+        var touchStartOff = 0;
+        var touching      = false;
+
+        track.addEventListener('touchstart', function(e) {
+          if (chevAnim) return;
+          touchStartX   = e.touches[0].clientX;
+          touchStartOff = offset;
+          paused  = true;
+          touching = true;
+        }, { passive: true });
+
+        track.addEventListener('touchmove', function(e) {
+          if (!touching) return;
+          var dx = touchStartX - e.touches[0].clientX;
+          offset = ((touchStartOff + dx) % setW + setW) % setW;
+        }, { passive: true });
+
+        track.addEventListener('touchend', function() {
+          if (!touching) return;
+          touching = false;
+          // Snap to nearest card boundary
+          var norm    = ((offset % setW) + setW) % setW;
+          var snapped = Math.round(norm / cardW) * cardW;
+          if (Math.abs(norm - snapped) > 1) {
+            chevAnim = { start: norm, end: snapped, startTime: null, dur: 280 };
+          }
+          offset = norm;
+          paused = false;
+        }, { passive: true });
 
         function chevClick(dir) {
           if (chevAnim) return;
