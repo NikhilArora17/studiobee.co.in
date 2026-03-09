@@ -679,20 +679,24 @@
       var btn  = document.getElementById('hamburger');
       var menu = document.getElementById('mobMenu');
       if (!btn || !menu) return;
-      var nav = btn.closest('nav');
+      var nav   = btn.closest('nav');
+      var logo  = nav.querySelector('a:first-child');
+      var spans = btn.querySelectorAll('span');
       function openMenu() {
         menu.classList.add('open');
         btn.classList.add('open');
-        nav.classList.add('menu-open');
         btn.setAttribute('aria-expanded', 'true');
         document.body.style.overflow = 'hidden';
+        spans.forEach(function(s) { s.style.background = '#FBFBFB'; });
+        if (logo) { logo.style.opacity = '0'; logo.style.pointerEvents = 'none'; }
       }
       function closeMenu() {
         menu.classList.remove('open');
         btn.classList.remove('open');
-        nav.classList.remove('menu-open');
         btn.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
+        spans.forEach(function(s) { s.style.background = ''; });
+        if (logo) { logo.style.opacity = ''; logo.style.pointerEvents = ''; }
       }
       btn.addEventListener('click', function () {
         menu.classList.contains('open') ? closeMenu() : openMenu();
