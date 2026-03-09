@@ -41,16 +41,16 @@ module.exports = async function handler(req, res) {
   }
   console.log(`New contact: ${name} <${email}> — ${city}`);
 
-  // Respond immediately — email sends in background so the form feels instant
-  res.status(200).json({ ok: true });
-
+  // Send email before responding — Vercel kills the function immediately after res.json()
+  // so fire-and-forget doesn't work in serverless
   if (transport) {
     const smtpTo   = process.env.SMTP_TO   || 'arora.nikhil@studiobee.ai';
     const smtpFrom = process.env.SMTP_FROM || process.env.SMTP_USER;
-    transport.sendMail({
-        from: `"studiobee Website" <${smtpFrom}>`,
+    try {
+      await transport.sendMail({
+        from: `"StudioBee Website" <${smtpFrom}>`,
         to: smtpTo,
-        subject: `New Project Inquiry — ${escHtml(name)}`,
+        subject: `New Project Inquiry — ${name}`,
         html: `
           <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:32px;">
             <h2 style="color:#2F48DF;margin-bottom:24px;font-size:22px;">New project inquiry</h2>
@@ -67,8 +67,12 @@ module.exports = async function handler(req, res) {
             <p style="margin-top:32px;font-size:12px;color:#bbb;">Sent from studiobee.co.in</p>
           </div>
         `,
-    }).catch(function(e) {
+      });
+      console.log('Email sent to', smtpTo);
+    } catch (e) {
       console.error('Email failed:', e.message);
-    });
+    }
   }
+
+  res.status(200).json({ ok: true });
 };
