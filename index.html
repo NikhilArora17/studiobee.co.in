@@ -1314,8 +1314,9 @@
 
       /* Team */
       .team-grid { grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
-      .team-hover-bio { display: block; }
+      .team-hover-bio { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 8; line-clamp: 8; overflow: hidden; font-size: 11px; line-height: 1.5; margin-bottom: 0; }
       .team-hover-name, .team-hover-role, .team-hover-tags, .team-hover-link { display: none; }
+      .team-hover-panel { padding: 12px; justify-content: center; }
 
       /* Footer */
       .footer-cols { gap: 32px; }
@@ -1862,17 +1863,20 @@
           '</div>';
         }).join('');
         // Mobile tap-to-toggle, auto-dismiss after 5s
-        // Event delegation on container so child elements don't swallow the event
-        var dismissTimer = null;
-        tg.addEventListener('click', function(e) {
+        // pointerdown fires immediately (no 300ms delay), works for touch + mouse
+        tg.addEventListener('pointerdown', function(e) {
           var card = e.target.closest('.team-card');
           if (!card) return;
+          e.preventDefault();
           var isActive = card.classList.contains('active');
-          tg.querySelectorAll('.team-card').forEach(function(c) { c.classList.remove('active'); });
-          clearTimeout(dismissTimer);
+          // Clear all active cards and their timers
+          tg.querySelectorAll('.team-card').forEach(function(c) {
+            c.classList.remove('active');
+            clearTimeout(c._dismissTimer);
+          });
           if (!isActive) {
             card.classList.add('active');
-            dismissTimer = setTimeout(function() { card.classList.remove('active'); }, 5000);
+            card._dismissTimer = setTimeout(function() { card.classList.remove('active'); }, 5000);
           }
         });
       }
