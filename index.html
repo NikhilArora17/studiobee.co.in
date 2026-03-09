@@ -376,12 +376,7 @@
 
     /* ── Services ── */
     .services-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 32px;
       margin-bottom: 56px;
-      flex-wrap: wrap;
     }
 
     .services-grid {
@@ -1285,12 +1280,18 @@
       .hero-sub { font-size: 15px; line-height: 1.7; max-width: 100%; margin-bottom: 36px; }
       .hero-actions { gap: 10px; flex-direction: column; align-items: flex-start; }
 
-      /* Generic section padding */
-      .section { padding: 64px 20px; }
+      /* ── Consistent section padding — 56px token ── */
+      .section             { padding: 56px 20px; }
+      .work-section        { padding: 48px 0 52px; }
+      .stats-section       { padding: 48px 20px; }
+      .testimonials-section{ padding: 56px 20px 64px; }
+      .team-section        { padding: 56px 20px; }
+      .cta-section         { padding: 64px 20px; }
+      footer               { padding: 44px 20px 28px; }
 
-      /* Services — tighten header on mobile */
-      .services-header { gap: 16px; margin-bottom: 32px; }
-      #cfg-services-body { font-size: 14px; }
+      /* Services header — stacked, tighter below heading */
+      .services-header { margin-bottom: 28px; }
+      #cfg-services-body { font-size: 14px; margin-top: 14px; }
 
       /* Services — 2 columns */
       .services-grid { grid-template-columns: 1fr 1fr; }
@@ -1298,31 +1299,22 @@
       .service-card { padding: 28px 22px 24px; }
 
       /* Work header side padding */
-      .work-header { padding: 0 20px; }
+      .work-header { padding: 0 20px; margin-bottom: 28px; }
 
       /* Stats — 2×2 */
-      .stats-section { padding: 56px 20px; }
       .stats-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
 
-      /* Process — 2 columns */
-      .process-grid { grid-template-columns: 1fr 1fr; }
+      /* Process — 2 columns, tighter heading gap */
+      .process-grid { grid-template-columns: 1fr 1fr; margin-top: 32px; }
       .process-step { padding: 36px 28px; }
       .process-step::after { left: 28px; right: 28px; }
 
-      /* Testimonials */
-      .testimonials-section { padding: 80px 20px 100px; }
-
       /* Team */
-      .team-section { padding: 80px 20px; }
-      .team-grid { grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+      .team-grid { grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
       .team-hover-bio { display: none; }
 
-      /* CTA / contact form */
-      .cta-section { padding: 80px 20px; }
-
       /* Footer */
-      footer { padding: 56px 20px 36px; }
-      .footer-cols { gap: 40px; }
+      .footer-cols { gap: 32px; }
     }
 
     @media (max-width: 480px) {
@@ -1333,9 +1325,9 @@
       .services-grid { grid-template-columns: 1fr; }
 
       /* Process — single column */
-      .process-grid { grid-template-columns: 1fr; }
-      .process-step { padding: 32px 24px; }
-      .process-step::after { left: 24px; right: 24px; }
+      .process-grid { grid-template-columns: 1fr; margin-top: 28px; }
+      .process-step { padding: 28px 20px; }
+      .process-step::after { left: 20px; right: 20px; }
 
       /* Contact form fields stack vertically */
       .cta-form-row { grid-template-columns: 1fr; }
@@ -1476,11 +1468,9 @@
   <section id="services" class="section" style="background:#0A0A0A;">
     <div class="section-max">
       <div class="services-header">
-        <div>
-          <p class="section-label" style="color:#2F48DF;">What we do</p>
-          <h2 id="cfg-services-heading" class="section-h2 scramble-heading" style="color:#FBFBFB; max-width:420px;"></h2>
-        </div>
-        <p id="cfg-services-body" style="font-size:16px; line-height:1.75; color:rgba(251,251,251,0.45); max-width:340px;">From social content and brand identity to video, studio space, and AI automation — everything under one roof.</p>
+        <p class="section-label" style="color:#2F48DF;">What we do</p>
+        <h2 id="cfg-services-heading" class="section-h2 scramble-heading" style="color:#FBFBFB; max-width:640px;"></h2>
+        <p id="cfg-services-body" style="font-size:16px; line-height:1.75; color:rgba(251,251,251,0.45); max-width:480px; margin-top:20px;">From social content and brand identity to video, studio space, and AI automation — everything under one roof.</p>
       </div>
 
       <div id="cfg-services-grid" class="services-grid"><!-- rendered by content.js --></div>
@@ -1523,7 +1513,7 @@
   <section id="process" class="section" style="background:#FBFBFB;">
     <div class="section-max">
       <p class="section-label" style="color:#2F48DF;">How we work</p>
-      <h2 id="cfg-process-heading" class="section-h2 scramble-heading" style="color:#0A0A0A; max-width:460px;"></h2>
+      <h2 id="cfg-process-heading" class="section-h2 scramble-heading" style="color:#0A0A0A; max-width:640px;"></h2>
 
       <div id="cfg-process-grid" class="process-grid">
 <!-- rendered by content.js -->
