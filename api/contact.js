@@ -14,7 +14,11 @@ if (process.env.SMTP_HOST) {
     port:   parseInt(process.env.SMTP_PORT) || 587,
     secure: process.env.SMTP_SECURE === 'true',
     auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    tls: { rejectUnauthorized: false },
   });
+  console.log(`SMTP transport ready: ${process.env.SMTP_HOST}:${process.env.SMTP_PORT} user=${process.env.SMTP_USER}`);
+} else {
+  console.warn('SMTP_HOST not set — email notifications disabled');
 }
 
 module.exports = async function handler(req, res) {
