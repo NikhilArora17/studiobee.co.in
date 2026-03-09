@@ -462,7 +462,7 @@
       position: fixed; inset: 0; z-index: 1000;
       background: #0A0A0A;
       display: flex; flex-direction: column;
-      padding: 120px 40px 64px;
+      padding: 120px 24px 64px;
       opacity: 0; pointer-events: none;
       transform: translateX(-24px);
       transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16,1,0.3,1);
@@ -476,11 +476,11 @@
     .mob-menu-links { display: flex; flex-direction: column; gap: 4px; flex: 1; position: relative; }
     .mob-menu-link {
       font-family: 'DM Serif Display', serif;
-      font-size: clamp(40px, 11vw, 60px);
-      color: rgba(251,251,251,0.45);
+      font-size: clamp(26px, 7vw, 36px);
+      color: #2F48DF;
       text-decoration: none;
       letter-spacing: -0.03em;
-      line-height: 1.15;
+      line-height: 1.2;
       opacity: 0; transform: translateX(-20px);
       transition: color 0.25s ease, opacity 0.4s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
     }
@@ -489,8 +489,8 @@
     .mob-menu.open .mob-menu-link:nth-child(2) { transition-delay: 0.12s; }
     .mob-menu.open .mob-menu-link:nth-child(3) { transition-delay: 0.18s; }
     .mob-menu.open .mob-menu-link:nth-child(4) { transition-delay: 0.24s; }
-    .mob-menu-link:hover { color: #FBFBFB; }
-    .mob-menu-link:active { color: #2F48DF; }
+    .mob-menu-link:hover { color: #5068f0; }
+    .mob-menu-link:active { color: #1a30b0; }
     .mob-menu-cta {
       display: flex; align-items: center; justify-content: center;
       background: #2F48DF; color: #FBFBFB;
