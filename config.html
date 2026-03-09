@@ -109,6 +109,16 @@
     }
     #save-status.saved { color: #4ade80; }
     #save-status.error { color: #f87171; }
+    #cloud-status {
+      font-size: 11px;
+      padding: 6px 4px 0;
+      min-height: 18px;
+      color: rgba(251,251,251,0.3);
+      letter-spacing: 0.01em;
+    }
+    #cloud-status.synced  { color: #4ade80; }
+    #cloud-status.error   { color: #f87171; }
+    #cloud-status.syncing { color: rgba(251,251,251,0.55); }
 
     /* ── MAIN ── */
     main {
@@ -486,9 +496,12 @@
   </div>
   <div class="sb-actions">
     <button class="action-btn primary" onclick="previewSite()">↗ Preview Site</button>
+    <button class="action-btn" onclick="pushToCloud()">☁ Push to All Devices</button>
+    <button class="action-btn" onclick="loadFromCloud()">⬇ Load from Cloud</button>
     <button class="action-btn" onclick="exportJSON()">⬇ Export JSON</button>
     <button class="action-btn danger" onclick="resetDefaults()">↺ Reset to Defaults</button>
     <div id="save-status"></div>
+    <div id="cloud-status"></div>
   </div>
 </aside>
 
@@ -644,6 +657,8 @@
     keyInput.addEventListener('input', function() {
       SB_ADMIN_KEY = keyInput.value.trim();
       localStorage.setItem('sb_admin_key', SB_ADMIN_KEY);
+      // Auto-push when key is entered so phone picks up changes immediately
+      if (SB_ADMIN_KEY) pushToCloud();
     });
   })();
 
@@ -777,15 +792,67 @@
 
   // ── Auto-publish on load ───────────────────────────────────────────────
   // If localStorage has saved config, immediately push it to the server so
-  // mobile devices (different origin) also see the latest content.
+  // ── Cloud sync helpers ────────────────────────────────────────────────
+
+  function setCloudStatus(msg, cls) {
+    var s = document.getElementById('cloud-status');
+    if (s) { s.textContent = msg; s.className = cls; }
+  }
+
+  function pushToCloud() {
+    if (!SB_ADMIN_KEY) {
+      setCloudStatus('⚠ Enter admin key first', 'error');
+      return;
+    }
+    var json = JSON.stringify(state);
+    setCloudStatus('☁ Syncing to cloud…', 'syncing');
+    fetch(API + '/save-config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': SB_ADMIN_KEY },
+      body: json,
+    }).then(function(r) {
+      if (r.ok) {
+        setCloudStatus('✓ Synced — phone will update on next page open', 'synced');
+      } else {
+        r.text().then(function(t) {
+          setCloudStatus('⚠ Cloud sync failed' + (r.status === 401 ? ' (wrong admin key)' : ' (' + r.status + ')'), 'error');
+        });
+      }
+    }).catch(function() {
+      setCloudStatus('⚠ Could not reach cloud', 'error');
+    });
+  }
+
+  function loadFromCloud() {
+    setCloudStatus('☁ Loading from cloud…', 'syncing');
+    fetch('/api/config')
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(cfg) {
+        if (!cfg) { setCloudStatus('⚠ No cloud config found', 'error'); return; }
+        var json = JSON.stringify(cfg);
+        localStorage.setItem('studiobee_content', json);
+        setCloudStatus('✓ Loaded from cloud — reloading…', 'synced');
+        setTimeout(function() { location.reload(); }, 800);
+      })
+      .catch(function() { setCloudStatus('⚠ Could not reach cloud', 'error'); });
+  }
+
+  // On startup: push existing localStorage to cloud so phone sees latest
   (function() {
     var existing = localStorage.getItem('studiobee_content');
-    if (existing) {
+    if (existing && SB_ADMIN_KEY) {
+      setCloudStatus('☁ Syncing to cloud…', 'syncing');
       fetch(API + '/save-config', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Admin-Key': SB_ADMIN_KEY },
         body: existing,
-      }).catch(function() {});
+      }).then(function(r) {
+        setCloudStatus(r.ok ? '✓ Cloud in sync' : '⚠ Cloud sync failed — check admin key', r.ok ? 'synced' : 'error');
+      }).catch(function() {
+        setCloudStatus('⚠ Could not reach cloud', 'error');
+      });
+    } else if (!SB_ADMIN_KEY) {
+      setCloudStatus('Enter admin key to sync across devices', '');
     }
   })();
 
@@ -802,17 +869,19 @@
     try {
       var json = JSON.stringify(state);
       localStorage.setItem('studiobee_content', json);
-      // Also save server-side so all devices (mobile, desktop) load the same config
-      fetch(API + '/save-config', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Admin-Key': SB_ADMIN_KEY },
-        body: json,
-      }).then(function(r) {
-        setStatus(r.ok ? '✓ Saved' : '⚠ Server save failed', r.ok ? 'saved' : 'error');
-      }).catch(function() {
-        setStatus('✓ Saved locally', 'saved');
-      });
-      setStatus('Saving…', '');
+      setStatus('✓ Saved locally', 'saved');
+      // Push to cloud so all devices get the update
+      if (SB_ADMIN_KEY) {
+        fetch(API + '/save-config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Key': SB_ADMIN_KEY },
+          body: json,
+        }).then(function(r) {
+          setCloudStatus(r.ok ? '✓ Cloud in sync' : '⚠ Cloud sync failed' + (r.status === 401 ? ' (wrong admin key)' : ''), r.ok ? 'synced' : 'error');
+        }).catch(function() {
+          setCloudStatus('⚠ Could not reach cloud', 'error');
+        });
+      }
     } catch (e) {
       setStatus('⚠ Error saving', 'error');
     }
