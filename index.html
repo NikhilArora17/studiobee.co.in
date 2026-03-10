@@ -1588,7 +1588,7 @@
   <!-- ───────── NAV ───────── -->
   <nav id="main-nav">
     <div class="nav-logo-wrap">
-      <img src="studiobee%20white.png" alt="studiobee" class="nav-logo-light" />
+      <img src="studiobee%20white.png" alt="studiobee — creative studio in Gurgaon, India" class="nav-logo-light" />
     </div>
     <div class="nav-links">
       <a href="#work" class="nav-link">Work</a>
@@ -1810,7 +1810,7 @@
   <footer>
     <div class="footer-top">
       <div>
-        <img src="studiobee%20white.png" alt="studiobee" style="height:24px; display:block;" />
+        <img src="studiobee%20white.png" alt="studiobee — full-service creative studio in Gurgaon, India. Branding, social media, video production, studio rental and AI automations." style="height:24px; display:block;" />
         <p class="footer-tagline">A full-service creative studio — branding, social, video, studio hire, and AI automations.</p>
       </div>
       <div class="footer-cols">
@@ -2008,7 +2008,7 @@
         ww.innerHTML = SC.projects.map(function(p) {
           var media = p.mediaType === 'video'
             ? '<video src="' + esc(p.media) + '" autoplay muted loop playsinline></video>'
-            : '<img src="' + esc(p.media) + '" alt="' + esc(p.title) + '" />';
+            : '<img src="' + esc(p.media) + '" alt="' + esc(p.title) + ' — ' + esc(p.type) + ' project by studiobee creative studio, Gurgaon" loading="lazy" />';
           var tags = (p.services || []).map(function(s) { return '<span class="wc-badge-tag">' + esc(s) + '</span>'; }).join('');
           return '<div class="wc-card" data-media="' + esc(p.media) + '" data-media-type="' + esc(p.mediaType || 'image') + '">' + media +
             '<div class="wc-info">' +
@@ -2081,7 +2081,7 @@
           var imgSrc = esc(m.photo || 'https://placehold.co/400x500/111827/374151');
           return '<div class="team-card" data-idx="' + i + '">' +
             '<div class="team-photo">' +
-              '<img src="' + imgSrc + '" alt="' + esc(m.name) + '" loading="lazy" />' +
+              '<img src="' + imgSrc + '" alt="' + esc(m.name) + ', ' + esc(m.role) + ' at studiobee creative studio, Gurgaon" loading="lazy" />' +
               '<div class="team-hover-panel">' +
                 '<p class="team-hover-name">' + esc(m.name) + '</p>' +
                 '<p class="team-hover-role">' + esc(m.role) + '</p>' +
@@ -2437,7 +2437,7 @@
             var num = String(i + 1).padStart(2, '0');
             var mediaEl = card.mediaType === 'video'
               ? '<video src="' + esc(card.mediaSrc) + '" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></video>'
-              : '<img src="' + esc(card.mediaSrc || '') + '" alt="' + esc(card.title || '') + '" />';
+              : '<img src="' + esc(card.mediaSrc || '') + '" alt="' + esc(card.title || '') + ' service by studiobee creative studio, Gurgaon" loading="lazy" />';
             return '<div class="service-card">' +
               '<span style="position:absolute;top:36px;right:36px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:700;color:rgba(47,72,223,0.25);letter-spacing:0.06em;">' + num + '</span>' +
               '<div class="service-icon">' + iconSvg(card.icon || 'star') + '</div>' +
@@ -2464,7 +2464,7 @@
           }).join('');
           var mediaEl = card.mediaType === 'video'
             ? '<video src="' + esc(card.mediaSrc) + '" autoplay muted loop playsinline></video>'
-            : '<img src="' + esc(card.mediaSrc || '') + '" alt="' + esc(card.title || '') + '" />';
+            : '<img src="' + esc(card.mediaSrc || '') + '" alt="' + esc(card.title || '') + ' — ' + esc(card.typeBadge || '') + ' project by studiobee creative studio, Gurgaon" loading="lazy" />';
           return '<div class="wc-card" data-media="' + esc(card.mediaSrc || '') + '" data-media-type="' + esc(card.mediaType || 'image') + '">' +
             mediaEl +
             '<div class="wc-reveal">' +
