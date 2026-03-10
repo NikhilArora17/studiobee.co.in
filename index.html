@@ -89,6 +89,14 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
     }
+    /* Always cover the iOS status-bar safe zone with solid blue */
+    nav::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: env(safe-area-inset-top);
+      background: var(--blue);
+    }
     .nav-links { display: flex; gap: 36px; align-items: center; }
     .nav-link {
       font-family: 'DM Sans', sans-serif;
