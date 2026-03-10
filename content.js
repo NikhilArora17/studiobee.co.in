@@ -28,11 +28,11 @@
       heading:    "Creative services\nfor modern brands.",
       subheading: "From social content and brand identity to video, studio space, and AI automation — everything under one roof.",
       items: [
-        { iconName: "share",  title: "Social Media Management",  body: "Strategy, content creation, scheduling, and community management across all major platforms. We grow your audience and keep your brand active and relevant.",                                                                          linkText: "Get started"   },
-        { iconName: "brand",  title: "Branding",                  body: "Logo design, brand identity, visual systems, and guidelines that make your business instantly recognisable and memorable across every touchpoint.",                                                                                      linkText: "Get started"   },
-        { iconName: "video",  title: "Video Production",          body: "From concept to final cut — promotional videos, social reels, brand films, and event coverage. High-quality production that tells your story compellingly.",                                                                            linkText: "Get started"   },
-        { iconName: "home",   title: "Studio Rental",             body: "A fully equipped creative space available by the hour or day. Professional lighting, backdrops, and gear — everything you need for shoots, recordings, and productions.",                                                               linkText: "Book a session" },
-        { iconName: "cpu",    title: "Business AI Automations",   body: "Custom AI workflows that eliminate repetitive tasks, streamline operations, and free your team to focus on what matters. Smart systems built for real business outcomes.",                                                               linkText: "Get started"   }
+        { iconName: "share",  title: "Social Media Management",  body: "Content that stops thumbs and builds loyal communities.",          linkText: "Get started"   },
+        { iconName: "brand",  title: "Branding",                  body: "A visual identity that makes your brand impossible to forget.",    linkText: "Get started"   },
+        { iconName: "video",  title: "Video Production",          body: "Stories that sell — from concept to final cut.",                  linkText: "Get started"   },
+        { iconName: "home",   title: "Studio Rental",             body: "Professional shoot space, fully equipped and ready to go.",       linkText: "Book a session" },
+        { iconName: "cpu",    title: "Business AI Automations",   body: "Smart workflows that save hours and scale your results.",         linkText: "Get started"   }
       ]
     },
 

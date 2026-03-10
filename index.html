@@ -94,12 +94,14 @@
     .nav-link {
       font-family: 'DM Sans', sans-serif;
       font-size: 14px;
-      font-weight: 400;
-      color: #0A0A0A;
+      font-weight: 500;
+      color: rgba(255,255,255,0.82);
       text-decoration: none;
       transition: color 0.2s ease;
     }
-    .nav-link:hover { color: #0A0A0A; }
+    .nav-link:hover { color: #fff; }
+    nav.scrolled .nav-link { color: rgba(255,255,255,0.9); }
+    nav.scrolled .nav-link:hover { color: #fff; }
     .nav-cta {
       font-family: 'DM Sans', sans-serif;
       font-size: 14px;
@@ -206,7 +208,7 @@
     .hero-inner-dark .hero-h1 em { color: #2F48DF; }
     .hero-inner-dark .hero-sub { color: rgba(10,10,10,0.55); }
     .hero-inner-dark .btn-dark { background: #0A0A0A; color: #FBFBFB; box-shadow: 0 8px 24px rgba(10,10,10,0.15); }
-    .hero-inner-dark .btn-ghost { color: #0A0A0A; border-color: rgba(10,10,10,0.25); }
+    .hero-inner-dark .btn-ghost { color: rgba(10,10,10,0.75); border-color: rgba(10,10,10,0.28); }
 
     /* ── Hero ── */
     .hero {
@@ -314,10 +316,21 @@
       gap: 10px;
       transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
       box-shadow: 0 8px 32px rgba(10,10,10,0.2);
+      position: relative;
+      overflow: hidden;
     }
+    .btn-dark::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 55%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent);
+      transition: left 0.55s ease;
+    }
+    .btn-dark:hover::after { left: 160%; }
     .btn-dark:hover {
-      transform: scale(1.05) translateY(-1px);
-      box-shadow: 0 16px 48px rgba(10,10,10,0.3);
+      transform: scale(1.05) translateY(-2px);
+      box-shadow: 0 20px 52px rgba(10,10,10,0.35);
     }
     .btn-dark:active { transform: scale(0.97); }
     .btn-dark:focus-visible { outline: 2px solid white; outline-offset: 3px; border-radius: 100px; }
@@ -325,20 +338,22 @@
     .btn-ghost {
       font-family: 'DM Sans', sans-serif;
       font-size: 15px;
-      font-weight: 400;
-      color: #0A0A0A;
+      font-weight: 500;
+      color: rgba(255,255,255,0.82);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 16px 24px;
+      padding: 15px 26px;
       border-radius: 100px;
-      transition: color 0.2s ease;
+      border: 1.5px solid rgba(255,255,255,0.32);
+      transition: color 0.25s ease, border-color 0.25s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
     }
     /* Only slide the arrow, not the whole button — prevents ghost doubling from invert strips */
     .btn-ghost span { display: inline-block; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-    .btn-ghost:hover { color: #0A0A0A; }
+    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.65); transform: scale(1.03); }
     .btn-ghost:hover span { transform: translateX(5px); }
+    .btn-ghost:active { transform: scale(0.97); }
     .btn-ghost:focus-visible { outline: 2px solid white; outline-offset: 3px; border-radius: 100px; }
 
     .hero-bottom-fade {
@@ -555,6 +570,11 @@
       position: relative;
       flex-shrink: 0;
       cursor: pointer;
+      transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease;
+    }
+    .wc-card:hover {
+      transform: translateY(-10px) scale(1.025);
+      box-shadow: 0 28px 70px rgba(0,0,0,0.55), 0 8px 20px rgba(0,0,0,0.3);
     }
 
     .wc-card img,
@@ -1296,6 +1316,29 @@
       color: rgba(255,255,255,0.22);
     }
 
+    /* ── Section reveal entrance animations ── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.72s ease, transform 0.72s cubic-bezier(0.16,1,0.3,1);
+    }
+    [data-reveal].revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    [data-reveal][data-delay="1"] { transition-delay: 0.08s; }
+    [data-reveal][data-delay="2"] { transition-delay: 0.16s; }
+    [data-reveal][data-delay="3"] { transition-delay: 0.24s; }
+    [data-reveal][data-delay="4"] { transition-delay: 0.32s; }
+    [data-reveal][data-delay="5"] { transition-delay: 0.40s; }
+
+    /* Section connectors — thin blue accent line at top of each dark→light transition */
+    .section-connector {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(47,72,223,0.35) 30%, rgba(47,72,223,0.35) 70%, transparent);
+      pointer-events: none;
+    }
+
     /* ── Mobile Responsive ───────────────────────────────────────────────── */
     @media (max-width: 768px) {
       /* Nav */
@@ -1444,20 +1487,20 @@
     .hamburger:active { opacity: 0.6; }
     .hamburger span {
       position: absolute;
-      left: 12px;
-      width: 20px; height: 2px;
-      background: #0A0A0A;
+      left: 10px;
+      width: 24px; height: 2.5px;
+      background: #FBFBFB;
       border-radius: 2px;
       transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease, background 0.25s ease;
     }
-    .hamburger span:nth-child(1) { top: 14px; }
+    .hamburger span:nth-child(1) { top: 13px; }
     .hamburger span:nth-child(2) { top: 21px; }
-    .hamburger span:nth-child(3) { top: 28px; }
+    .hamburger span:nth-child(3) { top: 29px; }
     nav.scrolled .hamburger span { background: #FBFBFB; }
-    .hamburger.open span { background: #FBFBFB; }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span { background: #2F48DF; }
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
     nav.menu-open .nav-logo-wrap { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
     /* ── Mobile menu overlay ── */
     .mob-menu {
@@ -1597,12 +1640,12 @@
   <section id="services" class="section" style="background:#0A0A0A;">
     <div class="section-max">
       <div class="services-header">
-        <p class="section-label" style="color:#2F48DF;">What we do</p>
-        <h2 id="cfg-services-heading" class="section-h2 scramble-heading" style="color:#FBFBFB; max-width:640px;"></h2>
-        <p id="cfg-services-body" style="font-size:16px; line-height:1.75; color:rgba(251,251,251,0.45); max-width:480px; margin-top:20px;">From social content and brand identity to video, studio space, and AI automation — everything under one roof.</p>
+        <p class="section-label" style="color:#2F48DF;" data-reveal>What we do</p>
+        <h2 id="cfg-services-heading" class="section-h2 scramble-heading" style="color:#FBFBFB; max-width:640px;" data-reveal data-delay="1"></h2>
+        <p id="cfg-services-body" style="font-size:16px; line-height:1.75; color:rgba(251,251,251,0.45); max-width:480px; margin-top:20px;" data-reveal data-delay="2">From social content and brand identity to video, studio space, and AI automation — everything under one roof.</p>
       </div>
 
-      <div id="cfg-services-grid" class="services-grid"><!-- rendered by content.js --></div>
+      <div id="cfg-services-grid" class="services-grid" data-reveal data-delay="3"><!-- rendered by content.js --></div>
     </div>
   </section>
 
@@ -1612,8 +1655,8 @@
     <!-- Header -->
     <div class="work-header">
       <div>
-        <p class="section-label" style="color:rgba(255,255,255,0.6);">Selected work</p>
-        <h2 class="section-h2 scramble-heading" style="color:#FBFBFB;">Projects we're<br/>proud of.</h2>
+        <p class="section-label" style="color:rgba(255,255,255,0.6);" data-reveal>Selected work</p>
+        <h2 class="section-h2 scramble-heading" style="color:#FBFBFB;" data-reveal data-delay="1">Projects we're<br/>proud of.</h2>
       </div>
       <div class="work-header-actions">
         <div class="wc-chevrons">
@@ -1635,16 +1678,16 @@
 
   <!-- ───────── STATS ───────── -->
   <section class="stats-section">
-    <div id="cfg-stats-grid" class="stats-grid"><!-- rendered by content.js --></div>
+    <div id="cfg-stats-grid" class="stats-grid" data-reveal><!-- rendered by content.js --></div>
   </section>
 
   <!-- ───────── PROCESS ───────── -->
   <section id="process" class="section" style="background:#FBFBFB;">
     <div class="section-max">
-      <p class="section-label" style="color:#2F48DF;">How we work</p>
-      <h2 id="cfg-process-heading" class="section-h2 scramble-heading" style="color:#0A0A0A; max-width:640px;"></h2>
+      <p class="section-label" style="color:#2F48DF;" data-reveal>How we work</p>
+      <h2 id="cfg-process-heading" class="section-h2 scramble-heading" style="color:#0A0A0A; max-width:640px;" data-reveal data-delay="1"></h2>
 
-      <div id="cfg-process-grid" class="process-grid">
+      <div id="cfg-process-grid" class="process-grid" data-reveal data-delay="2">
 <!-- rendered by content.js -->
       </div>
     </div>
@@ -1655,8 +1698,8 @@
 
     <!-- Centred heading -->
     <div class="testi-header">
-      <p class="section-label" style="color:rgba(255,255,255,0.3); margin-bottom:14px;">What clients say</p>
-      <h2 class="section-h2 scramble-heading" style="color:#FBFBFB;">Trusted by brands<br/>that move fast.</h2>
+      <p class="section-label" style="color:rgba(255,255,255,0.3); margin-bottom:14px;" data-reveal>What clients say</p>
+      <h2 class="section-h2 scramble-heading" style="color:#FBFBFB;" data-reveal data-delay="1">Trusted by brands<br/>that move fast.</h2>
     </div>
 
     <!-- Card stack — the visual centrepiece -->
@@ -1684,9 +1727,9 @@
   <!-- ───────── TEAM ───────── -->
   <section id="team" class="team-section">
     <div class="team-inner">
-      <p class="section-label" style="color:rgba(47,72,223,0.6); margin-bottom:14px;">The people</p>
-      <h2 class="section-h2 scramble-heading" style="color:#2F48DF;">The team behind<br/>studiobee.</h2>
-      <div class="team-grid" id="teamGrid">
+      <p class="section-label" style="color:rgba(47,72,223,0.6); margin-bottom:14px;" data-reveal>The people</p>
+      <h2 class="section-h2 scramble-heading" style="color:#2F48DF;" data-reveal data-delay="1">The team behind<br/>studiobee.</h2>
+      <div class="team-grid" id="teamGrid" data-reveal data-delay="2">
         <!-- Populated by content renderer -->
       </div>
     </div>
@@ -2727,6 +2770,23 @@
   })();
   </script>
 
+  <!-- ── Section reveal on scroll ── -->
+  <script>
+  (function () {
+    if (!window.IntersectionObserver) return;
+    var els = document.querySelectorAll('[data-reveal]');
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('revealed');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+  </script>
+
   <!-- ── Download protection ── -->
   <script>
   document.addEventListener('contextmenu', function(e) {
@@ -2751,7 +2811,7 @@
         btn.classList.add('open');
         btn.setAttribute('aria-expanded', 'true');
         document.body.style.overflow = 'hidden';
-        spans.forEach(function(s) { s.style.background = '#FBFBFB'; });
+        spans.forEach(function(s) { s.style.background = '#2F48DF'; });
         if (logo) { logo.style.opacity = '0'; logo.style.pointerEvents = 'none'; }
       }
       function closeMenu() {
