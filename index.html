@@ -2,7 +2,7 @@
 <html lang="en-IN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>studiobee — Creative Studio, Gurgaon</title>
   <meta name="description" content="studiobee is a full-service creative studio in Gurgaon — branding, social media, video production, studio rental, and AI automations for modern brands." />
   <meta name="keywords" content="creative studio Gurgaon, branding agency Delhi NCR, social media management, video production India, AI automations, studio rental Gurgaon" />
@@ -141,6 +141,8 @@
       pointer-events: none;
       animation: stripWave 9s ease-in-out infinite;
     }
+    /* Mobile single-element bg — hidden on desktop, shown via media query */
+    .intro-wave-mobile { display: none; }
     @keyframes stripWave {
       0%   { opacity: 0; }
       30%  { opacity: 1; }
@@ -1353,8 +1355,18 @@
       nav { padding: 14px 20px; padding-top: max(14px, env(safe-area-inset-top)); }
       .nav-links { gap: 18px; }
 
-      /* Mobile wave: slower animation only — all strips must stay visible (they tile full width) */
-      .intro-strip { animation-duration: 14s; }
+      /* Mobile wave: hide all 20 bg strips, use single element instead (reduces GPU layers 50→31) */
+      .intro-strip { display: none; }
+      .intro-wave-mobile {
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        background: url('7945.webp') center / cover no-repeat;
+        pointer-events: none;
+        animation: stripWave 14s ease-in-out infinite;
+        will-change: opacity;
+      }
 
       /* Hero — fix padding so dark-content overlay aligns with hero-inner */
       .hero-inner { padding: 100px 20px 64px; }
@@ -1650,6 +1662,7 @@
     <div class="intro-strip" style="clip-path:inset(0 10% 0 85%); animation-delay:-7.65s"></div>
     <div class="intro-strip" style="clip-path:inset(0 5%  0 90%); animation-delay:-8.1s"></div>
     <div class="intro-strip" style="clip-path:inset(0 0%  0 95%); animation-delay:-8.55s"></div>
+    <div class="intro-wave-mobile" aria-hidden="true"></div>
 
     <div class="bar-grid">
       <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
