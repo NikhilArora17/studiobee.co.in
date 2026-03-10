@@ -1346,6 +1346,10 @@
       nav { padding: 14px 20px; }
       .nav-links { gap: 18px; }
 
+      /* Mobile wave: half strips, slower animation */
+      .intro-strip:nth-child(even) { display: none; }
+      .intro-strip { animation-duration: 14s; }
+
       /* Hero — fix padding so dark-content overlay aligns with hero-inner */
       .hero-inner { padding: 100px 20px 64px; }
       .dark-content { padding: 100px 20px 64px; }
@@ -1848,26 +1852,36 @@
     }, { passive: true });
   </script>
 
-  <!-- Hero text inversion: clone hero content into 20 wave-synced strips with dark colors -->
+  <!-- Hero text inversion: clone hero content into wave-synced strips with dark colors -->
+  <!-- 20 strips on desktop, 10 wider strips at slower speed on mobile -->
   <script>
     (() => {
-      const clips  = [
+      const isMobile = window.innerWidth <= 768;
+      const clips = isMobile ? [
+        'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
+        'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
+        'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
+      ] : [
         'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
         'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
         'inset(0 55% 0 40%)','inset(0 50% 0 45%)','inset(0 45% 0 50%)','inset(0 40% 0 55%)',
         'inset(0 35% 0 60%)','inset(0 30% 0 65%)','inset(0 25% 0 70%)','inset(0 20% 0 75%)',
         'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
       ];
-      const delays = [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
-                      -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
+      const delays = isMobile
+        ? [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1]
+        : [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
+           -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
+      const DUR   = isMobile ? 14 : 9;
+      const COUNT = clips.length;
 
       const src  = document.querySelector('.hero-inner').innerHTML;
       const wrap = document.getElementById('hero-text-invert');
 
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < COUNT; i++) {
         const strip = document.createElement('div');
         strip.className = 'invert-strip';
-        strip.style.cssText = `clip-path:${clips[i]};animation-delay:${delays[i]}s`;
+        strip.style.cssText = `clip-path:${clips[i]};animation:stripWave ${DUR}s ease-in-out infinite;animation-delay:${delays[i]}s`;
 
         const inner = document.createElement('div');
         inner.className = 'hero-inner-dark';
@@ -1883,18 +1897,28 @@
     })();
   </script>
 
-  <!-- Nav logo column-by-column inversion: 20 strips synchronized with hero wave -->
+  <!-- Nav logo column-by-column inversion: synchronized with hero wave -->
+  <!-- 20 strips on desktop, 10 wider strips at slower speed on mobile -->
   <script>
     (() => {
-      const clips  = [
+      const isMobile = window.innerWidth <= 768;
+      const clips = isMobile ? [
+        'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
+        'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
+        'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
+      ] : [
         'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
         'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
         'inset(0 55% 0 40%)','inset(0 50% 0 45%)','inset(0 45% 0 50%)','inset(0 40% 0 55%)',
         'inset(0 35% 0 60%)','inset(0 30% 0 65%)','inset(0 25% 0 70%)','inset(0 20% 0 75%)',
         'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
       ];
-      const delays = [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
-                      -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
+      const delays = isMobile
+        ? [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1]
+        : [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
+           -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
+      const DUR   = isMobile ? 14 : 9;
+      const COUNT = clips.length;
 
       const nav       = document.getElementById('main-nav');
       const logoLight = nav.querySelector('.nav-logo-light');
@@ -1906,10 +1930,10 @@
       const overlay = document.createElement('div');
       overlay.className = 'nav-logo-invert';
 
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < COUNT; i++) {
         const strip = document.createElement('div');
         strip.className = 'nav-logo-invert-strip';
-        strip.style.cssText = `clip-path:${clips[i]};animation-delay:${delays[i]}s;`;
+        strip.style.cssText = `clip-path:${clips[i]};animation:stripWave ${DUR}s ease-in-out infinite;animation-delay:${delays[i]}s;`;
 
         const logo = document.createElement('img');
         logo.src = 'studiobee.png';
@@ -1925,6 +1949,7 @@
   </script>
 
   <!-- ── Hamburger inversion overlay (synced to hero wave) ── -->
+  <!-- Mobile-only (≤480px); always uses 10-strip mode since it only runs on mobile -->
   <script>
     (function () {
       if (window.innerWidth > 480) return; // desktop — no hamburger
@@ -1932,15 +1957,14 @@
       var btn = document.getElementById('hamburger');
       if (!nav || !btn) return;
 
+      // 10 wider strips at 14s — keeps wave sync, halves GPU load vs 20-strip version
       var clips  = [
-        'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
-        'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
-        'inset(0 55% 0 40%)','inset(0 50% 0 45%)','inset(0 45% 0 50%)','inset(0 40% 0 55%)',
-        'inset(0 35% 0 60%)','inset(0 30% 0 65%)','inset(0 25% 0 70%)','inset(0 20% 0 75%)',
-        'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
+        'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
+        'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
+        'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
       ];
-      var delays = [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
-                    -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
+      var delays = [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1];
+      var DUR = 14;
 
       var btnRect = btn.getBoundingClientRect();
       var navRect = nav.getBoundingClientRect();
@@ -1954,7 +1978,7 @@
       clips.forEach(function (clip, i) {
         var strip = document.createElement('div');
         strip.className = 'ham-invert-strip';
-        strip.style.cssText = 'clip-path:' + clip + ';animation-delay:' + delays[i] + 's;';
+        strip.style.cssText = 'clip-path:' + clip + ';animation:stripWave ' + DUR + 's ease-in-out infinite;animation-delay:' + delays[i] + 's;';
         [13, 21, 29].forEach(function (lineTop) {
           var s = document.createElement('span');
           s.style.left = (bL + 10) + 'px';
