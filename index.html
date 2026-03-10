@@ -32,10 +32,7 @@
   <meta name="geo.position" content="28.4595;77.0266" />
   <meta name="ICBM" content="28.4595, 77.0266" />
 
-  <link rel="preload" as="image" href="/7945.png" />
-  <link rel="preload" as="image" href="/7946.png" />
-  <script src="content.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preload" as="image" href="/7945.webp" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Kulim+Park:wght@300;400;600&display=swap" rel="stylesheet" />
@@ -131,7 +128,7 @@
       position: absolute;
       inset: 0;
       z-index: 5;
-      background: url('7945.png') center / cover no-repeat;
+      background: url('7945.webp') center / cover no-repeat;
       pointer-events: none;
       animation: stripWave 9s ease-in-out infinite;
     }
@@ -1991,6 +1988,9 @@
       nav.appendChild(wrap);
     })();
   </script>
+
+  <!-- content.js sets window.SC — loaded here (bottom of body) so it doesn't block initial render -->
+  <script src="content.js"></script>
 
   <!-- ── Content renderer ── -->
   <script>
