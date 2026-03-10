@@ -2,7 +2,7 @@
 <html lang="en-IN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>studiobee — Creative Studio, Gurgaon</title>
   <meta name="description" content="studiobee is a full-service creative studio in Gurgaon — branding, social media, video production, studio rental, and AI automations for modern brands." />
   <meta name="keywords" content="creative studio Gurgaon, branding agency Delhi NCR, social media management, video production India, AI automations, studio rental Gurgaon" />
@@ -81,6 +81,7 @@
       top: 0; left: 0; right: 0;
       z-index: 1002;
       padding: 22px 56px;
+      padding-top: max(22px, env(safe-area-inset-top));
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1343,7 +1344,7 @@
     /* ── Mobile Responsive ───────────────────────────────────────────────── */
     @media (max-width: 768px) {
       /* Nav */
-      nav { padding: 14px 20px; }
+      nav { padding: 14px 20px; padding-top: max(14px, env(safe-area-inset-top)); }
       .nav-links { gap: 18px; }
 
       /* Mobile wave: slower animation only — all strips must stay visible (they tile full width) */
