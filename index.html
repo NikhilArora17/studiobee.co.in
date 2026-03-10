@@ -95,11 +95,11 @@
       font-family: 'DM Sans', sans-serif;
       font-size: 14px;
       font-weight: 500;
-      color: rgba(255,255,255,0.82);
+      color: #0A0A0A;
       text-decoration: none;
       transition: color 0.2s ease;
     }
-    .nav-link:hover { color: #fff; }
+    .nav-link:hover { color: rgba(10,10,10,0.6); }
     nav.scrolled .nav-link { color: rgba(255,255,255,0.9); }
     nav.scrolled .nav-link:hover { color: #fff; }
     .nav-cta {
@@ -1501,6 +1501,31 @@
     .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ── Hamburger inversion overlay — black lines through hero wave strips ── */
+    /* Only shown on mobile (480px), hidden when scrolled or menu open           */
+    .ham-invert-wrap {
+      display: none;
+      position: absolute; inset: 0;
+      pointer-events: none; overflow: hidden;
+      z-index: 1;
+    }
+    @media (max-width: 480px) {
+      .ham-invert-wrap { display: block; }
+    }
+    nav.scrolled .ham-invert-wrap { display: none !important; }
+    .hamburger.open ~ .ham-invert-wrap,
+    nav.menu-open .ham-invert-wrap { display: none !important; }
+    .ham-invert-strip {
+      position: absolute; inset: 0;
+      animation: stripWave 9s ease-in-out infinite;
+    }
+    .ham-invert-strip span {
+      position: absolute;
+      width: 24px; height: 2.5px;
+      background: #0A0A0A;
+      border-radius: 2px;
+    }
     nav.menu-open .nav-logo-wrap { opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
     /* ── Mobile menu overlay ── */
     .mob-menu {
@@ -1898,6 +1923,49 @@
     })();
   </script>
 
+  <!-- ── Hamburger inversion overlay (synced to hero wave) ── -->
+  <script>
+    (function () {
+      if (window.innerWidth > 480) return; // desktop — no hamburger
+      var nav = document.getElementById('main-nav');
+      var btn = document.getElementById('hamburger');
+      if (!nav || !btn) return;
+
+      var clips  = [
+        'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
+        'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
+        'inset(0 55% 0 40%)','inset(0 50% 0 45%)','inset(0 45% 0 50%)','inset(0 40% 0 55%)',
+        'inset(0 35% 0 60%)','inset(0 30% 0 65%)','inset(0 25% 0 70%)','inset(0 20% 0 75%)',
+        'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
+      ];
+      var delays = [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
+                    -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
+
+      var btnRect = btn.getBoundingClientRect();
+      var navRect = nav.getBoundingClientRect();
+      var bL = btnRect.left - navRect.left;
+      var bT = btnRect.top  - navRect.top;
+
+      var wrap = document.createElement('div');
+      wrap.className = 'ham-invert-wrap';
+      wrap.setAttribute('aria-hidden', 'true');
+
+      clips.forEach(function (clip, i) {
+        var strip = document.createElement('div');
+        strip.className = 'ham-invert-strip';
+        strip.style.cssText = 'clip-path:' + clip + ';animation-delay:' + delays[i] + 's;';
+        [13, 21, 29].forEach(function (lineTop) {
+          var s = document.createElement('span');
+          s.style.left = (bL + 10) + 'px';
+          s.style.top  = (bT + lineTop) + 'px';
+          strip.appendChild(s);
+        });
+        wrap.appendChild(strip);
+      });
+
+      nav.appendChild(wrap);
+    })();
+  </script>
 
   <!-- ── Content renderer ── -->
   <script>
