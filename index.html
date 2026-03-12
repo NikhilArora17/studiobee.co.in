@@ -215,9 +215,9 @@
     .hero-inner-dark .hero-eyebrow::before { background: rgba(47,72,223,0.35); }
     .hero-inner-dark .hero-h1 { color: #0A0A0A; }
     .hero-inner-dark .hero-h1 em { color: #2F48DF; }
-    .hero-inner-dark .hero-sub { color: rgba(10,10,10,0.55); }
+    .hero-inner-dark .hero-sub { color: rgba(10,10,10,0.72); text-shadow: none; }
     .hero-inner-dark .btn-dark { background: #0A0A0A; color: #FBFBFB; box-shadow: 0 8px 24px rgba(10,10,10,0.15); }
-    .hero-inner-dark .btn-ghost { color: rgba(10,10,10,0.75); border-color: rgba(10,10,10,0.28); }
+    .hero-inner-dark .btn-ghost { color: rgba(10,10,10,0.88); border-color: rgba(10,10,10,0.45); background: rgba(10,10,10,0.06); }
 
     /* ── Hero ── */
     .hero {
@@ -304,9 +304,10 @@
       font-family: 'Kulim Park', sans-serif;
       font-size: 19px;
       line-height: 1.75;
-      color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.88);
       max-width: 500px;
       margin-bottom: 52px;
+      text-shadow: 0 1px 16px rgba(0,0,0,0.4);
     }
 
     .hero-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
@@ -348,19 +349,20 @@
       font-family: 'DM Sans', sans-serif;
       font-size: 15px;
       font-weight: 500;
-      color: rgba(255,255,255,0.82);
+      color: rgba(255,255,255,0.95);
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 15px 26px;
       border-radius: 100px;
-      border: 1.5px solid rgba(255,255,255,0.32);
-      transition: color 0.25s ease, border-color 0.25s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      border: 1.5px solid rgba(255,255,255,0.58);
+      background: rgba(255,255,255,0.10);
+      transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
     }
     /* Only slide the arrow, not the whole button — prevents ghost doubling from invert strips */
     .btn-ghost span { display: inline-block; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.65); transform: scale(1.03); }
+    .btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.18); transform: scale(1.03); }
     .btn-ghost:hover span { transform: translateX(5px); }
     .btn-ghost:active { transform: scale(0.97); }
     .btn-ghost:focus-visible { outline: 2px solid white; outline-offset: 3px; border-radius: 100px; }
@@ -1353,9 +1355,8 @@
       nav { padding: 14px 20px; padding-top: max(14px, env(safe-area-inset-top)); }
       .nav-links { gap: 18px; }
 
-      /* Mobile wave: hide every other bg strip (20→10 layers), slow to 18s */
-      .intro-strip:nth-child(even) { display: none; }
-      .intro-strip { animation-duration: 18s; }
+      /* Mobile wave: slower animation only */
+      .intro-strip { animation-duration: 14s; }
 
       /* Hero — fix padding so dark-content overlay aligns with hero-inner */
       .hero-inner { padding: 100px 20px 64px; }
@@ -1890,13 +1891,14 @@
   </script>
 
   <!-- Hero text inversion: clone hero content into wave-synced strips with dark colors -->
-  <!-- 20 strips on desktop, 5 wider strips at slower speed on mobile -->
+  <!-- 20 strips on desktop, 10 wider strips at slower speed on mobile -->
   <script>
     (() => {
       const isMobile = window.innerWidth <= 768;
       const clips = isMobile ? [
-        'inset(0 80% 0 0%)','inset(0 60% 0 20%)','inset(0 40% 0 40%)',
-        'inset(0 20% 0 60%)','inset(0 0% 0 80%)'
+        'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
+        'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
+        'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
       ] : [
         'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
         'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
@@ -1905,10 +1907,10 @@
         'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
       ];
       const delays = isMobile
-        ? [0,-3.6,-7.2,-10.8,-14.4]
+        ? [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1]
         : [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
            -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
-      const DUR   = isMobile ? 18 : 9;
+      const DUR   = isMobile ? 14 : 9;
       const COUNT = clips.length;
 
       const src  = document.querySelector('.hero-inner').innerHTML;
@@ -1934,13 +1936,14 @@
   </script>
 
   <!-- Nav logo column-by-column inversion: synchronized with hero wave -->
-  <!-- 20 strips on desktop, 5 wider strips at slower speed on mobile -->
+  <!-- 20 strips on desktop, 10 wider strips at slower speed on mobile -->
   <script>
     (() => {
       const isMobile = window.innerWidth <= 768;
       const clips = isMobile ? [
-        'inset(0 80% 0 0%)','inset(0 60% 0 20%)','inset(0 40% 0 40%)',
-        'inset(0 20% 0 60%)','inset(0 0% 0 80%)'
+        'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
+        'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
+        'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
       ] : [
         'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
         'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
@@ -1949,10 +1952,10 @@
         'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
       ];
       const delays = isMobile
-        ? [0,-3.6,-7.2,-10.8,-14.4]
+        ? [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1]
         : [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
            -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
-      const DUR   = isMobile ? 18 : 9;
+      const DUR   = isMobile ? 14 : 9;
       const COUNT = clips.length;
 
       const nav       = document.getElementById('main-nav');
@@ -1992,13 +1995,14 @@
       var btn = document.getElementById('hamburger');
       if (!nav || !btn) return;
 
-      // 5 wider strips at 18s — same visual effect, half the GPU layers
+      // 10 wider strips at 14s — keeps wave sync on mobile
       var clips  = [
-        'inset(0 80% 0 0%)','inset(0 60% 0 20%)','inset(0 40% 0 40%)',
-        'inset(0 20% 0 60%)','inset(0 0% 0 80%)'
+        'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
+        'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
+        'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
       ];
-      var delays = [0,-3.6,-7.2,-10.8,-14.4];
-      var DUR = 18;
+      var delays = [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1];
+      var DUR = 14;
 
       var btnRect = btn.getBoundingClientRect();
       var navRect = nav.getBoundingClientRect();
