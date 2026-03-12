@@ -1857,36 +1857,42 @@
 
   <script>
     // Nav scroll effect — RAF-throttled so it only updates once per frame
-    const nav = document.getElementById('main-nav');
-    let _navRaf = false;
-    window.addEventListener('scroll', () => {
-      if (_navRaf) return;
-      _navRaf = true;
-      requestAnimationFrame(() => {
-        nav.classList.toggle('scrolled', window.scrollY > 60);
-        _navRaf = false;
-      });
-    }, { passive: true });
+    (function () {
+      var nav = document.getElementById('main-nav');
+      var _navRaf = false;
+      window.addEventListener('scroll', function () {
+        if (_navRaf) return;
+        _navRaf = true;
+        requestAnimationFrame(function () {
+          nav.classList.toggle('scrolled', window.scrollY > 60);
+          _navRaf = false;
+        });
+      }, { passive: true });
+    })();
   </script>
 
-  <!-- Pause all strip animations when hero is off-screen (Option 4 — saves GPU when scrolled) -->
+  <!-- Shared strip animation config — consumed by the 3 inversion builder scripts below -->
   <script>
-    (function () {
-      var hero = document.querySelector('.hero');
-      if (!hero || !window.IntersectionObserver) return;
-      var allStrips = [];
-      function collectStrips() {
-        allStrips = Array.from(document.querySelectorAll(
-          '.intro-strip, .invert-strip, .nav-logo-invert-strip, .ham-invert-strip'
-        ));
-      }
-      var io = new IntersectionObserver(function (entries) {
-        // Collect lazily after JS inversion strips have been built
-        if (!allStrips.length) collectStrips();
-        var state = entries[0].isIntersecting ? 'running' : 'paused';
-        allStrips.forEach(function (el) { el.style.animationPlayState = state; });
-      }, { threshold: 0 });
-      io.observe(hero);
+    window._SB_STRIPS = (function () {
+      var m = window.innerWidth <= 768;
+      return {
+        clips: m ? [
+          'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
+          'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
+          'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
+        ] : [
+          'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
+          'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
+          'inset(0 55% 0 40%)','inset(0 50% 0 45%)','inset(0 45% 0 50%)','inset(0 40% 0 55%)',
+          'inset(0 35% 0 60%)','inset(0 30% 0 65%)','inset(0 25% 0 70%)','inset(0 20% 0 75%)',
+          'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
+        ],
+        delays: m
+          ? [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1]
+          : [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
+             -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55],
+        dur: m ? 14 : 9
+      };
     })();
   </script>
 
@@ -1894,23 +1900,7 @@
   <!-- 20 strips on desktop, 10 wider strips at slower speed on mobile -->
   <script>
     (() => {
-      const isMobile = window.innerWidth <= 768;
-      const clips = isMobile ? [
-        'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
-        'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
-        'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
-      ] : [
-        'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
-        'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
-        'inset(0 55% 0 40%)','inset(0 50% 0 45%)','inset(0 45% 0 50%)','inset(0 40% 0 55%)',
-        'inset(0 35% 0 60%)','inset(0 30% 0 65%)','inset(0 25% 0 70%)','inset(0 20% 0 75%)',
-        'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
-      ];
-      const delays = isMobile
-        ? [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1]
-        : [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
-           -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
-      const DUR   = isMobile ? 14 : 9;
+      const { clips, delays, dur: DUR } = window._SB_STRIPS;
       const COUNT = clips.length;
 
       const src  = document.querySelector('.hero-inner').innerHTML;
@@ -1939,23 +1929,7 @@
   <!-- 20 strips on desktop, 10 wider strips at slower speed on mobile -->
   <script>
     (() => {
-      const isMobile = window.innerWidth <= 768;
-      const clips = isMobile ? [
-        'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
-        'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
-        'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
-      ] : [
-        'inset(0 95% 0 0%)','inset(0 90% 0 5%)','inset(0 85% 0 10%)','inset(0 80% 0 15%)',
-        'inset(0 75% 0 20%)','inset(0 70% 0 25%)','inset(0 65% 0 30%)','inset(0 60% 0 35%)',
-        'inset(0 55% 0 40%)','inset(0 50% 0 45%)','inset(0 45% 0 50%)','inset(0 40% 0 55%)',
-        'inset(0 35% 0 60%)','inset(0 30% 0 65%)','inset(0 25% 0 70%)','inset(0 20% 0 75%)',
-        'inset(0 15% 0 80%)','inset(0 10% 0 85%)','inset(0 5% 0 90%)','inset(0 0% 0 95%)'
-      ];
-      const delays = isMobile
-        ? [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1]
-        : [0,-0.45,-0.9,-1.35,-1.8,-2.25,-2.7,-3.15,-3.6,-4.05,
-           -4.5,-4.95,-5.4,-5.85,-6.3,-6.75,-7.2,-7.65,-8.1,-8.55];
-      const DUR   = isMobile ? 14 : 9;
+      const { clips, delays, dur: DUR } = window._SB_STRIPS;
       const COUNT = clips.length;
 
       const nav       = document.getElementById('main-nav');
@@ -1995,14 +1969,10 @@
       var btn = document.getElementById('hamburger');
       if (!nav || !btn) return;
 
-      // 10 wider strips at 14s — keeps wave sync on mobile
-      var clips  = [
-        'inset(0 90% 0 0%)','inset(0 80% 0 10%)','inset(0 70% 0 20%)','inset(0 60% 0 30%)',
-        'inset(0 50% 0 40%)','inset(0 40% 0 50%)','inset(0 30% 0 60%)','inset(0 20% 0 70%)',
-        'inset(0 10% 0 80%)','inset(0 0% 0 90%)'
-      ];
-      var delays = [0,-0.9,-1.8,-2.7,-3.6,-4.5,-5.4,-6.3,-7.2,-8.1];
-      var DUR = 14;
+      // Uses shared mobile strip config (10 strips at 14s) from window._SB_STRIPS
+      var clips  = window._SB_STRIPS.clips;
+      var delays = window._SB_STRIPS.delays;
+      var DUR    = window._SB_STRIPS.dur;
 
       var btnRect = btn.getBoundingClientRect();
       var navRect = nav.getBoundingClientRect();
@@ -2027,6 +1997,22 @@
       });
 
       nav.appendChild(wrap);
+    })();
+  </script>
+
+  <!-- Pause all strip animations when hero is off-screen — placed AFTER all 3 inversion builders -->
+  <script>
+    (function () {
+      var hero = document.querySelector('.hero');
+      if (!hero || !window.IntersectionObserver) return;
+      // All strips already built by this point — collect once immediately
+      var allStrips = Array.from(document.querySelectorAll(
+        '.intro-strip, .invert-strip, .nav-logo-invert-strip, .ham-invert-strip'
+      ));
+      new IntersectionObserver(function (entries) {
+        var state = entries[0].isIntersecting ? 'running' : 'paused';
+        allStrips.forEach(function (el) { el.style.animationPlayState = state; });
+      }, { threshold: 0 }).observe(hero);
     })();
   </script>
 
@@ -2073,7 +2059,7 @@
       if (ww && SC.projects) {
         ww.innerHTML = SC.projects.map(function(p) {
           var media = p.mediaType === 'video'
-            ? '<video src="' + esc(p.media) + '" autoplay muted loop playsinline preload="none" onerror="this.style.display=\'none\'"></video>'
+            ? '<video src="' + esc(p.media) + '" autoplay muted loop playsinline preload="metadata" onerror="this.style.display=\'none\'"></video>'
             : '<img src="' + esc(p.media) + '" alt="' + esc(p.title) + ' — ' + esc(p.type) + ' project by studiobee creative studio, Gurgaon" loading="lazy" onerror="this.src=\'https://placehold.co/256x455/111/333\'" />';
           var tags = (p.services || []).map(function(s) { return '<span class="wc-badge-tag">' + esc(s) + '</span>'; }).join('');
           return '<div class="wc-card" data-media="' + esc(p.media) + '" data-media-type="' + esc(p.mediaType || 'image') + '">' + media +
@@ -2220,36 +2206,39 @@
 
         var offset   = 0;
         var paused   = false;
-        var offScreen = false; // true when work section is scrolled out of view
+        var rafId    = null;
         var chevAnim = null; // { start, end, startTime, dur }
-
-        // Pause RAF when work section is off-screen — saves ~60 DOM writes/sec on mobile
-        if ('IntersectionObserver' in window) {
-          new IntersectionObserver(function(entries) {
-            offScreen = !entries[0].isIntersecting;
-          }, { threshold: 0 }).observe(track.closest('.work-section') || track);
-        }
 
         function ease(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
 
         function tick(now) {
-          if (!offScreen) {
-            if (chevAnim) {
-              if (chevAnim.startTime === null) chevAnim.startTime = now;
-              var t = Math.min(1, (now - chevAnim.startTime) / chevAnim.dur);
-              offset = chevAnim.start + (chevAnim.end - chevAnim.start) * ease(t);
-              if (t >= 1) {
-                offset = chevAnim.end;
-                offset = ((offset % setW) + setW) % setW;
-                chevAnim = null;
-              }
-            } else if (!paused) {
-              offset += SPEED;
-              if (offset >= setW) offset -= setW;
+          if (chevAnim) {
+            if (chevAnim.startTime === null) chevAnim.startTime = now;
+            var t = Math.min(1, (now - chevAnim.startTime) / chevAnim.dur);
+            offset = chevAnim.start + (chevAnim.end - chevAnim.start) * ease(t);
+            if (t >= 1) {
+              offset = chevAnim.end;
+              offset = ((offset % setW) + setW) % setW;
+              chevAnim = null;
             }
-            marquee.style.transform = 'translateX(' + (-offset) + 'px)';
+          } else if (!paused) {
+            offset += SPEED;
+            if (offset >= setW) offset -= setW;
           }
-          requestAnimationFrame(tick);
+          marquee.style.transform = 'translateX(' + (-offset) + 'px)';
+          rafId = requestAnimationFrame(tick);
+        }
+
+        // Cancel RAF when work section is off-screen — stops all DOM writes + GPU compositing
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting) {
+              if (!rafId) rafId = requestAnimationFrame(tick);
+            } else {
+              cancelAnimationFrame(rafId);
+              rafId = null;
+            }
+          }, { threshold: 0 }).observe(track.closest('.work-section') || track);
         }
 
         track.addEventListener('mouseenter', function() { paused = true; });
@@ -2521,7 +2510,7 @@
           grid.innerHTML = s.cards.map(function(card, i) {
             var num = String(i + 1).padStart(2, '0');
             var mediaEl = card.mediaType === 'video'
-              ? '<video src="' + esc(card.mediaSrc) + '" autoplay muted loop playsinline preload="none" onerror="this.style.display=\'none\'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></video>'
+              ? '<video src="' + esc(card.mediaSrc) + '" autoplay muted loop playsinline preload="metadata" onerror="this.style.display=\'none\'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></video>'
               : '<img src="' + esc(card.mediaSrc || '') + '" alt="' + esc(card.title || '') + ' service by studiobee creative studio, Gurgaon" loading="lazy" onerror="this.src=\'https://placehold.co/400x300/111/333\'" />';
             return '<div class="service-card">' +
               '<span style="position:absolute;top:36px;right:36px;font-family:\'DM Sans\',sans-serif;font-size:11px;font-weight:700;color:rgba(47,72,223,0.25);letter-spacing:0.06em;">' + num + '</span>' +
@@ -2548,7 +2537,7 @@
             return '<span class="wc-badge wc-badge-secondary">' + esc(sv) + '</span>';
           }).join('');
           var mediaEl = card.mediaType === 'video'
-            ? '<video src="' + esc(card.mediaSrc) + '" autoplay muted loop playsinline preload="none" onerror="this.style.display=\'none\'"></video>'
+            ? '<video src="' + esc(card.mediaSrc) + '" autoplay muted loop playsinline preload="metadata" onerror="this.style.display=\'none\'"></video>'
             : '<img src="' + esc(card.mediaSrc || '') + '" alt="' + esc(card.title || '') + ' — ' + esc(card.typeBadge || '') + ' project by studiobee creative studio, Gurgaon" loading="lazy" onerror="this.src=\'https://placehold.co/256x455/111/333\'" />';
           return '<div class="wc-card" data-media="' + esc(card.mediaSrc || '') + '" data-media-type="' + esc(card.mediaType || 'image') + '">' +
             mediaEl +

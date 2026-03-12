@@ -45,13 +45,44 @@ Then use `API + '/contact'`, `API + '/upload'`, `API + '/ping'` in all XHR calls
 This allows the page to work from both VS Code Live Server (port 5500) and serve.mjs (port 3000).
 
 ## Protected Files — Do Not Move
-- `7945.png` and `7946.png` — must stay in the project root. They are referenced by `.intro-strip` CSS `background-image` and power the hero wave animation on `index.html`. Moving them breaks the animation.
+- `7945.webp` and `7946.webp` — must stay in the project root. They are referenced by `.intro-strip` CSS `background-image` and power the hero wave animation on `index.html`. Moving them breaks the animation.
 
 ## Output Defaults
 - Single `index.html` file, all styles inline, unless user says otherwise
-- Tailwind CSS via CDN: `<script src="https://cdn.tailwindcss.com"></script>`
+- No Tailwind CDN — project uses custom inline CSS only
 - Placeholder images: `https://placehold.co/WIDTHxHEIGHT`
 - Mobile-first responsive
+
+## iOS Performance & Crash Prevention
+Each element with `clip-path` + an opacity/transform CSS animation = 1 dedicated GPU compositor layer. iPhone 12/13 (4GB RAM) crashes Chrome when this exceeds ~40–50 layers.
+
+**Current layer budget (mobile):**
+- 20 `.intro-strip` bg divs (static clip-path + opacity animation) = 20 layers
+- 10 `.invert-strip` text inversion = 10 layers
+- 10 `.nav-logo-invert-strip` logo inversion = 10 layers
+- 10 `.ham-invert-strip` hamburger inversion = 10 layers
+- Total = 50 layers (at limit — do not add more animated clip-path elements)
+
+**Rules to keep iOS stable:**
+- Never add `mix-blend-mode` to `body::after` or any fixed full-viewport element — forces whole-page compositing
+- Never add `backdrop-filter` to carousel cards — 30+ blurs = instant crash
+- All strip animations pause via IntersectionObserver when hero scrolls off-screen (hero IO observer placed AFTER the 3 inversion builder scripts)
+- Carousel RAF fully cancels (`cancelAnimationFrame`) when work section is off-screen
+- Nav scroll handler is RAF-throttled (IIFE-scoped)
+- Videos use `preload="metadata"` (not `preload="none"`) for autoplay first-frame
+
+## Hero Wave Animation System
+- 20 `.intro-strip` HTML divs in `.hero` — static `clip-path`, staggered `animation-delay`, `animation: stripWave 9s ease-in-out infinite`
+- On mobile (≤768px): 14s duration (set in CSS), same 20 strips
+- 3 JS inversion systems built after DOM ready: text inversion, nav logo inversion, hamburger inversion (mobile-only ≤480px)
+- All 3 share `window._SB_STRIPS` (clips array + delays array + dur) — defined once before the builder scripts
+- `heroIO` observer runs LAST (after all 3 builders) — collects strips once immediately, pauses/resumes on visibility
+
+## iOS Status Bar (Safe Area)
+- `<meta name="viewport" content="..., viewport-fit=cover" />` — required for `env(safe-area-inset-top)` to work
+- `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />` — makes iOS status bar transparent in Safari
+- `#sb-status-fill`: `position:fixed; top:0; height:env(safe-area-inset-top); background:#2F48DF; z-index:10000` — fills the safe area with brand blue
+- z-index 10000 = above grain overlay (9999)
 
 ## Brand Assets
 - Always check the `brand_assets/` folder before designing. It may contain logos, color guides, style guides, or images.
