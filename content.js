@@ -38,12 +38,12 @@
 
     projects: [
       { title: "BPTP The Atrium", type: "Video Production", owner: "", services: ["video production"],                 desc: "", media: "/media/Atrium.mp4",          mediaType: "video" },
-      { title: "Fab Interiors",   type: "Video Production", owner: "", services: ["video production"],                 desc: "", media: "/media/Fab Interiors.mp4",   mediaType: "video" },
+      { title: "Fab Interiors",   type: "Video Production", owner: "", services: ["video production"],                 desc: "", media: "/media/Fab-Interiors.mp4",   mediaType: "video" },
       { title: "Infocomm 2025",   type: "Event",            owner: "", services: ["video production", "social media"], desc: "", media: "/media/Infocomm.mp4",        mediaType: "video" },
-      { title: "Karray Lyzard",   type: "Video Production", owner: "", services: ["video production", "branding"],    desc: "", media: "/media/Stop motion.mp4",     mediaType: "video" },
+      { title: "Karray Lyzard",   type: "Video Production", owner: "", services: ["video production", "branding"],    desc: "", media: "/media/Stop-motion.mp4",     mediaType: "video" },
       { title: "Ritika Puri",     type: "Brand + Video",    owner: "", services: ["branding", "video production"],    desc: "", media: "/media/YTD.mp4",             mediaType: "video" },
-      { title: "RR Cinema",       type: "Video Production", owner: "", services: ["video production"],                 desc: "", media: "/media/RR Cinema.mp4",       mediaType: "video" },
-      { title: "SmartHome Expo",  type: "Event",            owner: "", services: ["video production", "social media"], desc: "", media: "/media/smarthome expo.mp4",  mediaType: "video" }
+      { title: "RR Cinema",       type: "Video Production", owner: "", services: ["video production"],                 desc: "", media: "/media/RR-Cinema.mp4",       mediaType: "video" },
+      { title: "SmartHome Expo",  type: "Event",            owner: "", services: ["video production", "social media"], desc: "", media: "/media/smarthome-expo.mp4",  mediaType: "video" }
     ],
 
     stats: [
