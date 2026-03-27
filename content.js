@@ -37,14 +37,13 @@
     },
 
     projects: [
-      { title: "Meridian Financial", type: "Branding",     owner: "James Morton",   services: ["brand strategy", "social media"],           desc: "Full brand identity and social campaign for a next-generation wealth management platform.",   media: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=500&h=889&fit=crop&auto=format&q=80", mediaType: "image" },
-      { title: "GreenPath",          type: "Video",         owner: "Sarah Lin",      services: ["video production", "content strategy"],     desc: "Hero video and social content series for a sustainable consumer brand launching nationally.", media: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=889&fit=crop&auto=format&q=80", mediaType: "image" },
-      { title: "Apex Fitness",       type: "Brand + Video", owner: "Michael Torres", services: ["branding", "video production"],             desc: "Brand refresh and launch video for a premium fitness studio expanding to three new cities.",   media: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&h=889&fit=crop&auto=format&q=80", mediaType: "image" },
-      { title: "Orbit Tech",         type: "SaaS",          owner: "David Khatri",   services: ["AI automations", "social media", "web dev"],desc: "AI-driven social strategy and full-stack web platform for a B2B automation startup.",          media: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&h=889&fit=crop&auto=format&q=80", mediaType: "image" },
-      { title: "Studio 9",           type: "Agency",        owner: "Lena Voss",      services: ["branding", "design", "web"],                desc: "End-to-end brand identity, website design, and digital presence for a creative agency.",      media: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=500&h=889&fit=crop&auto=format&q=80", mediaType: "image" },
-      { title: "NovaBite",           type: "F&B",           owner: "Priya Nair",     services: ["branding", "social media", "photography"],  desc: "Visual identity and content system for an upscale fast-casual restaurant group.",             media: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&h=889&fit=crop&auto=format&q=80", mediaType: "image" },
-      { title: "Solace Wellness",    type: "Wellness",      owner: "Maya Reddy",     services: ["brand identity", "video", "social media"],  desc: "Calming brand world and monthly content for a boutique wellness and mindfulness studio.",     media: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500&h=889&fit=crop&auto=format&q=80", mediaType: "image" },
-      { title: "Thread & Form",      type: "Fashion",       owner: "Sophie Okafor",  services: ["branding", "social media", "photography"],  desc: "Brand launch and editorial content for an independent sustainable fashion label.",            media: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=889&fit=crop&auto=format&q=80", mediaType: "image" }
+      { title: "BPTP The Atrium", type: "Video Production", owner: "", services: ["video production"],                 desc: "", media: "/media/Atrium.mp4",          mediaType: "video" },
+      { title: "Fab Interiors",   type: "Video Production", owner: "", services: ["video production"],                 desc: "", media: "/media/Fab Interiors.mp4",   mediaType: "video" },
+      { title: "Infocomm 2025",   type: "Event",            owner: "", services: ["video production", "social media"], desc: "", media: "/media/Infocomm.mp4",        mediaType: "video" },
+      { title: "Karray Lyzard",   type: "Video Production", owner: "", services: ["video production", "branding"],    desc: "", media: "/media/Stop motion.mp4",     mediaType: "video" },
+      { title: "Ritika Puri",     type: "Brand + Video",    owner: "", services: ["branding", "video production"],    desc: "", media: "/media/YTD.mp4",             mediaType: "video" },
+      { title: "RR Cinema",       type: "Video Production", owner: "", services: ["video production"],                 desc: "", media: "/media/RR Cinema.mp4",       mediaType: "video" },
+      { title: "SmartHome Expo",  type: "Event",            owner: "", services: ["video production", "social media"], desc: "", media: "/media/smarthome expo.mp4",  mediaType: "video" }
     ],
 
     stats: [
@@ -66,35 +65,35 @@
 
     team: [
       {
-        name:     "Anya Sharma",
+        name:     "Nikhil",
         role:     "Creative Director",
         bio:      "10+ years crafting brand identities and digital experiences for startups and global brands. Obsessed with the space where storytelling meets design.",
         skills:   ["Brand Strategy", "Art Direction", "UX Design"],
-        photo:    "https://placehold.co/400x500/111827/4f64f0",
+        photo:    "/media/Nikhil.jpg",
         linkedin: ""
       },
       {
-        name:     "Rohan Mehta",
+        name:     "Rajib",
         role:     "Head of Video Production",
         bio:      "Award-winning director with roots in documentary and commercial film. Brings cinematic precision to every social reel and brand film we produce.",
         skills:   ["Cinematography", "Editing", "Motion Design"],
-        photo:    "https://placehold.co/400x500/111827/4f64f0",
+        photo:    "/media/Rajib.jpg",
         linkedin: ""
       },
       {
-        name:     "Priya Nair",
+        name:     "Himani",
         role:     "Social Media Strategist",
         bio:      "Built communities from zero to millions for D2C brands. Lives and breathes platform algorithms, cultural trends, and audience psychology.",
         skills:   ["Content Strategy", "Paid Social", "Analytics"],
-        photo:    "https://placehold.co/400x500/111827/4f64f0",
+        photo:    "/media/Himani.jpg",
         linkedin: ""
       },
       {
-        name:     "Dev Kapoor",
+        name:     "Aakash",
         role:     "AI Automation Lead",
         bio:      "Former ML engineer turned creative technologist. Designs intelligent workflows that help brands scale faster without adding headcount.",
         skills:   ["AI/ML", "Workflow Automation", "No-Code"],
-        photo:    "https://placehold.co/400x500/111827/4f64f0",
+        photo:    "/media/Aakash.png",
         linkedin: ""
       }
     ],

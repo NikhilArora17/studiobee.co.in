@@ -1,0 +1,237 @@
+{
+  "services": {
+    "heading": "Creative services\nfor modern brands.",
+    "subheading": "From social content and brand identity to video, studio space, and AI automation \u00e2\u20ac\u201d everything under one roof.",
+    "items": [
+      {
+        "iconName": "share",
+        "title": "Social Media Management",
+        "body": "Strategy, content creation, scheduling, and community management across all major platforms. We grow your audience and keep your brand active and relevant.",
+        "linkText": "Get started"
+      },
+      {
+        "iconName": "brand",
+        "title": "Branding",
+        "body": "Logo design, brand identity, visual systems, and guidelines that make your business instantly recognisable and memorable across every touchpoint.",
+        "linkText": "Get started"
+      },
+      {
+        "iconName": "video",
+        "title": "Video Production",
+        "body": "From concept to final cut \u00e2\u20ac\u201d promotional videos, social reels, brand films, and event coverage. High-quality production that tells your story compellingly.",
+        "linkText": "Get started"
+      },
+      {
+        "iconName": "home",
+        "title": "Studio Rental",
+        "body": "A fully equipped creative space available by the hour or day. Professional lighting, backdrops, and gear \u00e2\u20ac\u201d everything you need for shoots, recordings, and productions.",
+        "linkText": "Book a session"
+      },
+      {
+        "iconName": "cpu",
+        "title": "Business AI Automations",
+        "body": "Custom AI workflows that eliminate repetitive tasks, streamline operations, and free your team to focus on what matters. Smart systems built for real business outcomes.",
+        "linkText": "Get started"
+      }
+    ]
+  },
+  "projects": [
+    {
+      "title": "BPTP The Atrium",
+      "type": "Video Production",
+      "services": [
+        "brand strategy",
+        "social media",
+        "video production"
+      ],
+      "desc": "Social media and video production for BPTP's The Atrium",
+      "media": "/media/Atrium.mp4",
+      "mediaType": "video"
+    },
+    {
+      "title": "Fab Interiors",
+      "type": "Video",
+      "services": [
+        "video production",
+        "content strategy"
+      ],
+      "desc": "Fab Interior reel",
+      "media": "/media/Fab Interiors.mp4",
+      "mediaType": "video"
+    },
+    {
+      "title": "Infocomm 2025",
+      "type": "Brand + Video",
+      "services": [
+        "branding",
+        "video production"
+      ],
+      "desc": "InfoComm expo shoot for multiple brands",
+      "media": "/media/Infocomm.mp4",
+      "mediaType": "video"
+    },
+    {
+      "title": "Karray Lyzard",
+      "type": "Product Reel",
+      "services": [
+        "social media",
+        "Product reel"
+      ],
+      "desc": "Stop Motion reel for KArray Lyzard speakers",
+      "media": "/media/Stop motion.mp4",
+      "mediaType": "video"
+    },
+    {
+      "title": "Ritika Puri",
+      "type": "Branding + Video",
+      "services": [
+        "branding",
+        "design",
+        "video productions"
+      ],
+      "desc": "Multiple video productions for different properties' interiors designed by Ms Ritika Puri",
+      "media": "/media/YTD.mp4",
+      "mediaType": "video"
+    },
+    {
+      "title": "RR Cinema",
+      "type": "Video",
+      "services": [
+        "social media",
+        "photography",
+        "video",
+        "production"
+      ],
+      "desc": "Photography and Video Production for world class Home theater made for Mr Abhishek Arya",
+      "media": "/media/RR Cinema.mp4",
+      "mediaType": "video"
+    },
+    {
+      "title": "SmartHome Expo",
+      "type": "Video Production",
+      "services": [
+        "video",
+        "social media"
+      ],
+      "desc": "SmartHome expo shoot for BeeNext",
+      "media": "/media/smarthome expo.mp4",
+      "mediaType": "video"
+    }
+  ],
+  "stats": [
+    {
+      "number": "30+",
+      "label": "Design concepts, prototypes, and brand explorations delivered"
+    },
+    {
+      "number": "10+",
+      "label": "Combined experience in design, branding, and digital media"
+    },
+    {
+      "number": "7+",
+      "label": "Industries from tech startups to lifestyle brands"
+    },
+    {
+      "number": "100%",
+      "label": "Clients who returned or recommended us"
+    }
+  ],
+  "process": {
+    "heading": "A process built\nfor real outcomes.",
+    "items": [
+      {
+        "title": "Discover",
+        "body": "Deep-dive into your business, users, and competitive landscape to uncover what actually matters most."
+      },
+      {
+        "title": "Define",
+        "body": "We frame the problem clearly and set direction \u00e2\u20ac\u201d scope, principles, and success criteria agreed upfront."
+      },
+      {
+        "title": "Design",
+        "body": "Iterative design cycles with rapid prototyping, user testing, and continuous refinement until it's right."
+      },
+      {
+        "title": "Deploy",
+        "body": "From handoff to launch and beyond \u00e2\u20ac\u201d we support implementation and measure real-world performance."
+      }
+    ]
+  },
+  "team": [
+    {
+      "name": "Rajib Laishram",
+      "role": "Design Head",
+      "bio": "10+ years crafting brand identities and digital experiences for startups and global brands. Obsessed with the space where storytelling meets design.",
+      "skills": [
+        "Brand Strategy",
+        "Art Direction",
+        "UX Design"
+      ],
+      "photo": "/media/Rajib.jpg",
+      "linkedin": ""
+    },
+    {
+      "name": "Aakash Pal ",
+      "role": "Head of Video Production",
+      "bio": "Award-winning director with roots in documentary and commercial film. Brings cinematic precision to every social reel and brand film we produce.",
+      "skills": [
+        "Cinematography",
+        "Editing",
+        "Motion Design"
+      ],
+      "photo": "/media/Aakash.png",
+      "linkedin": ""
+    },
+    {
+      "name": "Himani Rathore",
+      "role": "Head of Branding ",
+      "bio": "Built communities from zero to millions for D2C brands. Lives and breathes platform algorithms, cultural trends, and audience psychology.",
+      "skills": [
+        "Content Strategy",
+        "Paid Social",
+        "Analytics"
+      ],
+      "photo": "/media/Himani.jpg",
+      "linkedin": ""
+    },
+    {
+      "name": "Nikhil Arora",
+      "role": "Head of UX/UI",
+      "bio": "Former ML engineer turned creative technologist. Designs intelligent workflows that help brands scale faster without adding headcount.",
+      "skills": [
+        "AI/ML",
+        "Workflow Automation",
+        "No-Code"
+      ],
+      "photo": "/media/Nikhil.jpg",
+      "linkedin": ""
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "studiobee completely transformed how our brand looks and feels online. The branding, the social content, the videos \u00e2\u20ac\u201d everything is cohesive and genuinely impressive.",
+      "name": "James Morton",
+      "role": "Founder, Meridian Financial"
+    },
+    {
+      "quote": "The AI automations they built saved us hours every week. Our entire back-end runs smoother than ever \u00e2\u20ac\u201d I can't imagine going back to the old way of doing things.",
+      "name": "Sarah L.",
+      "role": "CEO, GreenPath"
+    },
+    {
+      "quote": "Rented the studio for a product shoot \u00e2\u20ac\u201d top-tier setup, seamless to book, and the final photos exceeded every expectation we had going in.",
+      "name": "David K.",
+      "role": "Creative Director, Orbit Tech"
+    },
+    {
+      "quote": "Their social media management tripled our engagement in three months. They genuinely understand how to build an audience and keep them coming back.",
+      "name": "Michael T.",
+      "role": "Owner, Apex Fitness"
+    },
+    {
+      "quote": "We went from zero online presence to a brand people actually recognise. The whole team at studiobee are incredibly talented and a pleasure to work with.",
+      "name": "Priya N.",
+      "role": "Co-founder, NovaBite"
+    }
+  ]
+}

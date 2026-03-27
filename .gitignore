@@ -6,16 +6,17 @@ node_modules/
 
 # Secrets — never commit these
 smtp-config.json
+.env
 
 # Runtime data — contains customer PII
 contacts.json
 analytics.json
 
 # Config snapshot (regenerated at runtime from config panel)
-config.json
+# config.json — tracking to serve real content on Vercel
 
 # Uploaded media files
-media/
+# media/ — tracking media folder to serve videos on Vercel
 
 # Screenshots (dev only)
 screenshots/
