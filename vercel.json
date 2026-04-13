@@ -5,7 +5,8 @@
     { "source": "/analytics",   "destination": "/api/analytics" },
     { "source": "/upload",      "destination": "/api/upload" },
     { "source": "/save-config", "destination": "/api/save-config" },
-    { "source": "/config-data", "destination": "/api/config" }
+    { "source": "/config-data", "destination": "/api/config" },
+    { "source": "/media-proxy", "destination": "/api/media" }
   ],
   "functions": {
     "api/**/*.js": { "maxDuration": 10 }

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import http from 'http';
 import fs from 'fs';
 import os from 'os';
@@ -144,8 +145,8 @@ const CSP = [
   "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com",
   "font-src https://fonts.gstatic.com",
-  "img-src 'self' data: https://images.unsplash.com https://placehold.co",
-  "media-src 'self' blob: https://images.unsplash.com",
+  "img-src 'self' data: https://images.unsplash.com https://placehold.co https://*.supabase.co",
+  "media-src 'self' blob: https://*.supabase.co",
   "connect-src 'self'",
   "frame-ancestors 'none'",
 ].join('; ');
@@ -312,6 +313,38 @@ const server = http.createServer((req, res) => {
             console.log(`Email sent to ${smtpTo}`);
           } catch (e) {
             console.error('Email failed:', e.message);
+          }
+
+          // Confirmation email to submitter
+          if (email) {
+            try {
+              await smtpTransport.sendMail({
+                from:    `"studiobee" <${smtpFrom}>`,
+                to:      email,
+                subject: `We received your inquiry, ${name}`,
+                html: `
+                  <div style="background:#0A0A0A;padding:0;margin:0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+                    <div style="max-width:560px;margin:0 auto;padding:48px 32px;">
+                      <p style="font-size:22px;font-weight:700;color:#2F48DF;letter-spacing:-0.02em;margin:0 0 32px;">studiobee</p>
+                      <h1 style="font-size:28px;font-weight:400;color:#FBFBFB;line-height:1.25;margin:0 0 16px;">Thanks for reaching out,<br/>${escHtml(name)}.</h1>
+                      <p style="font-size:15px;line-height:1.7;color:rgba(251,251,251,0.55);margin:0 0 36px;">We've received your brief and will review it shortly. Expect a reply within <strong style="color:#FBFBFB;">one business day</strong>.</p>
+                      <div style="background:rgba(47,72,223,0.12);border:1px solid rgba(47,72,223,0.25);border-radius:12px;padding:24px 28px;margin-bottom:36px;">
+                        <p style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(251,251,251,0.35);margin:0 0 16px;">Your submission</p>
+                        <table style="width:100%;border-collapse:collapse;">
+                          <tr><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.07);color:rgba(251,251,251,0.4);font-size:13px;width:80px;">Name</td><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.07);color:#FBFBFB;font-size:13px;">${escHtml(name)}</td></tr>
+                          <tr><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.07);color:rgba(251,251,251,0.4);font-size:13px;">City</td><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.07);color:#FBFBFB;font-size:13px;">${escHtml(city)}</td></tr>
+                          <tr><td style="padding:8px 0;color:rgba(251,251,251,0.4);font-size:13px;vertical-align:top;">Message</td><td style="padding:8px 0;color:rgba(251,251,251,0.65);font-size:13px;line-height:1.6;">${escHtml(message).replace(/\n/g, '<br/>')}</td></tr>
+                        </table>
+                      </div>
+                      <p style="font-size:13px;color:rgba(251,251,251,0.25);margin:0;">studiobee · creative studio, Gurgaon · <a href="https://studiobee.co.in" style="color:#2F48DF;text-decoration:none;">studiobee.co.in</a></p>
+                    </div>
+                  </div>
+                `,
+              });
+              console.log(`Confirmation email sent to ${email}`);
+            } catch (e) {
+              console.error('Confirmation email failed:', e.message);
+            }
           }
         }
         res.writeHead(200, { 'Content-Type': 'application/json' });
