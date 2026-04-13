@@ -27,6 +27,7 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Could not create upload URL' });
   }
 
-  const publicUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/media/${filename}`;
+  // Return proxy URL instead of direct Supabase public URL (bucket is private)
+  const publicUrl = `/api/media?file=${encodeURIComponent(filename)}`;
   res.status(200).json({ uploadUrl: data.signedUrl, publicUrl });
 };
