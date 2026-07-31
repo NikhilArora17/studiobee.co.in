@@ -69,17 +69,17 @@ export async function updateSession(request: NextRequest) {
 
     if (profile.role === "employee") {
       // Matches what page-level checks already allow employees to see (e.g.
-      // /projects only requires *a* profile, no role check — employees can
-      // already read project data, they just can't create/bill). This
+      // /work only requires *a* profile, no role check — employees can
+      // already read project/task data, they just can't create/bill, and the
+      // Clients tab there hides itself for non-billing roles). This
       // previously only allowed "/" and "/account", which put employees in a
-      // redirect loop the moment the dashboard sent them to /tasks.
+      // redirect loop the moment the dashboard sent them to a page they
+      // couldn't reach.
       const allowed =
         pathname === "/" ||
         pathname.startsWith("/account") ||
-        pathname.startsWith("/tasks") ||
-        pathname.startsWith("/clock") ||
-        pathname.startsWith("/projects") ||
-        pathname.startsWith("/performance");
+        pathname.startsWith("/work") ||
+        pathname.startsWith("/time-performance");
       if (!allowed) {
         const url = request.nextUrl.clone();
         url.pathname = "/";

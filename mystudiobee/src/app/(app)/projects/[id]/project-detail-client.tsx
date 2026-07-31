@@ -283,7 +283,7 @@ export function ProjectDetailClient({
 
   return (
     <>
-      <DashboardHeader title={project.name} backHref="/projects">
+      <DashboardHeader title={project.name} backHref="/work">
         <Button variant="outline" size="sm" onClick={() => setShowEdit(true)}>
           <Pencil className="h-3.5 w-3.5" /> Edit
         </Button>
@@ -308,7 +308,7 @@ export function ProjectDetailClient({
         {project.deleted_at && (
           <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-xs text-amber-800">
             This project&apos;s client is in the{" "}
-            <Link href="/bin" className="font-medium underline underline-offset-2">
+            <Link href="/admin" className="font-medium underline underline-offset-2">
               Bin
             </Link>
             . Restore the client from there to make changes here.
@@ -555,7 +555,7 @@ export function ProjectDetailClient({
             {projectVendors.map((pv) => (
               <div key={pv.id} className="flex items-center gap-3 rounded-lg border border-border px-3 py-2">
                 <Link
-                  href="/admin/vendors"
+                  href="/admin"
                   className="min-w-0 flex-1 truncate text-sm font-medium hover:underline"
                 >
                   {pv.equipment_vendors?.name ?? "Unknown vendor"}
@@ -590,7 +590,7 @@ export function ProjectDetailClient({
             {projectHires.map((ph) => (
               <div key={ph.id} className="flex items-center gap-3 rounded-lg border border-border px-3 py-2">
                 <Link
-                  href="/admin/hires"
+                  href="/admin"
                   className="min-w-0 flex-1 truncate text-sm font-medium hover:underline"
                 >
                   {ph.external_hires?.name ?? "Unknown hire"}

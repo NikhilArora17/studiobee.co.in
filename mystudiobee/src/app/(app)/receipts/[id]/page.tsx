@@ -15,13 +15,13 @@ export default async function ReceiptDetailPage({ params }: { params: Promise<{ 
 
   return (
     <>
-      <DashboardHeader title={doc.number} backHref="/receipts" />
+      <DashboardHeader title={doc.number} backHref="/billing" />
       <div className="flex-1 overflow-y-auto p-4 sm:p-6">
         <div className="animate-in-page mx-auto max-w-3xl space-y-4">
           {(doc as Record<string, unknown>).deleted_at ? (
             <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-xs text-amber-800">
               This document&apos;s client is in the{" "}
-              <Link href="/bin" className="font-medium underline underline-offset-2">
+              <Link href="/admin" className="font-medium underline underline-offset-2">
                 Bin
               </Link>
               .

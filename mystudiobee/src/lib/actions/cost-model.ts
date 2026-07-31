@@ -20,7 +20,7 @@ export async function upsertCostRole(input: { id?: string; name: string; hourly_
     ? await supabase.from("cost_roles").update({ name: input.name, hourly_rate: input.hourly_rate }).eq("id", input.id)
     : await supabase.from("cost_roles").insert({ name: input.name, hourly_rate: input.hourly_rate });
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/cost-model");
+  revalidatePath("/admin");
 }
 
 export async function setCostRoleActive(id: string, active: boolean) {
@@ -28,7 +28,7 @@ export async function setCostRoleActive(id: string, active: boolean) {
   const supabase = await createClient();
   const { error } = await supabase.from("cost_roles").update({ active }).eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/cost-model");
+  revalidatePath("/admin");
 }
 
 // ── Service presets ──────────────────────────────────────────────────────
@@ -53,7 +53,7 @@ export async function upsertServicePreset(input: {
     ? await supabase.from("service_presets").update(payload).eq("id", input.id)
     : await supabase.from("service_presets").insert(payload);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/cost-model");
+  revalidatePath("/admin");
 }
 
 export async function deleteServicePreset(id: string) {
@@ -61,7 +61,7 @@ export async function deleteServicePreset(id: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("service_presets").delete().eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/cost-model");
+  revalidatePath("/admin");
 }
 
 export async function deleteCostRole(id: string) {
@@ -69,5 +69,5 @@ export async function deleteCostRole(id: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("cost_roles").delete().eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/cost-model");
+  revalidatePath("/admin");
 }

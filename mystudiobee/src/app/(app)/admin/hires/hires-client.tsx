@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { DashboardHeader } from "@/components/layout/dashboard-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -121,12 +120,12 @@ export function HiresClient({ items }: { items: Hire[] }) {
 
   return (
     <>
-      <DashboardHeader title="External Hires">
+      <div className="mb-3 flex justify-end">
         <Button size="sm" onClick={openNew}>
           + Add Hire
         </Button>
-      </DashboardHeader>
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+      </div>
+      <div>
         <div className="rounded-xl border border-border overflow-hidden">
           <Table>
             <TableHeader>

@@ -23,7 +23,7 @@ export async function createProject(input: {
     .select("id")
     .single();
   if (error) throw new Error(error.message);
-  revalidatePath("/projects");
+  revalidatePath("/work");
   return data.id as string;
 }
 
@@ -47,7 +47,7 @@ export async function updateProject(
     .update({ ...input, updated_at: new Date().toISOString() })
     .eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/projects");
+  revalidatePath("/work");
   revalidatePath(`/projects/${id}`);
 }
 
@@ -91,7 +91,7 @@ export async function updateProjectStatus(
     .update({ status, updated_at: new Date().toISOString() })
     .eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/projects");
+  revalidatePath("/work");
   revalidatePath(`/projects/${id}`);
 }
 

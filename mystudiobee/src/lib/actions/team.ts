@@ -53,7 +53,7 @@ export async function inviteEmployee(input: { email: string; role: Role }) {
     if (profileError) throw new Error(profileError.message);
   }
 
-  revalidatePath("/admin/team");
+  revalidatePath("/admin");
 }
 
 export async function updateEmployeeRole(id: string, role: Role) {
@@ -63,7 +63,7 @@ export async function updateEmployeeRole(id: string, role: Role) {
   const supabase = await createClient();
   const { error } = await supabase.from("profiles").update({ role }).eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/team");
+  revalidatePath("/admin");
 }
 
 export async function updateEmployeeManager(id: string, managerId: string | null) {
@@ -71,7 +71,7 @@ export async function updateEmployeeManager(id: string, managerId: string | null
   const supabase = await createClient();
   const { error } = await supabase.from("profiles").update({ manager_id: managerId }).eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/team");
+  revalidatePath("/admin");
 }
 
 export async function setEmployeeActive(id: string, active: boolean) {
@@ -81,7 +81,7 @@ export async function setEmployeeActive(id: string, active: boolean) {
   const supabase = await createClient();
   const { error } = await supabase.from("profiles").update({ active }).eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/team");
+  revalidatePath("/admin");
 }
 
 /** Hard delete — their id is referenced (on delete set null) from tasks,
@@ -97,5 +97,5 @@ export async function deleteEmployee(id: string) {
   if (profileError) throw new Error(profileError.message);
   const { error: authError } = await admin.auth.admin.deleteUser(id);
   if (authError) throw new Error(authError.message);
-  revalidatePath("/admin/team");
+  revalidatePath("/admin");
 }

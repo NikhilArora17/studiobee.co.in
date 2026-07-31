@@ -26,7 +26,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
 
   return (
     <>
-      <DashboardHeader title={client.name} backHref="/clients" />
+      <DashboardHeader title={client.name} backHref="/work" />
       <div className="flex-1 overflow-y-auto p-4 sm:p-6">
         <div className="animate-in-page mx-auto max-w-4xl">
           <ClientDetailClient

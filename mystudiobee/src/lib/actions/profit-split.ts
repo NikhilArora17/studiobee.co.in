@@ -23,7 +23,7 @@ export async function upsertProfitSplitSettings(input: {
     .from("profit_split_settings")
     .upsert({ ...input }, { onConflict: "category" });
   if (error) throw new Error(error.message);
-  revalidatePath("/performance");
+  revalidatePath("/time-performance");
 }
 
 export async function getProfitSplitSettings() {

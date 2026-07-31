@@ -48,7 +48,7 @@ export default async function NewQuotePage() {
 
   return (
     <>
-      <DashboardHeader title="New Quote" backHref="/quotes" />
+      <DashboardHeader title="New Quote" backHref="/billing" />
       <div className="flex-1 overflow-y-auto p-4 sm:p-6">
         <div className="animate-in-page mx-auto max-w-3xl">
           <QuoteEditor

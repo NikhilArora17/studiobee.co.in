@@ -30,7 +30,7 @@ export async function upsertEquipment(input: {
     ? await supabase.from("equipment").update(rest).eq("id", id)
     : await supabase.from("equipment").insert(rest);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/equipment");
+  revalidatePath("/admin");
 }
 
 export async function setEquipmentActive(id: string, active: boolean) {
@@ -43,7 +43,7 @@ export async function setEquipmentActive(id: string, active: boolean) {
     .update({ active })
     .eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/equipment");
+  revalidatePath("/admin");
 }
 
 // ── Internal costing items ("Overhead Items" table, relocated from Cost Model) ──
@@ -74,7 +74,7 @@ export async function upsertOverheadItem(input: {
     ? await supabase.from("overhead_items").update(payload).eq("id", input.id)
     : await supabase.from("overhead_items").insert(payload);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/equipment");
+  revalidatePath("/admin");
 }
 
 export async function setOverheadItemActive(id: string, active: boolean) {
@@ -84,7 +84,7 @@ export async function setOverheadItemActive(id: string, active: boolean) {
   const supabase = createAdminClient();
   const { error } = await supabase.from("overhead_items").update({ active }).eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/equipment");
+  revalidatePath("/admin");
 }
 
 export async function deleteOverheadItem(id: string) {
@@ -94,5 +94,5 @@ export async function deleteOverheadItem(id: string) {
   const supabase = createAdminClient();
   const { error } = await supabase.from("overhead_items").delete().eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/equipment");
+  revalidatePath("/admin");
 }

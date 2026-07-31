@@ -62,7 +62,7 @@ export function ClientDetailClient({
       try {
         await deleteClient(client.id);
         toast.success(`${client.name} moved to Bin`);
-        router.push("/clients");
+        router.push("/work");
         router.refresh();
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Failed to delete");
@@ -75,7 +75,7 @@ export function ClientDetailClient({
       {isBinned && (
         <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-xs text-amber-800">
           This client was deleted{deletedAt ? ` on ${new Date(deletedAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}` : ""} and is sitting in the{" "}
-          <Link href="/bin" className="font-medium underline underline-offset-2">
+          <Link href="/admin" className="font-medium underline underline-offset-2">
             Bin
           </Link>
           . Restore it from there to make changes.

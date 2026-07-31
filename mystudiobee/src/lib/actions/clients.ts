@@ -23,18 +23,13 @@ async function requireAdminTier() {
 function revalidateAffectedPaths() {
   for (const path of [
     "/",
-    "/clients",
-    "/projects",
-    "/tasks",
-    "/quotes",
-    "/proformas",
-    "/invoices",
-    "/receipts",
-    "/bin",
+    "/work",
+    "/billing",
+    "/admin",
+    "/reports",
     "/reports/pnl",
-    "/reports/time",
     "/reports/hours",
-    "/clock",
+    "/time-performance",
   ]) {
     try { revalidatePath(path); } catch { /* ignore */ }
   }
@@ -84,7 +79,7 @@ export async function upsertClient(input: ClientInput) {
 
   if (error) throw new Error("DB error: " + error.message + " code:" + error.code);
   if (!data) throw new Error("Insert/update returned no data — possible RLS SELECT block after write");
-  try { revalidatePath("/clients"); } catch { /* ignore */ }
+  try { revalidatePath("/work"); } catch { /* ignore */ }
   return data.id as string;
 }
 
@@ -94,7 +89,7 @@ export async function updateClientAvatar(id: string, avatarUrl: string) {
   const { error } = await supabase.from("clients").update({ avatar_url: avatarUrl }).eq("id", id);
   if (error) throw new Error(error.message);
   try { revalidatePath("/"); } catch { /* ignore */ }
-  try { revalidatePath("/clients"); } catch { /* ignore */ }
+  try { revalidatePath("/work"); } catch { /* ignore */ }
   try { revalidatePath(`/clients/${id}`); } catch { /* ignore */ }
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Plus, Search } from "lucide-react";
@@ -25,23 +25,22 @@ type Client = {
 
 export function ClientsClient({
   clients,
-  initialQuery,
   openNewOnLoad,
 }: {
   clients: Client[];
-  initialQuery: string;
   openNewOnLoad: boolean;
 }) {
   const router = useRouter();
-  const [q, setQ] = useState(initialQuery);
+  const [q, setQ] = useState("");
   const [open, setOpen] = useState(openNewOnLoad);
   const [avatars, setAvatars] = useState<Record<string, string>>({});
   const [uploadingId, setUploadingId] = useState<string | null>(null);
 
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    router.push(q ? `/clients?q=${encodeURIComponent(q)}` : "/clients");
-  }
+  const filteredClients = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    if (!needle) return clients;
+    return clients.filter((c) => c.name.toLowerCase().includes(needle));
+  }, [clients, q]);
 
   async function handleAvatarUpload(clientId: string, file: File) {
     setUploadingId(clientId);
@@ -58,7 +57,7 @@ export function ClientsClient({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3">
-        <form onSubmit={handleSearch} className="relative max-w-xs flex-1">
+        <div className="relative max-w-xs flex-1">
           <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={q}
@@ -66,18 +65,20 @@ export function ClientsClient({
             placeholder="Search clients…"
             className="pl-8"
           />
-        </form>
+        </div>
         <Button onClick={() => setOpen(true)}>
           <Plus className="h-3.5 w-3.5" /> Add client
         </Button>
       </div>
 
       <div className="rounded-xl border border-border bg-card shadow-card">
-        {clients.length === 0 ? (
-          <div className="py-10 text-center text-sm text-muted-foreground">No clients yet.</div>
+        {filteredClients.length === 0 ? (
+          <div className="py-10 text-center text-sm text-muted-foreground">
+            {clients.length === 0 ? "No clients yet." : "No clients match your search."}
+          </div>
         ) : (
           <div className="divide-y divide-border">
-            {clients.map((c) => (
+            {filteredClients.map((c) => (
               <div
                 key={c.id}
                 className="relative flex items-center gap-4 px-5 py-3.5 transition-colors duration-100 hover:bg-muted/50"

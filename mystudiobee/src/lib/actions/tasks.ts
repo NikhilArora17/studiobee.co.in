@@ -22,7 +22,7 @@ export async function createTask(input: {
     // an unassigned task is invisible in every employee's filtered task view.
     .insert({ ...input, assigned_to: input.assigned_to ?? profile.id, created_by: profile.id });
   if (error) throw new Error(error.message);
-  revalidatePath("/tasks");
+  revalidatePath("/work");
   if (input.project_id) revalidatePath(`/projects/${input.project_id}`);
 }
 
@@ -36,7 +36,7 @@ export async function updateTaskStatus(
     .update({ status, updated_at: new Date().toISOString() })
     .eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/tasks");
+  revalidatePath("/work");
 }
 
 export async function updateTaskAssignee(id: string, assignedTo: string | null) {
@@ -46,13 +46,13 @@ export async function updateTaskAssignee(id: string, assignedTo: string | null) 
     .update({ assigned_to: assignedTo, updated_at: new Date().toISOString() })
     .eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/tasks");
+  revalidatePath("/work");
 }
 
 export async function deleteTask(id: string, project_id?: string | null) {
   const supabase = await createClient();
   const { error } = await supabase.from("tasks").delete().eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/tasks");
+  revalidatePath("/work");
   if (project_id) revalidatePath(`/projects/${project_id}`);
 }

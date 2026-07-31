@@ -93,7 +93,7 @@ export async function createQuote(input: {
     .single();
 
   if (error) throw new Error(error.message);
-  revalidatePath("/quotes");
+  revalidatePath("/billing");
   return data.id as string;
 }
 
@@ -140,10 +140,7 @@ export async function updateDocument(
   if (!data || data.length === 0) {
     throw new Error("Save failed — nothing was written. You may have been signed out; refresh the page and try again.");
   }
-  revalidatePath("/quotes");
-  revalidatePath("/proformas");
-  revalidatePath("/invoices");
-  revalidatePath("/receipts");
+  revalidatePath("/billing");
 }
 
 export async function convertDocument(id: string) {
@@ -175,10 +172,7 @@ export async function convertDocument(id: string) {
   const convertedStatus = src.type === "quote" || src.type === "proforma" ? "accepted" : "paid";
   await supabase.from("documents").update({ status: convertedStatus }).eq("id", id);
 
-  revalidatePath("/quotes");
-  revalidatePath("/proformas");
-  revalidatePath("/invoices");
-  revalidatePath("/receipts");
+  revalidatePath("/billing");
   return { id: data.id as string, type: nextType };
 }
 
@@ -207,10 +201,7 @@ export async function duplicateDocument(id: string) {
     .single();
   if (error) throw new Error(error.message);
 
-  revalidatePath("/quotes");
-  revalidatePath("/proformas");
-  revalidatePath("/invoices");
-  revalidatePath("/receipts");
+  revalidatePath("/billing");
   return { id: data.id as string, type: docType };
 }
 
@@ -230,10 +221,7 @@ export async function updateDocumentStatus(id: string, status: DocumentStatus) {
     .select("id");
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) throw new Error("Document not found");
-  revalidatePath("/quotes");
-  revalidatePath("/proformas");
-  revalidatePath("/invoices");
-  revalidatePath("/receipts");
+  revalidatePath("/billing");
 }
 
 export async function deleteDocument(id: string) {
@@ -244,10 +232,7 @@ export async function deleteDocument(id: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("documents").delete().eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/quotes");
-  revalidatePath("/proformas");
-  revalidatePath("/invoices");
-  revalidatePath("/receipts");
+  revalidatePath("/billing");
 }
 
 /** Fetch a document, redacting cost_breakdown from line items for manager-role sessions. */

@@ -21,7 +21,7 @@ export default async function DashboardPage() {
   if (!profile) return null;
 
   if (!isBillingRole(profile.role)) {
-    redirect("/tasks");
+    redirect("/work");
   }
 
   const supabase = await createClient();
@@ -108,7 +108,7 @@ export default async function DashboardPage() {
               </div>
               <div className="flex gap-2">
                 <Link
-                  href="/clients?new=1"
+                  href="/work?new=1"
                   className="inline-flex items-center gap-1.5 rounded-lg border border-black/5 bg-white/80 px-3 py-1.5 text-sm font-medium text-foreground backdrop-blur-sm transition-colors duration-100 hover:bg-white"
                 >
                   <Plus className="h-3.5 w-3.5" /> Client
@@ -153,7 +153,7 @@ export default async function DashboardPage() {
                   <Wallet className="h-4 w-4" />
                 </span>
                 <Link
-                  href="/invoices"
+                  href="/billing"
                   className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-colors duration-100 hover:bg-white/25"
                 >
                   <ArrowUpRight className="h-3.5 w-3.5" />
@@ -207,19 +207,19 @@ export default async function DashboardPage() {
 
           {/* Task stats */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Link href="/tasks?status=pending" className="rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-card hover:shadow-card-hover transition-shadow duration-100">
+            <Link href="/work?status=pending" className="rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-card hover:shadow-card-hover transition-shadow duration-100">
               <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">Pending</p>
               <p className="mt-1 font-heading text-2xl font-semibold">{taskCounts.pending}</p>
             </Link>
-            <Link href="/tasks?status=in_progress" className="rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-card hover:shadow-card-hover transition-shadow duration-100">
+            <Link href="/work?status=in_progress" className="rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-card hover:shadow-card-hover transition-shadow duration-100">
               <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">In Progress</p>
               <p className="mt-1 font-heading text-2xl font-semibold">{taskCounts.in_progress}</p>
             </Link>
-            <Link href="/tasks?status=delayed" className="rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-card hover:shadow-card-hover transition-shadow duration-100">
+            <Link href="/work?status=delayed" className="rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-card hover:shadow-card-hover transition-shadow duration-100">
               <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">Delayed</p>
               <p className="mt-1 font-heading text-2xl font-semibold">{taskCounts.delayed}</p>
             </Link>
-            <Link href="/tasks?status=completed" className="rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-card hover:shadow-card-hover transition-shadow duration-100">
+            <Link href="/work?status=completed" className="rounded-xl border border-primary/15 bg-primary/10 p-4 shadow-card hover:shadow-card-hover transition-shadow duration-100">
               <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">Completed</p>
               <p className="mt-1 font-heading text-2xl font-semibold">{taskCounts.completed}</p>
             </Link>
@@ -284,7 +284,7 @@ export default async function DashboardPage() {
                 <h3 className="font-heading text-[11px] font-semibold uppercase tracking-[0.08em]">
                   Active Projects
                 </h3>
-                <Link href="/projects" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/work" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
                   View all
                 </Link>
               </div>
@@ -320,7 +320,7 @@ export default async function DashboardPage() {
                 <h3 className="font-heading text-[11px] font-semibold uppercase tracking-[0.08em]">
                   Recent Quotes
                 </h3>
-                <Link href="/quotes" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/billing" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
                   View all
                 </Link>
               </div>
@@ -355,7 +355,7 @@ export default async function DashboardPage() {
                 <h3 className="font-heading text-[11px] font-semibold uppercase tracking-[0.08em]">
                   Recent Clients
                 </h3>
-                <Link href="/clients" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
+                <Link href="/work" className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
                   View all
                 </Link>
               </div>

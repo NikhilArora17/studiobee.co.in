@@ -29,7 +29,7 @@ export async function upsertHire(input: {
     ? await supabase.from("external_hires").update(rest).eq("id", id)
     : await supabase.from("external_hires").insert(rest);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/hires");
+  revalidatePath("/admin");
 }
 
 export async function setHireActive(id: string, active: boolean) {
@@ -39,7 +39,7 @@ export async function setHireActive(id: string, active: boolean) {
   const supabase = createAdminClient();
   const { error } = await supabase.from("external_hires").update({ active }).eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/hires");
+  revalidatePath("/admin");
 }
 
 export async function linkHireToProject(input: { project_id: string; hire_id: string; role_on_shoot?: string; notes?: string }) {

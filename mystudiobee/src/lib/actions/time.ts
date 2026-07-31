@@ -51,8 +51,8 @@ export async function clockIn(input: {
     .single();
   if (error) throw new Error(error.message);
 
-  revalidatePath("/clock");
-  revalidatePath("/reports/time");
+  revalidatePath("/time-performance");
+  revalidatePath("/reports");
   return data.id as string;
 }
 
@@ -81,8 +81,8 @@ export async function clockOut(entryId: string, location: { latitude: number; lo
     .eq("employee_id", profile.id); // RLS + owner check
   if (error) throw new Error(error.message);
 
-  revalidatePath("/clock");
-  revalidatePath("/reports/time");
+  revalidatePath("/time-performance");
+  revalidatePath("/reports");
 }
 
 export async function deleteTimeEntry(entryId: string) {
@@ -99,8 +99,8 @@ export async function deleteTimeEntry(entryId: string) {
     .eq("id", entryId);
   if (error) throw new Error(error.message);
 
-  revalidatePath("/clock");
-  revalidatePath("/reports/time");
+  revalidatePath("/time-performance");
+  revalidatePath("/reports");
 }
 
 export async function restoreTimeEntry(entryId: string) {
@@ -117,6 +117,6 @@ export async function restoreTimeEntry(entryId: string) {
     .eq("id", entryId);
   if (error) throw new Error(error.message);
 
-  revalidatePath("/clock");
-  revalidatePath("/reports/time");
+  revalidatePath("/time-performance");
+  revalidatePath("/reports");
 }

@@ -28,7 +28,7 @@ export async function upsertVendor(input: {
     ? await supabase.from("equipment_vendors").update(rest).eq("id", id)
     : await supabase.from("equipment_vendors").insert(rest);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/vendors");
+  revalidatePath("/admin");
 }
 
 export async function setVendorActive(id: string, active: boolean) {
@@ -38,7 +38,7 @@ export async function setVendorActive(id: string, active: boolean) {
   const supabase = createAdminClient();
   const { error } = await supabase.from("equipment_vendors").update({ active }).eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/admin/vendors");
+  revalidatePath("/admin");
 }
 
 export async function linkVendorToProject(input: { project_id: string; vendor_id: string; notes?: string }) {

@@ -32,7 +32,7 @@ export async function upsertPointReason(input: { id?: string; label: string; poi
     ? await supabase.from("point_reasons").update(payload).eq("id", input.id)
     : await supabase.from("point_reasons").insert(payload);
   if (error) throw new Error(error.message);
-  revalidatePath("/performance");
+  revalidatePath("/time-performance");
 }
 
 export async function setPointReasonActive(id: string, active: boolean) {
@@ -40,7 +40,7 @@ export async function setPointReasonActive(id: string, active: boolean) {
   const supabase = await createClient();
   const { error } = await supabase.from("point_reasons").update({ active }).eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/performance");
+  revalidatePath("/time-performance");
 }
 
 // ── Point events ─────────────────────────────────────────────────────────
@@ -128,7 +128,7 @@ export async function logPointEvent(input: { employeeId: string; reasonId: strin
     logged_by: profile.id,
   });
   if (error) throw new Error(error.message);
-  revalidatePath("/performance");
+  revalidatePath("/time-performance");
 }
 
 export async function updatePointEvent(id: string, note: string) {
@@ -153,7 +153,7 @@ export async function updatePointEvent(id: string, note: string) {
 
   const { error } = await supabase.from("point_events").update({ note }).eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/performance");
+  revalidatePath("/time-performance");
 }
 
 export async function deletePointEvent(id: string) {
@@ -178,5 +178,5 @@ export async function deletePointEvent(id: string) {
 
   const { error } = await supabase.from("point_events").delete().eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/performance");
+  revalidatePath("/time-performance");
 }
