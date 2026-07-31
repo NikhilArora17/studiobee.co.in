@@ -11,6 +11,7 @@ import {
   Wallet,
   Settings,
   TrendingUp,
+  PanelLeftIcon,
 } from "lucide-react";
 import {
   Sidebar,
@@ -22,6 +23,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { createClient } from "@/lib/supabase/client";
@@ -81,6 +83,20 @@ function NavLink({ item, active }: { item: NavEntry; active: boolean }) {
   );
 }
 
+function SidebarToggle() {
+  const { toggleSidebar } = useSidebar();
+  return (
+    <button
+      onClick={toggleSidebar}
+      title="Collapse sidebar"
+      className="rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/10 hover:text-white/80"
+    >
+      <PanelLeftIcon className="h-4 w-4" />
+      <span className="sr-only">Toggle Sidebar</span>
+    </button>
+  );
+}
+
 export function AppSidebar({
   displayName,
   email,
@@ -114,9 +130,12 @@ export function AppSidebar({
   return (
     <Sidebar className="bg-gradient-blue">
       <SidebarHeader className="border-b border-white/8 px-5 py-2.5">
-        <Link href="/" className="inline-flex items-center">
-          <Image src="/studiobee-white.png" alt="StudioBee" width={120} height={30} />
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/" className="inline-flex items-center">
+            <Image src="/studiobee-white.png" alt="StudioBee" width={120} height={30} />
+          </Link>
+          <SidebarToggle />
+        </div>
       </SidebarHeader>
 
       <SidebarContent className="px-3 py-1.5">
@@ -151,6 +170,7 @@ export function AppSidebar({
           </button>
         </div>
       </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   );
 }
