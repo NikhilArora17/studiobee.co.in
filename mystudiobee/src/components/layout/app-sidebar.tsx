@@ -43,10 +43,12 @@ import { isAdminTier, type Role } from "@/lib/role";
 type NavEntry = { title: string; href: string; icon: React.ComponentType<{ className?: string }> };
 
 const workspaceNav: NavEntry[] = [{ title: "Dashboard", href: "/", icon: LayoutDashboard }];
-const crmNav: NavEntry[] = [{ title: "Clients", href: "/clients", icon: Users }];
-const projectNav: NavEntry[] = [{ title: "Projects", href: "/projects", icon: FolderOpen }];
-const taskNav: NavEntry[] = [{ title: "Tasks", href: "/tasks", icon: CheckSquare }];
-const clockNav: NavEntry[] = [{ title: "Clock In", href: "/clock", icon: Clock }];
+const clientsEntry: NavEntry = { title: "Clients", href: "/clients", icon: Users };
+const projectsEntry: NavEntry = { title: "Projects", href: "/projects", icon: FolderOpen };
+const tasksEntry: NavEntry = { title: "Tasks", href: "/tasks", icon: CheckSquare };
+const clockEntry: NavEntry = { title: "Clock In", href: "/clock", icon: Clock };
+const performanceEntry: NavEntry = { title: "Performance", href: "/performance", icon: Award };
+const timeNav: NavEntry[] = [clockEntry, performanceEntry];
 const billingNav: NavEntry[] = [
   { title: "Quotes", href: "/quotes", icon: FileText },
   { title: "Proforma Invoices", href: "/proformas", icon: FileStack },
@@ -60,13 +62,12 @@ const adminNav: NavEntry[] = [
   { title: "Equipment", href: "/admin/equipment", icon: Package },
   { title: "Equipment Vendors", href: "/admin/vendors", icon: Truck },
   { title: "External Hires", href: "/admin/hires", icon: Contact },
+  { title: "Bin", href: "/bin", icon: Trash2 },
 ];
 const reportNav: NavEntry[] = [
   { title: "Reports", href: "/reports", icon: BarChart2 },
   { title: "Time Log", href: "/reports/time", icon: Clock },
 ];
-const binNav: NavEntry[] = [{ title: "Bin", href: "/bin", icon: Trash2 }];
-const performanceNav: NavEntry[] = [{ title: "Performance", href: "/performance", icon: Award }];
 
 const GROUP_LABEL_CLASS =
   "mb-0 mt-1 px-3 h-4 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/30 leading-none";
@@ -152,15 +153,15 @@ export function AppSidebar({
 
       <SidebarContent className="px-3 py-1.5">
         <Group items={workspaceNav} pathname={pathname} />
-        {isBilling && <Group label="CRM" items={crmNav} pathname={pathname} />}
-        <Group label="Projects" items={projectNav} pathname={pathname} />
-        <Group label="Tasks" items={taskNav} pathname={pathname} />
-        <Group label="Time" items={clockNav} pathname={pathname} />
-        <Group label="Performance" items={performanceNav} pathname={pathname} />
+        <Group
+          label="Work"
+          items={isBilling ? [clientsEntry, projectsEntry, tasksEntry] : [projectsEntry, tasksEntry]}
+          pathname={pathname}
+        />
+        <Group label="Time & Performance" items={timeNav} pathname={pathname} />
         {isBilling && <Group label="Billing" items={billingNav} pathname={pathname} />}
         {isAdminTierRole && <Group label="Admin" items={adminNav} pathname={pathname} />}
         {isAdminTierRole && <Group label="Insights" items={reportNav} pathname={pathname} />}
-        {isAdminTierRole && <Group items={binNav} pathname={pathname} />}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-white/8 px-3 py-1.5">
