@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,6 +24,12 @@ import {
   Truck,
   Contact,
   Award,
+  Briefcase,
+  Timer,
+  Wallet,
+  Settings,
+  TrendingUp,
+  ChevronRight,
 } from "lucide-react";
 import {
   Sidebar,
@@ -30,32 +37,46 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { createClient } from "@/lib/supabase/client";
 import { isAdminTier, type Role } from "@/lib/role";
 
 type NavEntry = { title: string; href: string; icon: React.ComponentType<{ className?: string }> };
+type NavGroupDef = {
+  key: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  items: NavEntry[];
+};
 
-const workspaceNav: NavEntry[] = [{ title: "Dashboard", href: "/", icon: LayoutDashboard }];
+const dashboardEntry: NavEntry = { title: "Dashboard", href: "/", icon: LayoutDashboard };
 const clientsEntry: NavEntry = { title: "Clients", href: "/clients", icon: Users };
 const projectsEntry: NavEntry = { title: "Projects", href: "/projects", icon: FolderOpen };
 const tasksEntry: NavEntry = { title: "Tasks", href: "/tasks", icon: CheckSquare };
 const clockEntry: NavEntry = { title: "Clock In", href: "/clock", icon: Clock };
 const performanceEntry: NavEntry = { title: "Performance", href: "/performance", icon: Award };
-const timeNav: NavEntry[] = [clockEntry, performanceEntry];
-const billingNav: NavEntry[] = [
+
+const billingItems: NavEntry[] = [
   { title: "Quotes", href: "/quotes", icon: FileText },
   { title: "Proforma Invoices", href: "/proformas", icon: FileStack },
   { title: "Invoices", href: "/invoices", icon: Receipt },
   { title: "Receipts", href: "/receipts", icon: ScrollText },
 ];
-const adminNav: NavEntry[] = [
+
+const adminItems: NavEntry[] = [
   { title: "Team", href: "/admin/team", icon: UserCog },
   { title: "Services", href: "/admin/services", icon: Layers },
   { title: "Cost Model", href: "/admin/cost-model", icon: Calculator },
@@ -64,20 +85,18 @@ const adminNav: NavEntry[] = [
   { title: "External Hires", href: "/admin/hires", icon: Contact },
   { title: "Bin", href: "/bin", icon: Trash2 },
 ];
-const reportNav: NavEntry[] = [
+
+const insightsItems: NavEntry[] = [
   { title: "Reports", href: "/reports", icon: BarChart2 },
   { title: "Time Log", href: "/reports/time", icon: Clock },
 ];
-
-const GROUP_LABEL_CLASS =
-  "mb-0 mt-1 px-3 h-4 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/30 leading-none";
 
 function isNavActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(href + "/");
 }
 
-function NavItem({ item, active }: { item: NavEntry; active: boolean }) {
+function TopLink({ item, active }: { item: NavEntry; active: boolean }) {
   const { isMobile, setOpenMobile } = useSidebar();
   return (
     <SidebarMenuItem>
@@ -104,19 +123,62 @@ function NavItem({ item, active }: { item: NavEntry; active: boolean }) {
   );
 }
 
-function Group({ label, items, pathname }: { label?: string; items: NavEntry[]; pathname: string }) {
-  if (items.length === 0) return null;
+function NavGroupAccordion({ group, pathname }: { group: NavGroupDef; pathname: string }) {
+  const { isMobile, setOpenMobile } = useSidebar();
+  const hasActiveChild = group.items.some((item) => isNavActive(pathname, item.href));
+  // null = user hasn't manually toggled yet, so the group tracks whether it contains the active page
+  const [manualOpen, setManualOpen] = useState<boolean | null>(null);
+  const open = manualOpen ?? hasActiveChild;
+
+  if (group.items.length === 0) return null;
+
   return (
-    <SidebarGroup className={label ? "mt-1" : undefined}>
-      {label && <SidebarGroupLabel className={GROUP_LABEL_CLASS}>{label}</SidebarGroupLabel>}
-      <SidebarGroupContent>
-        <SidebarMenu className="space-y-0">
-          {items.map((item) => (
-            <NavItem key={item.href} item={item} active={isNavActive(pathname, item.href)} />
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
+    <SidebarMenuItem>
+      <Collapsible open={open} onOpenChange={setManualOpen}>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton
+            className={`flex items-center gap-2.5 rounded-md px-3 py-[3px] font-heading text-[13px] tracking-[0.04em] transition-all duration-150 ${
+              hasActiveChild
+                ? "!text-white/85 font-medium"
+                : "!text-white/55 font-normal hover:!text-white/85 hover:!bg-white/6"
+            }`}
+          >
+            <group.icon className="h-4 w-4 shrink-0" />
+            <span className="flex-1 text-left">{group.label}</span>
+            <ChevronRight
+              className={`h-3.5 w-3.5 shrink-0 transition-transform duration-150 ${open ? "rotate-90" : ""}`}
+            />
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <SidebarMenuSub className="border-white/10">
+            {group.items.map((item) => {
+              const active = isNavActive(pathname, item.href);
+              return (
+                <SidebarMenuSubItem key={item.href}>
+                  <SidebarMenuSubButton asChild isActive={active}>
+                    <Link
+                      href={item.href}
+                      onClick={() => {
+                        if (isMobile) setOpenMobile(false);
+                      }}
+                      className={`flex items-center gap-2 font-heading text-[13px] tracking-[0.04em] ${
+                        active
+                          ? "!bg-white/12 !text-white font-medium"
+                          : "!text-white/55 font-normal hover:!text-white/85 hover:!bg-white/6"
+                      }`}
+                    >
+                      <item.icon className={`h-3.5 w-3.5 shrink-0 ${active ? "text-primary" : ""}`} />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              );
+            })}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </Collapsible>
+    </SidebarMenuItem>
   );
 }
 
@@ -133,6 +195,22 @@ export function AppSidebar({
   const router = useRouter();
   const isAdminTierRole = isAdminTier(role);
   const isBilling = isAdminTierRole || role === "manager";
+
+  const workGroup: NavGroupDef = {
+    key: "work",
+    label: "Work",
+    icon: Briefcase,
+    items: isBilling ? [clientsEntry, projectsEntry, tasksEntry] : [projectsEntry, tasksEntry],
+  };
+  const timePerformanceGroup: NavGroupDef = {
+    key: "time-performance",
+    label: "Time & Performance",
+    icon: Timer,
+    items: [clockEntry, performanceEntry],
+  };
+  const billingGroup: NavGroupDef = { key: "billing", label: "Billing", icon: Wallet, items: billingItems };
+  const adminGroup: NavGroupDef = { key: "admin", label: "Admin", icon: Settings, items: adminItems };
+  const insightsGroup: NavGroupDef = { key: "insights", label: "Insights", icon: TrendingUp, items: insightsItems };
 
   async function handleSignOut() {
     const supabase = createClient();
@@ -152,16 +230,18 @@ export function AppSidebar({
       </SidebarHeader>
 
       <SidebarContent className="px-3 py-1.5">
-        <Group items={workspaceNav} pathname={pathname} />
-        <Group
-          label="Work"
-          items={isBilling ? [clientsEntry, projectsEntry, tasksEntry] : [projectsEntry, tasksEntry]}
-          pathname={pathname}
-        />
-        <Group label="Time & Performance" items={timeNav} pathname={pathname} />
-        {isBilling && <Group label="Billing" items={billingNav} pathname={pathname} />}
-        {isAdminTierRole && <Group label="Admin" items={adminNav} pathname={pathname} />}
-        {isAdminTierRole && <Group label="Insights" items={reportNav} pathname={pathname} />}
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu className="space-y-0.5">
+              <TopLink item={dashboardEntry} active={isNavActive(pathname, "/")} />
+              <NavGroupAccordion group={workGroup} pathname={pathname} />
+              <NavGroupAccordion group={timePerformanceGroup} pathname={pathname} />
+              {isBilling && <NavGroupAccordion group={billingGroup} pathname={pathname} />}
+              {isAdminTierRole && <NavGroupAccordion group={adminGroup} pathname={pathname} />}
+              {isAdminTierRole && <NavGroupAccordion group={insightsGroup} pathname={pathname} />}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter className="border-t border-white/8 px-3 py-1.5">
