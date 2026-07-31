@@ -89,7 +89,7 @@ function SidebarToggle() {
     <button
       onClick={toggleSidebar}
       title="Collapse sidebar"
-      className="rounded-md p-1.5 text-white/40 transition-colors hover:bg-white/10 hover:text-white/80"
+      className="rounded-md border border-white/15 bg-white/10 p-1.5 text-white/80 transition-colors hover:bg-white/20 hover:text-white"
     >
       <PanelLeftIcon className="h-4 w-4" />
       <span className="sr-only">Toggle Sidebar</span>
