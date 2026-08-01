@@ -9,9 +9,18 @@ import { createClient } from "@/lib/supabase/server";
 
 const DOC_SELECT = "id, number, project_name, status, total, clients(name)";
 
-export default async function BillingPage() {
+const VALID_TABS = ["quotes", "proformas", "invoices", "receipts"];
+
+export default async function BillingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
   const profile = await getCurrentProfile();
   if (!profile || !isBillingRole(profile.role)) redirect("/");
+
+  const { tab } = await searchParams;
+  const defaultTab = tab && VALID_TABS.includes(tab) ? tab : "quotes";
 
   const supabase = await createClient();
   const [{ data: quotes }, { data: proformas }, { data: invoices }, { data: receipts }] = await Promise.all([
@@ -28,7 +37,7 @@ export default async function BillingPage() {
       <DashboardHeader title="Billing" />
       <div className="flex-1 overflow-y-auto p-4 sm:p-6">
         <div className="animate-in-page mx-auto max-w-5xl">
-          <Tabs defaultValue="quotes">
+          <Tabs defaultValue={defaultTab}>
             <TabsList>
               <TabsTrigger value="quotes">Quotes</TabsTrigger>
               <TabsTrigger value="proformas">Proforma Invoices</TabsTrigger>

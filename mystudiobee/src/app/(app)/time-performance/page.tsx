@@ -8,9 +8,16 @@ import { getProfitSplitSettings } from "@/lib/actions/profit-split";
 import { ClockClient } from "../clock/clock-client";
 import { PerformanceClient } from "../performance/performance-client";
 
-export default async function TimePerformancePage() {
+export default async function TimePerformancePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
   const profile = await getCurrentProfile();
   if (!profile) redirect("/login");
+
+  const { tab } = await searchParams;
+  const defaultTab = tab === "performance" ? "performance" : "clock";
 
   const supabase = await createClient();
 
@@ -52,7 +59,7 @@ export default async function TimePerformancePage() {
     <>
       <DashboardHeader title="Time & Performance" />
       <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-        <Tabs defaultValue="clock">
+        <Tabs defaultValue={defaultTab}>
           <TabsList>
             <TabsTrigger value="clock">Clock In</TabsTrigger>
             <TabsTrigger value="performance">Performance</TabsTrigger>

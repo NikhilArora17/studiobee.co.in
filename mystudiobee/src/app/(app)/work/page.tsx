@@ -19,12 +19,12 @@ const LIFECYCLE_ORDER: Record<string, number> = {
 export default async function WorkPage({
   searchParams,
 }: {
-  searchParams: Promise<{ new?: string; status?: string }>;
+  searchParams: Promise<{ new?: string; status?: string; tab?: string }>;
 }) {
   const profile = await getCurrentProfile();
   if (!profile) redirect("/login");
 
-  const { new: openNew, status } = await searchParams;
+  const { new: openNew, status, tab } = await searchParams;
   const isBilling = isBillingRole(profile.role);
   const canCreateProject = profile.role !== "employee";
   const isEmployee = profile.role === "employee";
@@ -59,7 +59,15 @@ export default async function WorkPage({
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
-  const defaultTab = openNew === "1" && isBilling ? "clients" : status ? "tasks" : "projects";
+  const validTabs = isBilling ? ["clients", "projects", "tasks"] : ["projects", "tasks"];
+  const defaultTab =
+    tab && validTabs.includes(tab)
+      ? tab
+      : openNew === "1" && isBilling
+        ? "clients"
+        : status
+          ? "tasks"
+          : "projects";
 
   return (
     <>

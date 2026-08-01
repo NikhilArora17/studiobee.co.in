@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   LayoutDashboard,
   LogOut,
@@ -12,6 +13,7 @@ import {
   Settings,
   TrendingUp,
   PanelLeftIcon,
+  ChevronRight,
 } from "lucide-react";
 import {
   Sidebar,
@@ -23,40 +25,98 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { createClient } from "@/lib/supabase/client";
 import { isAdminTier, type Role } from "@/lib/role";
 
-type NavEntry = {
+type SubItem = { title: string; tab: string };
+type NavGroupDef = {
   title: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
   activePrefixes: string[];
+  subItems?: SubItem[];
 };
 
-const NAV: NavEntry[] = [
+const NAV: NavGroupDef[] = [
   { title: "Dashboard", href: "/", icon: LayoutDashboard, activePrefixes: ["/"] },
-  { title: "Work", href: "/work", icon: Briefcase, activePrefixes: ["/work", "/clients", "/projects", "/tasks"] },
+  {
+    title: "Work",
+    href: "/work",
+    icon: Briefcase,
+    activePrefixes: ["/work", "/clients", "/projects", "/tasks"],
+    subItems: [
+      { title: "Clients", tab: "clients" },
+      { title: "Projects", tab: "projects" },
+      { title: "Tasks", tab: "tasks" },
+    ],
+  },
   {
     title: "Time & Performance",
     href: "/time-performance",
     icon: Timer,
     activePrefixes: ["/time-performance"],
+    subItems: [
+      { title: "Clock In", tab: "clock" },
+      { title: "Performance", tab: "performance" },
+    ],
   },
-  { title: "Billing", href: "/billing", icon: Wallet, activePrefixes: ["/billing", "/quotes", "/proformas", "/invoices", "/receipts"] },
-  { title: "Admin", href: "/admin", icon: Settings, activePrefixes: ["/admin"] },
-  { title: "Insights", href: "/reports", icon: TrendingUp, activePrefixes: ["/reports"] },
+  {
+    title: "Billing",
+    href: "/billing",
+    icon: Wallet,
+    activePrefixes: ["/billing", "/quotes", "/proformas", "/invoices", "/receipts"],
+    subItems: [
+      { title: "Quotes", tab: "quotes" },
+      { title: "Proforma Invoices", tab: "proformas" },
+      { title: "Invoices", tab: "invoices" },
+      { title: "Receipts", tab: "receipts" },
+    ],
+  },
+  {
+    title: "Admin",
+    href: "/admin",
+    icon: Settings,
+    activePrefixes: ["/admin"],
+    subItems: [
+      { title: "Team", tab: "team" },
+      { title: "Services", tab: "services" },
+      { title: "Cost Model", tab: "cost-model" },
+      { title: "Equipment", tab: "equipment" },
+      { title: "Equipment Vendors", tab: "vendors" },
+      { title: "External Hires", tab: "hires" },
+      { title: "Bin", tab: "bin" },
+    ],
+  },
+  {
+    title: "Insights",
+    href: "/reports",
+    icon: TrendingUp,
+    activePrefixes: ["/reports"],
+    subItems: [
+      { title: "Reports", tab: "reports" },
+      { title: "Time Log", tab: "time-log" },
+    ],
+  },
 ];
 
-function isNavActive(pathname: string, item: NavEntry) {
+function isNavActive(pathname: string, item: NavGroupDef) {
   return item.activePrefixes.some((prefix) =>
     prefix === "/" ? pathname === "/" : pathname === prefix || pathname.startsWith(prefix + "/")
   );
 }
 
-function NavLink({ item, active }: { item: NavEntry; active: boolean }) {
+function NavLink({ item, active }: { item: NavGroupDef; active: boolean }) {
   const { isMobile, setOpenMobile } = useSidebar();
   return (
     <SidebarMenuItem>
@@ -79,6 +139,87 @@ function NavLink({ item, active }: { item: NavEntry; active: boolean }) {
           <span>{item.title}</span>
         </Link>
       </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+}
+
+function NavGroupAccordion({
+  group,
+  pathname,
+  activeTab,
+}: {
+  group: NavGroupDef;
+  pathname: string;
+  activeTab: string | null;
+}) {
+  const { isMobile, setOpenMobile } = useSidebar();
+  const hasActiveChild = isNavActive(pathname, group);
+  // null = user hasn't manually toggled yet, so the group tracks whether it's the active page
+  const [manualOpen, setManualOpen] = useState<boolean | null>(null);
+  const open = manualOpen ?? hasActiveChild;
+
+  const items = group.subItems ?? [];
+  if (items.length === 0) return null;
+
+  return (
+    <SidebarMenuItem>
+      <Collapsible open={open} onOpenChange={setManualOpen}>
+        <div className="flex items-center gap-0.5">
+          <SidebarMenuButton asChild isActive={hasActiveChild} className="flex-1">
+            <Link
+              href={group.href}
+              onClick={() => {
+                if (isMobile) setOpenMobile(false);
+              }}
+              className={`group/nav relative flex items-center gap-2.5 rounded-md px-3 py-[3px] font-heading text-[13px] tracking-[0.04em] transition-all duration-150 ${
+                hasActiveChild
+                  ? "!bg-white/12 !text-white font-medium"
+                  : "!text-white/55 font-normal hover:!text-white/85 hover:!bg-white/6"
+              }`}
+            >
+              {hasActiveChild && (
+                <span className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
+              )}
+              <group.icon className={`h-4 w-4 shrink-0 ${hasActiveChild ? "text-primary" : ""}`} />
+              <span>{group.title}</span>
+            </Link>
+          </SidebarMenuButton>
+          <CollapsibleTrigger asChild>
+            <button
+              title={open ? "Collapse" : "Expand"}
+              className="shrink-0 rounded-md p-1 text-white/40 transition-colors hover:bg-white/10 hover:text-white/80"
+            >
+              <ChevronRight className={`h-3.5 w-3.5 transition-transform duration-150 ${open ? "rotate-90" : ""}`} />
+            </button>
+          </CollapsibleTrigger>
+        </div>
+        <CollapsibleContent>
+          <SidebarMenuSub className="border-white/10">
+            {items.map((item) => {
+              const active = activeTab === item.tab;
+              return (
+                <SidebarMenuSubItem key={item.tab}>
+                  <SidebarMenuSubButton asChild isActive={active}>
+                    <Link
+                      href={`${group.href}?tab=${item.tab}`}
+                      onClick={() => {
+                        if (isMobile) setOpenMobile(false);
+                      }}
+                      className={`font-heading text-[13px] tracking-[0.04em] ${
+                        active
+                          ? "!bg-white/12 !text-white font-medium"
+                          : "!text-white/55 font-normal hover:!text-white/85 hover:!bg-white/6"
+                      }`}
+                    >
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              );
+            })}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </Collapsible>
     </SidebarMenuItem>
   );
 }
@@ -108,6 +249,8 @@ export function AppSidebar({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get("tab");
   const isAdminTierRole = isAdminTier(role);
   const isBilling = isAdminTierRole || role === "manager";
 
@@ -125,6 +268,11 @@ export function AppSidebar({
     if (item.href === "/reports") return isBilling; // Insights: relaxed to manager+, matches /reports page gate
     if (item.href === "/admin") return isAdminTierRole;
     return true;
+  }).map((item) => {
+    if (item.href === "/work" && !isBilling) {
+      return { ...item, subItems: item.subItems?.filter((s) => s.tab !== "clients") };
+    }
+    return item;
   });
 
   return (
@@ -142,9 +290,13 @@ export function AppSidebar({
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-0.5">
-              {visibleNav.map((item) => (
-                <NavLink key={item.href} item={item} active={isNavActive(pathname, item)} />
-              ))}
+              {visibleNav.map((item) =>
+                item.subItems ? (
+                  <NavGroupAccordion key={item.href} group={item} pathname={pathname} activeTab={activeTab} />
+                ) : (
+                  <NavLink key={item.href} item={item} active={isNavActive(pathname, item)} />
+                )
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

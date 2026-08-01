@@ -13,11 +13,20 @@ import { VendorsClient } from "./vendors/vendors-client";
 import { HiresClient } from "./hires/hires-client";
 import { BinClient } from "../bin/bin-client";
 
-export default async function AdminPage() {
+const VALID_TABS = ["team", "services", "cost-model", "equipment", "vendors", "hires", "bin"];
+
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
   const profile = await getCurrentProfile();
   if (!profile || !isAdminTier(profile.role)) {
     redirect("/");
   }
+
+  const { tab } = await searchParams;
+  const defaultTab = tab && VALID_TABS.includes(tab) ? tab : "team";
 
   const supabase = await createClient();
   const adminSupabase = createAdminClient();
@@ -46,7 +55,7 @@ export default async function AdminPage() {
     <>
       <DashboardHeader title="Admin" />
       <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-        <Tabs defaultValue="team">
+        <Tabs defaultValue={defaultTab}>
           <TabsList>
             <TabsTrigger value="team">Team</TabsTrigger>
             <TabsTrigger value="services">Services</TabsTrigger>
