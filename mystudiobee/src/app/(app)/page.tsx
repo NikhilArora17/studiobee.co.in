@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import {
   FileText,
   Users,
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 import { DashboardHeader } from "@/components/layout/dashboard-header";
 import { ClientAvatar } from "@/components/clients/client-avatar";
+import { DashboardClockWidget } from "@/components/dashboard/clock-widget";
 import { getCurrentProfile, isBillingRole, canSeeCost } from "@/lib/profile";
 import { createClient } from "@/lib/supabase/server";
 import { sumLaborCost, sumDirectCost } from "@/lib/profit-split/engine";
@@ -20,14 +20,15 @@ export default async function DashboardPage() {
   const profile = await getCurrentProfile();
   if (!profile) return null;
 
-  if (!isBillingRole(profile.role)) {
-    redirect("/work");
-  }
-
-  const supabase = await createClient();
+  const isBilling = isBillingRole(profile.role);
+  const isEmployee = profile.role === "employee";
+  const canCreateProject = !isEmployee;
   const showMargin = canSeeCost(profile.role);
 
+  const supabase = await createClient();
+
   const [
+    { data: activeClockEntries },
     { data: recentClients },
     { data: recentQuotes },
     { data: tasks },
@@ -35,15 +36,39 @@ export default async function DashboardPage() {
     { data: invoiceDocs },
     { data: marginDocs },
   ] = await Promise.all([
-    supabase.from("clients").select("id, name, city, avatar_url, created_at").is("deleted_at", null).order("created_at", { ascending: false }).limit(5),
-    supabase.from("documents").select("id, number, project_name, status, total, created_at").eq("type", "quote").is("deleted_at", null).order("created_at", { ascending: false }).limit(5),
-    supabase.from("tasks").select("id, status, due_date, title, project_id, projects(name)").is("deleted_at", null).order("due_date", { ascending: true, nullsFirst: false }),
-    supabase.from("projects").select("id, name, status, type, clients(name)").eq("status", "active").is("deleted_at", null).order("created_at", { ascending: false }).limit(5),
-    supabase.from("documents").select("id, number, project_name, status, total, created_at, updated_at").eq("type", "invoice").is("deleted_at", null).order("created_at", { ascending: true }),
+    supabase
+      .from("time_entries")
+      .select("id, clocked_in_at, project_id, projects(name)")
+      .eq("employee_id", profile.id)
+      .is("clocked_out_at", null)
+      .is("deleted_at", null)
+      .order("clocked_in_at", { ascending: false })
+      .limit(1),
+    isBilling
+      ? supabase.from("clients").select("id, name, city, avatar_url, created_at").is("deleted_at", null).order("created_at", { ascending: false }).limit(5)
+      : Promise.resolve({ data: null as { id: string; name: string; city: string; avatar_url: string | null; created_at: string }[] | null }),
+    isBilling
+      ? supabase.from("documents").select("id, number, project_name, status, total, created_at").eq("type", "quote").is("deleted_at", null).order("created_at", { ascending: false }).limit(3)
+      : Promise.resolve({ data: null as { id: string; number: string; project_name: string; status: string; total: number; created_at: string }[] | null }),
+    (() => {
+      let query = supabase
+        .from("tasks")
+        .select("id, status, due_date, title, project_id, projects(name)")
+        .is("deleted_at", null)
+        .order("due_date", { ascending: true, nullsFirst: false });
+      if (isEmployee) query = query.eq("assigned_to", profile.id);
+      return query;
+    })(),
+    supabase.from("projects").select("id, name, status, type, clients(name)").eq("status", "active").is("deleted_at", null).order("created_at", { ascending: false }).limit(3),
+    isBilling
+      ? supabase.from("documents").select("id, number, project_name, status, total, created_at, updated_at").eq("type", "invoice").is("deleted_at", null).order("created_at", { ascending: true })
+      : Promise.resolve({ data: null as { id: string; number: string; project_name: string; status: string; total: number; created_at: string; updated_at: string | null }[] | null }),
     showMargin
       ? supabase.from("documents").select("id, total, line_items, created_at").in("type", ["invoice", "receipt"]).in("status", ["paid", "accepted"]).is("deleted_at", null)
       : Promise.resolve({ data: null as { id: string; total: number; line_items: unknown; created_at: string }[] | null }),
   ]);
+
+  const activeClockEntry = activeClockEntries?.[0] ?? null;
 
   const taskCounts = {
     pending: tasks?.filter((t) => t.status === "pending").length ?? 0,
@@ -107,29 +132,39 @@ export default async function DashboardPage() {
                 </h2>
               </div>
               <div className="flex gap-2">
-                <Link
-                  href="/work?new=1"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-black/5 bg-white/80 px-3 py-1.5 text-sm font-medium text-foreground backdrop-blur-sm transition-colors duration-100 hover:bg-white"
-                >
-                  <Plus className="h-3.5 w-3.5" /> Client
-                </Link>
-                <Link
-                  href="/projects/new"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-black/5 bg-white/80 px-3 py-1.5 text-sm font-medium text-foreground backdrop-blur-sm transition-colors duration-100 hover:bg-white"
-                >
-                  <Plus className="h-3.5 w-3.5" /> Project
-                </Link>
-                <Link
-                  href="/quotes/new"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors duration-100"
-                >
-                  <Plus className="h-3.5 w-3.5" /> Quote
-                </Link>
+                {isBilling && (
+                  <Link
+                    href="/work?new=1"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-black/5 bg-white/80 px-3 py-1.5 text-sm font-medium text-foreground backdrop-blur-sm transition-colors duration-100 hover:bg-white"
+                  >
+                    <Plus className="h-3.5 w-3.5" /> Client
+                  </Link>
+                )}
+                {canCreateProject && (
+                  <Link
+                    href="/projects/new"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-black/5 bg-white/80 px-3 py-1.5 text-sm font-medium text-foreground backdrop-blur-sm transition-colors duration-100 hover:bg-white"
+                  >
+                    <Plus className="h-3.5 w-3.5" /> Project
+                  </Link>
+                )}
+                {isBilling && (
+                  <Link
+                    href="/quotes/new"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors duration-100"
+                  >
+                    <Plus className="h-3.5 w-3.5" /> Quote
+                  </Link>
+                )}
               </div>
             </div>
           </div>
 
+          {/* Clock In/Out */}
+          <DashboardClockWidget activeEntry={activeClockEntry} />
+
           {/* Finance snapshot */}
+          {isBilling && (
           <div className="stagger-children grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="relative overflow-hidden rounded-xl bg-primary p-4 text-primary-foreground shadow-elevated">
               <div
@@ -204,6 +239,7 @@ export default async function DashboardPage() {
               </p>
             </div>
           </div>
+          )}
 
           {/* Task stats */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -279,7 +315,7 @@ export default async function DashboardPage() {
 
           <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2">
             {/* Active Projects */}
-            <div className="rounded-xl border border-border bg-card p-5 shadow-card">
+            <div className={`rounded-xl border border-border bg-card p-5 shadow-card ${isBilling ? "" : "lg:col-span-2"}`}>
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="font-heading text-[11px] font-semibold uppercase tracking-[0.08em]">
                   Active Projects
@@ -315,6 +351,7 @@ export default async function DashboardPage() {
             </div>
 
             {/* Recent Quotes */}
+            {isBilling && (
             <div className="rounded-xl border border-border bg-card p-5 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="font-heading text-[11px] font-semibold uppercase tracking-[0.08em]">
@@ -348,8 +385,10 @@ export default async function DashboardPage() {
                 </div>
               )}
             </div>
+            )}
 
             {/* Recent Clients */}
+            {isBilling && (
             <div className="rounded-xl border border-border bg-card p-5 shadow-card">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="font-heading text-[11px] font-semibold uppercase tracking-[0.08em]">
@@ -379,6 +418,7 @@ export default async function DashboardPage() {
                 </div>
               )}
             </div>
+            )}
 
             {/* Profit Margin */}
             {showMargin && (
