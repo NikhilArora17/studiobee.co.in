@@ -225,6 +225,11 @@ body {
 [data-slot="sidebar-inset"] {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+@media (max-width: 767px) {
+  [data-slot="sidebar-inset"] > .overflow-y-auto {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4.75rem);
+  }
+}
 
 * {
   scrollbar-width: thin;

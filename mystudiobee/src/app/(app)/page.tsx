@@ -6,7 +6,6 @@ import {
   AlertTriangle,
   Wallet,
   TrendingUp,
-  ArrowUpRight,
   PieChart,
 } from "lucide-react";
 import { DashboardHeader } from "@/components/layout/dashboard-header";
@@ -165,8 +164,12 @@ export default async function DashboardPage() {
 
           {/* Finance snapshot */}
           {isBilling && (
-          <div className="stagger-children grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="relative overflow-hidden rounded-xl bg-primary p-4 text-primary-foreground shadow-elevated">
+          <div className="stagger-children grid grid-cols-3 gap-2 sm:gap-3">
+            <Link
+              href="/billing"
+              title={`${sentInvoices.length} unpaid invoice${sentInvoices.length === 1 ? "" : "s"}`}
+              className="group relative overflow-hidden rounded-xl bg-primary p-3 text-primary-foreground shadow-elevated transition-transform duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-[1.02] hover:shadow-card-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98]"
+            >
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-0"
@@ -175,67 +178,38 @@ export default async function DashboardPage() {
                     "radial-gradient(ellipse 90% 70% at 100% 0%, rgba(123,143,255,0.55) 0%, transparent 60%), radial-gradient(ellipse 70% 60% at 0% 100%, rgba(15,30,160,0.5) 0%, transparent 55%)",
                 }}
               />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-[0.05]"
-                style={{
-                  backgroundImage:
-                    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E\")",
-                }}
-              />
-              <div className="relative flex items-center justify-between">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15">
-                  <Wallet className="h-4 w-4" />
-                </span>
-                <Link
-                  href="/billing"
-                  className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-colors duration-100 hover:bg-white/25"
-                >
-                  <ArrowUpRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-              <p className="relative mt-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-primary-foreground/70">
+              <Wallet className="relative h-3.5 w-3.5 text-primary-foreground/70" />
+              <p className="relative mt-2 truncate text-[9px] font-semibold uppercase tracking-[0.06em] text-primary-foreground/70">
                 Outstanding
               </p>
-              <p className="relative mt-1 font-heading text-2xl font-semibold tracking-tight">
+              <p className="relative mt-0.5 truncate font-heading text-sm font-semibold tracking-tight sm:text-base">
                 ₹{outstandingTotal.toLocaleString("en-IN")}
               </p>
-              <p className="relative mt-1 text-[11px] text-primary-foreground/60">
-                {sentInvoices.length} unpaid invoice{sentInvoices.length === 1 ? "" : "s"}
-              </p>
-            </div>
+            </Link>
 
-            <div className="rounded-xl bg-[#0A0A0A] p-4 text-white shadow-elevated">
-              <div className="flex items-center justify-between">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10">
-                  <AlertTriangle className="h-4 w-4" />
-                </span>
-              </div>
-              <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-white/60">
+            <div
+              title={`${overdueInvoices.length} invoice${overdueInvoices.length === 1 ? "" : "s"} unpaid 30+ days`}
+              className="rounded-xl bg-[#0A0A0A] p-3 text-white shadow-elevated"
+            >
+              <AlertTriangle className="h-3.5 w-3.5 text-white/60" />
+              <p className="mt-2 truncate text-[9px] font-semibold uppercase tracking-[0.06em] text-white/60">
                 Overdue
               </p>
-              <p className="mt-1 font-heading text-2xl font-semibold tracking-tight">
+              <p className="mt-0.5 truncate font-heading text-sm font-semibold tracking-tight sm:text-base">
                 ₹{overdueTotal.toLocaleString("en-IN")}
-              </p>
-              <p className="mt-1 text-[11px] text-white/50">
-                {overdueInvoices.length} invoice{overdueInvoices.length === 1 ? "" : "s"} unpaid 30+ days
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-card p-4 shadow-card">
-              <div className="flex items-center justify-between">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <TrendingUp className="h-4 w-4" />
-                </span>
-              </div>
-              <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
-                Collected this month
+            <div
+              title={now.toLocaleString("en-IN", { month: "long" })}
+              className="rounded-xl border border-border bg-card p-3 shadow-card"
+            >
+              <TrendingUp className="h-3.5 w-3.5 text-primary" />
+              <p className="mt-2 truncate text-[9px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                Collected
               </p>
-              <p className="mt-1 font-heading text-2xl font-semibold tracking-tight text-primary">
+              <p className="mt-0.5 truncate font-heading text-sm font-semibold tracking-tight text-primary sm:text-base">
                 ₹{collectedThisMonth.toLocaleString("en-IN")}
-              </p>
-              <p className="mt-1 text-[11px] text-muted-foreground">
-                {now.toLocaleString("en-IN", { month: "long" })}
               </p>
             </div>
           </div>

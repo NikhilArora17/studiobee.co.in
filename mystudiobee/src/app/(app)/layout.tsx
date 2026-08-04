@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
+import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { getCurrentProfile } from "@/lib/profile";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -11,6 +12,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <SidebarProvider>
       <AppSidebar displayName={profile.display_name} email={profile.email} role={profile.role} />
       <SidebarInset>{children}</SidebarInset>
+      <MobileBottomNav role={profile.role} />
     </SidebarProvider>
   );
 }
