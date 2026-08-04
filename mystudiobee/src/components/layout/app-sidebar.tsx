@@ -12,7 +12,6 @@ import {
   Wallet,
   Settings,
   TrendingUp,
-  PanelLeftIcon,
   ChevronRight,
 } from "lucide-react";
 import {
@@ -40,7 +39,7 @@ import { createClient } from "@/lib/supabase/client";
 import { isAdminTier, type Role } from "@/lib/role";
 
 type SubItem = { title: string; tab: string };
-type NavGroupDef = {
+export type NavGroupDef = {
   title: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -48,7 +47,7 @@ type NavGroupDef = {
   subItems?: SubItem[];
 };
 
-const NAV: NavGroupDef[] = [
+export const NAV: NavGroupDef[] = [
   { title: "Dashboard", href: "/", icon: LayoutDashboard, activePrefixes: ["/"] },
   {
     title: "Work",
@@ -110,7 +109,7 @@ const NAV: NavGroupDef[] = [
   },
 ];
 
-function isNavActive(pathname: string, item: NavGroupDef) {
+export function isNavActive(pathname: string, item: NavGroupDef) {
   return item.activePrefixes.some((prefix) =>
     prefix === "/" ? pathname === "/" : pathname === prefix || pathname.startsWith(prefix + "/")
   );
@@ -224,20 +223,6 @@ function NavGroupAccordion({
   );
 }
 
-function SidebarToggle() {
-  const { toggleSidebar } = useSidebar();
-  return (
-    <button
-      onClick={toggleSidebar}
-      title="Collapse sidebar"
-      className="rounded-md border border-white/15 bg-white/10 p-1.5 text-white/80 transition-colors hover:bg-white/20 hover:text-white"
-    >
-      <PanelLeftIcon className="h-4 w-4" />
-      <span className="sr-only">Toggle Sidebar</span>
-    </button>
-  );
-}
-
 export function AppSidebar({
   displayName,
   email,
@@ -278,12 +263,9 @@ export function AppSidebar({
   return (
     <Sidebar className="bg-gradient-blue">
       <SidebarHeader className="border-b border-white/8 px-5 py-2.5">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="inline-flex items-center">
-            <Image src="/studiobee-white.png" alt="StudioBee" width={120} height={30} />
-          </Link>
-          <SidebarToggle />
-        </div>
+        <Link href="/" className="inline-flex items-center">
+          <Image src="/studiobee-white.png" alt="StudioBee" width={120} height={30} />
+        </Link>
       </SidebarHeader>
 
       <SidebarContent className="px-3 py-1.5">
