@@ -3,7 +3,7 @@
 (function () {
   if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
 
-  var API = (window.location.port === '3000') ? '' : 'http://localhost:3000';
+  var API = (window.location.port === '5500') ? 'http://localhost:3000' : '';
   var CONSENT_KEY = '_sb_consent';
   var SID_KEY = '_sb_sid';
 
