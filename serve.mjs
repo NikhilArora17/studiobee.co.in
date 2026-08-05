@@ -28,12 +28,14 @@ fs.mkdirSync(MEDIA_DIR, { recursive: true });
 const MAX_UPLOAD_BYTES    = 50 * 1024 * 1024; // 50 MB
 const MAX_CONTACT_BYTES   = 64 * 1024;         // 64 KB
 const MAX_ANALYTICS_BYTES = 4  * 1024;         //  4 KB
+const MAX_PRESENCE_BYTES  = 2  * 1024;         //  2 KB
 
 // Files that must never be served via static file handler
 const BLOCKED_FILES = new Set([
   'smtp-config.json',
   'contacts.json',
   'analytics.json',   // served only via protected GET /analytics
+  'presence.json',    // served only via protected GET /presence
   'timelog.json',     // served only via protected GET /timelog
   'package.json',
   'package-lock.json',
@@ -151,12 +153,12 @@ const MIME = {
 // ── CSP header value ──────────────────────────────────────────────────────────
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com",
+  "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://eu-assets.i.posthog.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com",
   "font-src https://fonts.gstatic.com",
   "img-src 'self' data: https://images.unsplash.com https://placehold.co https://*.supabase.co",
   "media-src 'self' blob: https://*.supabase.co",
-  "connect-src 'self'",
+  "connect-src 'self' https://cdn.jsdelivr.net https://eu.i.posthog.com",
   "frame-ancestors 'self'",
 ].join('; ');
 
@@ -273,6 +275,80 @@ const server = http.createServer(async (req, res) => {
         arr.push(entry);
         if (arr.length > 10000) arr = arr.slice(arr.length - 10000);
         fs.writeFileSync(analyticsFile, JSON.stringify(arr));
+        res.writeHead(204); res.end();
+      } catch (e) {
+        res.writeHead(400); res.end('Bad request');
+      }
+    });
+    return;
+  }
+
+  // ── GET /presence (admin protected) — who's active right now ────────────────
+  if (req.method === 'GET' && urlPath === '/presence') {
+    if (req.headers['x-admin-key'] !== adminKey) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Unauthorized' }));
+      return;
+    }
+    const presenceFile = path.join(__dirname, 'presence.json');
+    let presence = [];
+    try { presence = JSON.parse(fs.readFileSync(presenceFile, 'utf8')); } catch (e) {}
+    if (!Array.isArray(presence)) presence = [];
+    const activeSince = Date.now() - 75 * 1000;
+    const active = presence
+      .filter(p => new Date(p.lastSeen).getTime() >= activeSince)
+      .sort((a, b) => new Date(b.lastSeen) - new Date(a.lastSeen));
+
+    const analyticsFile = path.join(__dirname, 'analytics.json');
+    let rows = [];
+    try { rows = JSON.parse(fs.readFileSync(analyticsFile, 'utf8')); } catch (e) {}
+    if (!Array.isArray(rows)) rows = [];
+    const recent = rows.slice(-15).reverse().map(r => ({
+      ts: r.ts, page: r.page, country: r.country, city: r.city,
+      eventType: r.eventType || 'pageview', eventLabel: r.eventLabel,
+    }));
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ active, recent }));
+    return;
+  }
+
+  // ── POST /presence ────────────────────────────────────────────────────────
+  if (req.method === 'POST' && urlPath === '/presence') {
+    const ua = (req.headers['user-agent'] || '').toLowerCase();
+    if (/bot|crawler|spider|slurp|baidu|googlebot|yandex|facebookexternalhit|semrush|ahrefs/.test(ua)) {
+      res.writeHead(204); res.end(); return;
+    }
+    if (!checkRateLimit(ip + ':presence', 20)) {
+      res.writeHead(429); res.end('Too Many Requests'); return;
+    }
+    let totalSize = 0;
+    const chunks = [];
+    req.on('data', c => {
+      totalSize += c.length;
+      if (totalSize > MAX_PRESENCE_BYTES) { req.destroy(); return; }
+      chunks.push(c);
+    });
+    req.on('end', () => {
+      try {
+        const body = JSON.parse(Buffer.concat(chunks).toString());
+        const sid = String(body.sessionId || '').slice(0, 64);
+        if (!sid) { res.writeHead(204); res.end(); return; }
+        const entry = {
+          sid,
+          page: String(body.page || '').slice(0, 256),
+          country: null,
+          city: null,
+          replayUrl: String(body.replayUrl || '').slice(0, 512) || null,
+          lastSeen: new Date().toISOString(),
+        };
+        const presenceFile = path.join(__dirname, 'presence.json');
+        let presence = [];
+        try { presence = JSON.parse(fs.readFileSync(presenceFile, 'utf8')); } catch (e) {}
+        if (!Array.isArray(presence)) presence = [];
+        const idx = presence.findIndex(p => p.sid === sid);
+        if (idx >= 0) presence[idx] = entry; else presence.push(entry);
+        fs.writeFileSync(presenceFile, JSON.stringify(presence));
         res.writeHead(204); res.end();
       } catch (e) {
         res.writeHead(400); res.end('Bad request');

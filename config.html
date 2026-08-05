@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StudioBee — Config</title>
   <script src="content.js"></script>
+  <script src="country-codes.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet" />
@@ -481,6 +482,19 @@
     .an-ref-row-top { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
     .an-ref-bar-track { height: 6px; border-radius: 3px; background: #eee; overflow: hidden; }
     .an-ref-bar-fill { height: 100%; background: #2F48DF; border-radius: 3px; }
+    .live-dot {
+      width: 9px; height: 9px; border-radius: 50%; background: #1a9850; flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(26,152,80,0.6);
+      animation: live-pulse 2s infinite;
+    }
+    @keyframes live-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(26,152,80,0.5); }
+      70%  { box-shadow: 0 0 0 8px rgba(26,152,80,0); }
+      100% { box-shadow: 0 0 0 0 rgba(26,152,80,0); }
+    }
+    #live-map-svg path.sb-country { fill: #1a1a2e; stroke: rgba(255,255,255,0.15); stroke-width: 0.5; transition: fill 0.3s; }
+    #live-map-svg path.sb-country.active { fill: #2F48DF; }
+    #live-map-svg circle.sb-dot { fill: #2F48DF; opacity: 0.9; }
 
     /* ── Time Log ── */
     .tl-clock-card {
@@ -788,6 +802,35 @@
       <h1>Analytics</h1>
       <p>Visitor data collected from your live site.</p>
     </div>
+
+    <div class="section-block" style="margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <span class="live-dot"></span>
+        <h2 style="margin:0;">Live · Right Now</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:280px 1fr;gap:16px;margin-bottom:16px;">
+        <div class="an-card" style="display:flex;flex-direction:column;justify-content:center;">
+          <div class="an-label">On the site now</div>
+          <div class="an-value" id="live-count" style="font-size:40px;">—</div>
+          <div style="font-size:12px;color:#999;margin-top:4px;">last 75 seconds, consented sessions</div>
+        </div>
+        <div id="live-map-wrap" style="background:#0A0A0A;border-radius:10px;padding:8px;min-height:180px;">
+          <svg id="live-map-svg" viewBox="0 0 960 500" style="width:100%;height:auto;display:block;"></svg>
+          <p id="live-map-status" style="color:#777;font-size:12px;margin-top:4px;">Loading map…</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <h2 style="margin-bottom:8px;">Who's Here</h2>
+          <table class="an-table" id="live-whos-here"><thead><tr><th>Location</th><th>Page</th><th>Replay</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div>
+          <h2 style="margin-bottom:8px;">Live Activity</h2>
+          <table class="an-table" id="live-activity"><thead><tr><th>Event</th><th>Page</th><th>Location</th><th>When</th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+    </div>
+
     <div class="section-block" style="margin-bottom:16px;">
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
         <button class="an-range-btn" data-range="7">Last 7 days</button>
@@ -2437,6 +2480,141 @@
         analyticsLoaded = true;
         fetchAnalytics();
       }
+    });
+  });
+})();
+</script>
+
+<!-- ── Live "Right Now" Panel JS ── -->
+<script>
+(function() {
+  var adminKey = localStorage.getItem('sb_admin_key') || (typeof window.__ADMIN_KEY__ !== 'undefined' ? window.__ADMIN_KEY__ : '') || '';
+  var API = (window.location.port === '5500') ? 'http://localhost:3000' : '';
+  var mapReady = false;
+  var mapLoadPromise = null;
+  var pollTimer = null;
+  var tabActive = false;
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function timeAgo(iso) {
+    var s = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
+    if (s < 60) return s + 's';
+    var m = Math.round(s / 60);
+    if (m < 60) return m + 'm';
+    var h = Math.round(m / 60);
+    if (h < 24) return h + 'h';
+    return Math.round(h / 24) + 'd';
+  }
+
+  function loc(row) {
+    if (row.city && row.country) return row.city + ', ' + row.country;
+    return row.country || '—';
+  }
+
+  function loadScript(src, next, onerror) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = next;
+    s.onerror = onerror;
+    document.head.appendChild(s);
+  }
+
+  function loadMapLibs(cb) {
+    if (mapReady) { cb(); return; }
+    if (!mapLoadPromise) {
+      mapLoadPromise = new Promise(function(resolve, reject) {
+        var status = document.getElementById('live-map-status');
+        function fail() { if (status) status.textContent = 'Map failed to load.'; reject(new Error('map load failed')); }
+        loadScript('https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js', function() {
+          loadScript('https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js', function() {
+            fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+              .then(function(r) { return r.json(); })
+              .then(function(topo) { buildMap(topo); mapReady = true; resolve(); })
+              .catch(fail);
+          }, fail);
+        }, fail);
+      });
+    }
+    mapLoadPromise.then(cb).catch(function() {});
+  }
+
+  function buildMap(topo) {
+    var svg = document.getElementById('live-map-svg');
+    var status = document.getElementById('live-map-status');
+    var features = topojson.feature(topo, topo.objects.countries).features;
+    var projection = d3.geoNaturalEarth1().fitSize([960, 500], { type: 'FeatureCollection', features: features });
+    var pathGen = d3.geoPath(projection);
+
+    var ns = 'http://www.w3.org/2000/svg';
+    features.forEach(function(f) {
+      var d = pathGen(f);
+      if (!d) return;
+      var el = document.createElementNS(ns, 'path');
+      el.setAttribute('d', d);
+      el.setAttribute('class', 'sb-country');
+      var alpha2 = window.SB_NUM_TO_ALPHA2 && window.SB_NUM_TO_ALPHA2[String(f.id).padStart(3, '0')];
+      if (alpha2) el.dataset.country = alpha2;
+      svg.appendChild(el);
+    });
+    if (status) status.style.display = 'none';
+  }
+
+  function updateMap(activeCountries) {
+    if (!mapReady) return;
+    document.querySelectorAll('#live-map-svg path.sb-country').forEach(function(p) {
+      p.classList.toggle('active', !!(p.dataset.country && activeCountries.has(p.dataset.country)));
+    });
+  }
+
+  function render(data) {
+    var active = data.active || [];
+    var recent = data.recent || [];
+
+    document.getElementById('live-count').textContent = active.length;
+
+    var countries = new Set(active.map(function(a) { return a.country; }).filter(Boolean));
+    loadMapLibs(function() { updateMap(countries); });
+
+    document.querySelector('#live-whos-here tbody').innerHTML = active.map(function(a) {
+      var replay = a.replayUrl ? '<a href="' + esc(a.replayUrl) + '" target="_blank" rel="noopener">▶ Watch</a>' : '—';
+      return '<tr><td>' + esc(loc(a)) + '</td><td>' + esc(a.page || '—') + '</td><td>' + replay + '</td></tr>';
+    }).join('') || '<tr><td colspan="3" style="color:#aaa">No one here right now</td></tr>';
+
+    document.querySelector('#live-activity tbody').innerHTML = recent.map(function(r) {
+      var label = r.eventType === 'cta_click' ? ('Click: ' + (r.eventLabel || '')) : 'Pageview';
+      return '<tr><td>' + esc(label) + '</td><td>' + esc(r.page || '—') + '</td><td>' + esc(loc(r)) + '</td><td>' + timeAgo(r.ts) + '</td></tr>';
+    }).join('') || '<tr><td colspan="4" style="color:#aaa">No recent activity</td></tr>';
+  }
+
+  function poll() {
+    fetch(API + '/presence', { headers: { 'X-Admin-Key': adminKey } })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) { if (data) render(data); })
+      .catch(function() {});
+  }
+
+  function startPolling() {
+    if (pollTimer) return;
+    poll();
+    pollTimer = setInterval(poll, 5000);
+  }
+  function stopPolling() {
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  }
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) stopPolling();
+    else if (tabActive) startPolling();
+  });
+
+  document.querySelectorAll('.nav-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      tabActive = (btn.dataset.panel === 'analytics');
+      if (tabActive) startPolling(); else stopPolling();
     });
   });
 })();

@@ -42,3 +42,14 @@ create table if not exists contacts (
   message text default '',
   created_at timestamptz default now()
 );
+
+-- Live presence (Phase 2: "who's on the site right now")
+-- One row per consented session, upserted on every heartbeat.
+create table if not exists presence (
+  sid text primary key,
+  page text,
+  country text,
+  city text,
+  replay_url text,
+  last_seen timestamptz default now()
+);

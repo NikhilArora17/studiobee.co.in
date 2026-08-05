@@ -77,6 +77,74 @@
     }, false);
   };
 
+  // ── PostHog session replay (consented sessions only) ───────────────────────
+  var POSTHOG_TOKEN = 'phc_AE89s7iL9TRtKeie69cbFr7Mi7F59McQpuGoMPYiq882';
+  var POSTHOG_HOST = 'https://eu.i.posthog.com';
+  var POSTHOG_ASSETS = 'https://eu-assets.i.posthog.com';
+  var posthogReady = false;
+
+  function loadPostHog(onReady) {
+    if (window.posthog && posthogReady) { onReady(); return; }
+    var s = document.createElement('script');
+    s.src = POSTHOG_ASSETS + '/static/array.js';
+    s.async = true;
+    s.onload = function () {
+      window.posthog.init(POSTHOG_TOKEN, {
+        api_host: POSTHOG_HOST,
+        person_profiles: 'identified_only',
+        loaded: function () {
+          posthogReady = true;
+          onReady();
+        },
+      });
+    };
+    document.head.appendChild(s);
+  }
+
+  function getReplayUrl() {
+    try {
+      return (posthogReady && window.posthog.get_session_replay_url)
+        ? window.posthog.get_session_replay_url({ withTimestamp: true }) : '';
+    } catch (e) { return ''; }
+  }
+
+  // ── Live presence heartbeat (consented sessions only) ──────────────────────
+  var HEARTBEAT_MS = 20000;
+  var heartbeatTimer = null;
+
+  function sendHeartbeat() {
+    var sid = getSid();
+    if (!sid) return;
+    fetch(API + '/presence', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: sid, page: page, replayUrl: getReplayUrl() }),
+      keepalive: true,
+    }).catch(function () {});
+  }
+
+  function startHeartbeat() {
+    if (!isConsented() || heartbeatTimer) return;
+    sendHeartbeat();
+    heartbeatTimer = setInterval(sendHeartbeat, HEARTBEAT_MS);
+  }
+
+  function stopHeartbeat() {
+    if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
+  }
+
+  function initLiveTracking() {
+    if (!isConsented()) return;
+    loadPostHog(function () { sendHeartbeat(); });
+    if (document.visibilityState === 'visible') startHeartbeat();
+  }
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') startHeartbeat();
+    else stopHeartbeat();
+  });
+
+  initLiveTracking();
+
   trackPageview(0);
   window.addEventListener('pagehide', function () {
     send({
@@ -122,6 +190,7 @@
       setConsent('granted');
       bar.remove();
       trackPageview(0);
+      initLiveTracking();
     });
     document.getElementById('sb-consent-reject').addEventListener('click', function () {
       setConsent('denied');
