@@ -1,6 +1,12 @@
 const { supabase, checkAdmin, checkRateLimit, getIp } = require('./_lib/supabase');
 
 const ACTIVE_WINDOW_MS = 75 * 1000;
+const REPLAY_URL_RE = /^https:\/\/(eu|us)\.posthog\.com\//;
+
+function sanitizeReplayUrl(u) {
+  const s = String(u || '').slice(0, 512);
+  return REPLAY_URL_RE.test(s) ? s : '';
+}
 
 module.exports = async function handler(req, res) {
   if (req.method === 'GET') {
@@ -34,7 +40,7 @@ module.exports = async function handler(req, res) {
     if (!sid) return res.status(204).end();
 
     const page = String(body.page || '').slice(0, 256);
-    const replayUrl = String(body.replayUrl || '').slice(0, 512);
+    const replayUrl = sanitizeReplayUrl(body.replayUrl);
     const country = String(req.headers['x-vercel-ip-country'] || '').slice(0, 2);
     const city = String(req.headers['x-vercel-ip-city'] ? decodeURIComponent(req.headers['x-vercel-ip-city']) : '').slice(0, 100);
 

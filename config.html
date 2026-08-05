@@ -2515,6 +2515,13 @@
     return row.country || '—';
   }
 
+  function safeHref(u) {
+    try {
+      var p = new URL(String(u || ''));
+      return (p.protocol === 'https:' || p.protocol === 'http:') ? p.href : '';
+    } catch (e) { return ''; }
+  }
+
   function loadScript(src, next, onerror) {
     var s = document.createElement('script');
     s.src = src;
@@ -2580,7 +2587,8 @@
     loadMapLibs(function() { updateMap(countries); });
 
     document.querySelector('#live-whos-here tbody').innerHTML = active.map(function(a) {
-      var replay = a.replayUrl ? '<a href="' + esc(a.replayUrl) + '" target="_blank" rel="noopener">▶ Watch</a>' : '—';
+      var safeReplay = safeHref(a.replayUrl);
+      var replay = safeReplay ? '<a href="' + esc(safeReplay) + '" target="_blank" rel="noopener noreferrer">▶ Watch</a>' : '—';
       return '<tr><td>' + esc(loc(a)) + '</td><td>' + esc(a.page || '—') + '</td><td>' + replay + '</td></tr>';
     }).join('') || '<tr><td colspan="3" style="color:#aaa">No one here right now</td></tr>';
 

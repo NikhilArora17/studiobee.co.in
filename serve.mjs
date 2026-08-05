@@ -29,6 +29,7 @@ const MAX_UPLOAD_BYTES    = 50 * 1024 * 1024; // 50 MB
 const MAX_CONTACT_BYTES   = 64 * 1024;         // 64 KB
 const MAX_ANALYTICS_BYTES = 4  * 1024;         //  4 KB
 const MAX_PRESENCE_BYTES  = 2  * 1024;         //  2 KB
+const REPLAY_URL_RE = /^https:\/\/(eu|us)\.posthog\.com\//;
 
 // Files that must never be served via static file handler
 const BLOCKED_FILES = new Set([
@@ -339,7 +340,7 @@ const server = http.createServer(async (req, res) => {
           page: String(body.page || '').slice(0, 256),
           country: null,
           city: null,
-          replayUrl: String(body.replayUrl || '').slice(0, 512) || null,
+          replayUrl: (REPLAY_URL_RE.test(String(body.replayUrl || '').slice(0, 512)) ? String(body.replayUrl).slice(0, 512) : null),
           lastSeen: new Date().toISOString(),
         };
         const presenceFile = path.join(__dirname, 'presence.json');
