@@ -206,19 +206,24 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     const analyticsFile = path.join(__dirname, 'analytics.json');
-    try {
-      const raw = fs.readFileSync(analyticsFile, 'utf8');
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(raw);
-    } catch (e) {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end('[]');
-    }
+    let rows = [];
+    try { rows = JSON.parse(fs.readFileSync(analyticsFile, 'utf8')); } catch (e) {}
+    if (!Array.isArray(rows)) rows = [];
+
+    const contactsFile = path.join(__dirname, 'contacts.json');
+    let contacts = [];
+    try { contacts = JSON.parse(fs.readFileSync(contactsFile, 'utf8')); } catch (e) {}
+    if (!Array.isArray(contacts)) contacts = [];
+    contacts = contacts.map((c, i) => ({ id: String(i), ts: c.timestamp }));
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ rows, contacts }));
     return;
   }
 
   // ── POST /analytics ───────────────────────────────────────────────────────
   if (req.method === 'POST' && urlPath === '/analytics') {
+    const EVENT_TYPES = new Set(['pageview', 'cta_click']);
     // Skip known bots
     const ua = (req.headers['user-agent'] || '').toLowerCase();
     if (/bot|crawler|spider|slurp|baidu|googlebot|yandex|facebookexternalhit|semrush|ahrefs/.test(ua)) {
@@ -238,18 +243,28 @@ const server = http.createServer(async (req, res) => {
     req.on('end', () => {
       try {
         const body = JSON.parse(Buffer.concat(chunks).toString());
+        const consented = body.consented === true;
         const locale = String(body.locale || '');
         const locParts = locale.split('-');
         const country = locParts.length > 1 ? locParts[locParts.length - 1].toUpperCase().slice(0, 2) : '';
+        const eventType = EVENT_TYPES.has(body.eventType) ? body.eventType : 'pageview';
         const entry = {
-          sid:      String(body.sessionId || '').slice(0, 64),
+          sid:      consented ? String(body.sessionId || '').slice(0, 64) : null,
           ts:       new Date().toISOString(),
           page:     String(body.page || '/').slice(0, 256),
           ref:      String(body.referrer || '').slice(0, 256),
-          duration: Math.min(Math.max(0, Number(body.duration) || 0), 86400),
+          duration: consented ? Math.min(Math.max(0, Number(body.duration) || 0), 86400) : 0,
           country,
           locale:   locale.slice(0, 20),
           tz:       String(body.tz || '').slice(0, 64),
+          consented,
+          city: null,
+          region: null,
+          utmSource:   String(body.utmSource   || '').slice(0, 100) || null,
+          utmMedium:   String(body.utmMedium   || '').slice(0, 100) || null,
+          utmCampaign: String(body.utmCampaign || '').slice(0, 100) || null,
+          eventType,
+          eventLabel: eventType === 'cta_click' ? String(body.eventLabel || '').slice(0, 200) : null,
         };
         const analyticsFile = path.join(__dirname, 'analytics.json');
         let arr = [];

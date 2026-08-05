@@ -448,7 +448,7 @@
       <a href="index.html#services" class="nav-link">Services</a>
       <a href="index.html#process"  class="nav-link">Process</a>
       <a href="index.html#team"     class="nav-link">Team</a>
-      <a href="index.html#contact"  class="nav-cta">Start a project</a>
+      <a href="index.html#contact"  class="nav-cta" data-track-cta="Nav: Start a project">Start a project</a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -463,7 +463,7 @@
       <a href="index.html#process"  class="mob-menu-link">Process</a>
       <a href="index.html#team"     class="mob-menu-link">Team</a>
     </div>
-    <a href="index.html#contact" class="mob-menu-cta">Start a project →</a>
+    <a href="index.html#contact" class="mob-menu-cta" data-track-cta="Nav: Start a project (mobile)">Start a project →</a>
   </div>
 
   <!-- ── Detail layout ── -->
@@ -586,7 +586,7 @@
         '<div class="services-list">' + pillsHtml + '</div>' +
         '<div class="divider"></div>' +
         '<p class="detail-desc">' + esc(p.desc || '') + '</p>' +
-        '<a href="index.html#contact" class="btn-primary">Start a project <span style="opacity:0.55;">→</span></a>' +
+        '<a href="index.html#contact" class="btn-primary" data-track-cta="Case Study: ' + esc(p.title || '') + '">Start a project <span style="opacity:0.55;">→</span></a>' +
         '<a href="case-studies.html" class="back-link">← All case studies</a>' +
       '</div>';
 
@@ -628,30 +628,7 @@
   </script>
 
   <!-- ── Analytics tracking ── -->
-  <script>
-  (function() {
-    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
-    var sid = sessionStorage.getItem('_sb_sid') || (function() {
-      var id = Math.random().toString(36).slice(2) + Date.now().toString(36);
-      sessionStorage.setItem('_sb_sid', id); return id;
-    })();
-    var start = Date.now();
-    var page = location.pathname + location.search;
-    function send(duration) {
-      try {
-        navigator.sendBeacon('/analytics', JSON.stringify({
-          sessionId: sid, page: page,
-          referrer: document.referrer || '',
-          duration: duration || 0,
-          locale: navigator.language || '',
-          tz: Intl.DateTimeFormat().resolvedOptions().timeZone || ''
-        }));
-      } catch(e) {}
-    }
-    send(0);
-    window.addEventListener('pagehide', function() { send(Math.round((Date.now() - start) / 1000)); });
-  })();
-  </script>
+  <script src="analytics.js"></script>
 
   <!-- ── Download protection ── -->
   <script>

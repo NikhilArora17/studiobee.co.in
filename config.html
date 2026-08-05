@@ -474,6 +474,13 @@
     .an-table th { text-align: left; padding: 6px 8px; border-bottom: 2px solid #e0e0e0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #888; }
     .an-table td { padding: 6px 8px; border-bottom: 1px solid #eee; }
     .an-table tr:last-child td { border-bottom: none; }
+    .an-delta { font-size: 12px; font-weight: 600; margin-top: 4px; }
+    .an-delta.up { color: #1a9850; }
+    .an-delta.down { color: #cc3333; }
+    .an-ref-row { margin-bottom: 12px; }
+    .an-ref-row-top { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+    .an-ref-bar-track { height: 6px; border-radius: 3px; background: #eee; overflow: hidden; }
+    .an-ref-bar-fill { height: 100%; background: #2F48DF; border-radius: 3px; }
 
     /* ── Time Log ── */
     .tl-clock-card {
@@ -782,29 +789,36 @@
       <p>Visitor data collected from your live site.</p>
     </div>
     <div class="section-block" style="margin-bottom:16px;">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
-        <button class="an-range-btn active" data-range="today">Today</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
         <button class="an-range-btn" data-range="7">Last 7 days</button>
-        <button class="an-range-btn" data-range="30">Last 30 days</button>
+        <button class="an-range-btn active" data-range="30">Last 30 days</button>
+        <button class="an-range-btn" data-range="90">Last 90 days</button>
         <button class="an-range-btn" data-range="all">All time</button>
+        <button class="an-range-btn" id="an-export" style="margin-left:auto;">↓ CSV</button>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px;">
-        <div class="an-card"><div class="an-label">Total Visits</div><div class="an-value" id="an-visits">—</div></div>
-        <div class="an-card"><div class="an-label">Unique Sessions</div><div class="an-value" id="an-sessions">—</div></div>
-        <div class="an-card"><div class="an-label">Avg. Time on Page</div><div class="an-value" id="an-avgtime">—</div></div>
+        <div class="an-card"><div class="an-label">Page Views (all)</div><div class="an-value" id="an-pageviews">—</div><div class="an-delta" id="an-pageviews-delta"></div></div>
+        <div class="an-card"><div class="an-label">Anonymous Views</div><div class="an-value" id="an-anon">—</div><div class="an-delta" id="an-anon-delta"></div></div>
+        <div class="an-card"><div class="an-label">Consented Sessions</div><div class="an-value" id="an-sessions">—</div><div class="an-delta" id="an-sessions-delta"></div></div>
+        <div class="an-card"><div class="an-label">Avg. Dwell Time</div><div class="an-value" id="an-avgtime">—</div><div class="an-delta" id="an-avgtime-delta"></div></div>
+        <div class="an-card"><div class="an-label">Contact Submits</div><div class="an-value" id="an-contacts">—</div><div class="an-delta" id="an-contacts-delta"></div></div>
+      </div>
+      <div style="margin-bottom:24px;">
+        <h2 style="margin-bottom:8px;">Page Performance</h2>
+        <table class="an-table" id="an-pages"><thead><tr><th>Path</th><th>Views</th><th>Unique</th><th>Avg dwell</th></tr></thead><tbody></tbody></table>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
         <div>
-          <h2 style="margin-bottom:8px;">Top Pages</h2>
-          <table class="an-table" id="an-pages"><thead><tr><th>Page</th><th>Visits</th></tr></thead><tbody></tbody></table>
+          <h2 style="margin-bottom:8px;">Top Referral Sources</h2>
+          <div id="an-referrers"></div>
         </div>
         <div>
-          <h2 style="margin-bottom:8px;">Top Countries</h2>
-          <table class="an-table" id="an-countries"><thead><tr><th>Country</th><th>Visits</th></tr></thead><tbody></tbody></table>
+          <h2 style="margin-bottom:8px;">Campaigns</h2>
+          <table class="an-table" id="an-campaigns"><thead><tr><th>Source</th><th>Medium</th><th>Campaign</th><th>Visits</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
-      <h2 style="margin-bottom:8px;">Recent Visits</h2>
-      <table class="an-table" id="an-recent"><thead><tr><th>Time</th><th>Page</th><th>Country</th><th>Duration</th></tr></thead><tbody></tbody></table>
+      <h2 style="margin-bottom:8px;">CTA Clicks</h2>
+      <table class="an-table" id="an-ctas"><thead><tr><th>CTA</th><th>Clicks</th></tr></thead><tbody></tbody></table>
       <p id="an-error" style="color:#cc3333;margin-top:12px;display:none;"></p>
     </div>
   </section>
@@ -2192,8 +2206,14 @@
 (function() {
   var adminKey = localStorage.getItem('sb_admin_key') || (typeof window.__ADMIN_KEY__ !== 'undefined' ? window.__ADMIN_KEY__ : '') || '';
   var API = (window.location.port === '5500') ? 'http://localhost:3000' : '';
-  var allData = [];
-  var currentRange = 'today';
+  var allRows = [];
+  var allContacts = [];
+  var currentRange = '30';
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
 
   function fetchAnalytics() {
     var errEl = document.getElementById('an-error');
@@ -2205,7 +2225,8 @@
       .then(function(data) {
         if (!data) return;
         errEl.style.display = 'none';
-        allData = data;
+        allRows = data.rows || [];
+        allContacts = data.contacts || [];
         renderAnalytics(currentRange);
       })
       .catch(function() {
@@ -2214,57 +2235,199 @@
       });
   }
 
-  function filterByRange(data, range) {
-    if (range === 'all') return data;
-    var now = Date.now();
-    var ms = range === 'today' ? 86400000 : parseInt(range) * 86400000;
-    return data.filter(function(d) { return now - new Date(d.ts).getTime() < ms; });
+  function rangeMs(range) {
+    return range === 'all' ? Infinity : parseInt(range) * 86400000;
+  }
+
+  // current period = (now - ms, now]; previous period = (now - 2*ms, now - ms]
+  function filterByWindow(items, ms, now, offset) {
+    if (ms === Infinity) return offset === 0 ? items : [];
+    var end = now - ms * offset;
+    var start = end - ms;
+    return items.filter(function(d) {
+      var t = new Date(d.ts).getTime();
+      return t > start && t <= end;
+    });
+  }
+
+  function categorizeReferrer(url, siteHost) {
+    if (!url) return 'Direct';
+    var host;
+    try { host = new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return 'Direct'; }
+    if (host === siteHost) return 'Direct';
+    if (host.indexOf('google.') !== -1) return 'Google';
+    if (host.indexOf('bing.') !== -1) return 'Bing';
+    if (host.indexOf('instagram.com') !== -1) return 'Instagram';
+    if (host.indexOf('facebook.com') !== -1 || host.indexOf('fb.com') !== -1) return 'Facebook';
+    if (host.indexOf('linkedin.com') !== -1) return 'LinkedIn';
+    if (host.indexOf('youtube.com') !== -1) return 'YouTube';
+    if (host.indexOf('chatgpt.com') !== -1 || host.indexOf('openai.com') !== -1) return 'ChatGPT';
+    return host;
+  }
+
+  function fmtDelta(curr, prev) {
+    if (!prev) return curr ? '<span class="an-delta up">new</span>' : '';
+    var pct = Math.round(((curr - prev) / prev) * 100);
+    if (pct === 0) return '<span class="an-delta">flat vs prev period</span>';
+    var cls = pct > 0 ? 'up' : 'down';
+    var arrow = pct > 0 ? '↑' : '↓';
+    return '<span class="an-delta ' + cls + '">' + arrow + ' ' + Math.abs(pct) + '% vs prev period</span>';
+  }
+
+  function computeStats(pageviews, contacts) {
+    var pv = pageviews.length;
+    var anon = pageviews.filter(function(d) { return !d.consented; }).length;
+    var sessions = new Set(pageviews.filter(function(d) { return d.consented && d.sid; }).map(function(d) { return d.sid; })).size;
+    var withDur = pageviews.filter(function(d) { return d.consented && d.duration > 0; });
+    var avgDwell = withDur.length ? Math.round(withDur.reduce(function(s, d) { return s + d.duration; }, 0) / withDur.length) : 0;
+    return { pv: pv, anon: anon, sessions: sessions, avgDwell: avgDwell, contacts: contacts.length };
   }
 
   function renderAnalytics(range) {
-    var filtered = filterByRange(allData, range);
+    var ms = rangeMs(range);
+    var now = Date.now();
+    var siteHost = location.hostname;
 
-    // Summary
-    document.getElementById('an-visits').textContent = filtered.length;
-    var sessions = new Set(filtered.map(function(d) { return d.sid; })).size;
-    document.getElementById('an-sessions').textContent = sessions;
-    var withDur = filtered.filter(function(d) { return d.duration > 0; });
-    var avg = withDur.length ? Math.round(withDur.reduce(function(s, d) { return s + d.duration; }, 0) / withDur.length) : 0;
-    document.getElementById('an-avgtime').textContent = avg + 's';
+    var pageviews = allRows.filter(function(d) { return (d.eventType || 'pageview') === 'pageview'; });
+    var ctaClicks = allRows.filter(function(d) { return d.eventType === 'cta_click'; });
 
-    // Top pages
+    var curPv = filterByWindow(pageviews, ms, now, 0);
+    var prevPv = filterByWindow(pageviews, ms, now, 1);
+    var curContacts = filterByWindow(allContacts, ms, now, 0);
+    var prevContacts = filterByWindow(allContacts, ms, now, 1);
+    var curCta = filterByWindow(ctaClicks, ms, now, 0);
+
+    var cur = computeStats(curPv, curContacts);
+    var prev = computeStats(prevPv, prevContacts);
+
+    document.getElementById('an-pageviews').textContent = cur.pv;
+    document.getElementById('an-pageviews-delta').innerHTML = fmtDelta(cur.pv, prev.pv);
+    document.getElementById('an-anon').textContent = cur.anon;
+    document.getElementById('an-anon-delta').innerHTML = fmtDelta(cur.anon, prev.anon);
+    document.getElementById('an-sessions').textContent = cur.sessions;
+    document.getElementById('an-sessions-delta').innerHTML = fmtDelta(cur.sessions, prev.sessions);
+    document.getElementById('an-avgtime').textContent = cur.avgDwell + 's';
+    document.getElementById('an-avgtime-delta').innerHTML = fmtDelta(cur.avgDwell, prev.avgDwell);
+    document.getElementById('an-contacts').textContent = cur.contacts;
+    document.getElementById('an-contacts-delta').innerHTML = fmtDelta(cur.contacts, prev.contacts);
+
+    // Page Performance
     var pages = {};
-    filtered.forEach(function(d) { pages[d.page] = (pages[d.page] || 0) + 1; });
-    var pRows = Object.entries(pages).sort(function(a,b){return b[1]-a[1];}).slice(0, 10);
+    curPv.forEach(function(d) {
+      var p = pages[d.page] || (pages[d.page] = { views: 0, sids: new Set(), durSum: 0, durCount: 0 });
+      p.views++;
+      if (d.consented && d.sid) p.sids.add(d.sid);
+      if (d.consented && d.duration > 0) { p.durSum += d.duration; p.durCount++; }
+    });
+    var pRows = Object.entries(pages).sort(function(a, b) { return b[1].views - a[1].views; }).slice(0, 20);
     document.querySelector('#an-pages tbody').innerHTML = pRows.map(function(r) {
-      return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
-    }).join('') || '<tr><td colspan="2" style="color:#aaa">No data</td></tr>';
-
-    // Top countries
-    var countries = {};
-    filtered.forEach(function(d) { if (d.country) countries[d.country] = (countries[d.country] || 0) + 1; });
-    var cRows = Object.entries(countries).sort(function(a,b){return b[1]-a[1];}).slice(0, 10);
-    document.querySelector('#an-countries tbody').innerHTML = cRows.map(function(r) {
-      return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
-    }).join('') || '<tr><td colspan="2" style="color:#aaa">No data</td></tr>';
-
-    // Recent visits
-    var recent = filtered.slice(-50).reverse();
-    document.querySelector('#an-recent tbody').innerHTML = recent.map(function(d) {
-      var t = d.ts ? new Date(d.ts).toLocaleString() : '—';
-      return '<tr><td>' + t + '</td><td>' + (d.page || '—') + '</td><td>' + (d.country || '—') + '</td><td>' + (d.duration || 0) + 's</td></tr>';
+      var avg = r[1].durCount ? Math.round(r[1].durSum / r[1].durCount) : 0;
+      return '<tr><td>' + esc(r[0]) + '</td><td>' + r[1].views + '</td><td>' + r[1].sids.size + '</td><td>' + avg + 's</td></tr>';
     }).join('') || '<tr><td colspan="4" style="color:#aaa">No data</td></tr>';
+
+    // Referral Sources
+    var refs = {};
+    curPv.forEach(function(d) {
+      var src = categorizeReferrer(d.ref, siteHost);
+      refs[src] = (refs[src] || 0) + 1;
+    });
+    var refRows = Object.entries(refs).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
+    var refTotal = refRows.reduce(function(s, r) { return s + r[1]; }, 0) || 1;
+    document.getElementById('an-referrers').innerHTML = refRows.map(function(r) {
+      var pct = Math.round((r[1] / refTotal) * 100);
+      return '<div class="an-ref-row">' +
+        '<div class="an-ref-row-top"><span>' + esc(r[0]) + '</span><span>' + r[1] + ' (' + pct + '%)</span></div>' +
+        '<div class="an-ref-bar-track"><div class="an-ref-bar-fill" style="width:' + pct + '%;"></div></div>' +
+        '</div>';
+    }).join('') || '<p style="color:#aaa;font-size:13px;">No data</p>';
+
+    // Campaigns
+    var camps = {};
+    curPv.forEach(function(d) {
+      if (!d.utmSource) return;
+      var key = d.utmSource + '|' + (d.utmMedium || '—') + '|' + (d.utmCampaign || '—');
+      camps[key] = (camps[key] || 0) + 1;
+    });
+    var campRows = Object.entries(camps).sort(function(a, b) { return b[1] - a[1]; });
+    document.querySelector('#an-campaigns tbody').innerHTML = campRows.map(function(r) {
+      var parts = r[0].split('|');
+      return '<tr><td>' + esc(parts[0]) + '</td><td>' + esc(parts[1]) + '</td><td>' + esc(parts[2]) + '</td><td>' + r[1] + '</td></tr>';
+    }).join('') || '<tr><td colspan="4" style="color:#aaa">No data</td></tr>';
+
+    // CTA Clicks
+    var ctas = {};
+    curCta.forEach(function(d) { ctas[d.eventLabel || 'Unlabeled'] = (ctas[d.eventLabel || 'Unlabeled'] || 0) + 1; });
+    var ctaRows = Object.entries(ctas).sort(function(a, b) { return b[1] - a[1]; });
+    document.querySelector('#an-ctas tbody').innerHTML = ctaRows.map(function(r) {
+      return '<tr><td>' + esc(r[0]) + '</td><td>' + r[1] + '</td></tr>';
+    }).join('') || '<tr><td colspan="2" style="color:#aaa">No data</td></tr>';
+
+    // Stash for CSV export
+    renderAnalytics._snapshot = { range: range, cur: cur, prev: prev, pRows: pRows, refRows: refRows, refTotal: refTotal, campRows: campRows, ctaRows: ctaRows };
+  }
+
+  function csvCell(v) { return '"' + String(v).replace(/"/g, '""') + '"'; }
+
+  function exportCsv() {
+    var s = renderAnalytics._snapshot;
+    if (!s) return;
+    var lines = [];
+    lines.push(csvCell('StudioBee Analytics Export'));
+    lines.push([csvCell('Range'), csvCell(s.range === 'all' ? 'all' : s.range + 'd'), csvCell('Generated'), csvCell(new Date().toISOString())].join(','));
+    lines.push('');
+    lines.push('OVERVIEW');
+    lines.push([csvCell('Metric'), csvCell('Current'), csvCell('Previous period')].join(','));
+    lines.push([csvCell('Page views (all)'), csvCell(s.cur.pv), csvCell(s.prev.pv)].join(','));
+    lines.push([csvCell('Anonymous views'), csvCell(s.cur.anon), csvCell(s.prev.anon)].join(','));
+    lines.push([csvCell('Consented sessions'), csvCell(s.cur.sessions), csvCell(s.prev.sessions)].join(','));
+    lines.push([csvCell('Avg dwell (s)'), csvCell(s.cur.avgDwell), csvCell(s.prev.avgDwell)].join(','));
+    lines.push([csvCell('Contact submits'), csvCell(s.cur.contacts), csvCell(s.prev.contacts)].join(','));
+    lines.push('');
+    lines.push('PAGES');
+    lines.push([csvCell('Path'), csvCell('Views'), csvCell('Unique'), csvCell('Avg dwell (s)')].join(','));
+    s.pRows.forEach(function(r) {
+      var avg = r[1].durCount ? Math.round(r[1].durSum / r[1].durCount) : 0;
+      lines.push([csvCell(r[0]), csvCell(r[1].views), csvCell(r[1].sids.size), csvCell(avg)].join(','));
+    });
+    lines.push('');
+    lines.push('REFERRERS');
+    lines.push([csvCell('Source'), csvCell('Visits'), csvCell('Share %')].join(','));
+    s.refRows.forEach(function(r) {
+      lines.push([csvCell(r[0]), csvCell(r[1]), csvCell(Math.round((r[1] / s.refTotal) * 100))].join(','));
+    });
+    lines.push('');
+    lines.push('CAMPAIGNS');
+    lines.push([csvCell('Source'), csvCell('Medium'), csvCell('Campaign'), csvCell('Visits')].join(','));
+    s.campRows.forEach(function(r) {
+      var parts = r[0].split('|');
+      lines.push([csvCell(parts[0]), csvCell(parts[1]), csvCell(parts[2]), csvCell(r[1])].join(','));
+    });
+    lines.push('');
+    lines.push('CTA CLICKS');
+    lines.push([csvCell('CTA'), csvCell('Clicks')].join(','));
+    s.ctaRows.forEach(function(r) { lines.push([csvCell(r[0]), csvCell(r[1])].join(',')); });
+
+    var blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'studiobee-analytics-' + s.range + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
   }
 
   // Wire up range buttons
-  document.querySelectorAll('.an-range-btn').forEach(function(btn) {
+  document.querySelectorAll('.an-range-btn[data-range]').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      document.querySelectorAll('.an-range-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('.an-range-btn[data-range]').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       currentRange = btn.dataset.range;
       renderAnalytics(currentRange);
     });
   });
+
+  var exportBtn = document.getElementById('an-export');
+  if (exportBtn) exportBtn.addEventListener('click', exportCsv);
 
   // Load analytics when tab is activated
   var analyticsLoaded = false;
