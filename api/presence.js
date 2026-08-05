@@ -1,6 +1,6 @@
 const { supabase, checkAdmin, checkRateLimit, getIp } = require('./_lib/supabase');
 
-const ACTIVE_WINDOW_MS = 75 * 1000;
+const ACTIVE_WINDOW_MS = 120 * 1000;
 const REPLAY_URL_RE = /^https:\/\/(eu|us)\.posthog\.com\//;
 
 function sanitizeReplayUrl(u) {

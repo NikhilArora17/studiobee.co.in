@@ -295,7 +295,7 @@ const server = http.createServer(async (req, res) => {
     let presence = [];
     try { presence = JSON.parse(fs.readFileSync(presenceFile, 'utf8')); } catch (e) {}
     if (!Array.isArray(presence)) presence = [];
-    const activeSince = Date.now() - 75 * 1000;
+    const activeSince = Date.now() - 120 * 1000;
     const active = presence
       .filter(p => new Date(p.lastSeen).getTime() >= activeSince)
       .sort((a, b) => new Date(b.lastSeen) - new Date(a.lastSeen));

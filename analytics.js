@@ -128,20 +128,11 @@
     heartbeatTimer = setInterval(sendHeartbeat, HEARTBEAT_MS);
   }
 
-  function stopHeartbeat() {
-    if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
-  }
-
   function initLiveTracking() {
     if (!isConsented()) return;
     loadPostHog(function () { sendHeartbeat(); });
-    if (document.visibilityState === 'visible') startHeartbeat();
+    startHeartbeat();
   }
-
-  document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'visible') startHeartbeat();
-    else stopHeartbeat();
-  });
 
   initLiveTracking();
 
