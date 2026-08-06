@@ -75,6 +75,9 @@
       consented: isConsented(),
       sessionId: getSid(),
     }, false);
+    if (gaLoaded && window.gtag) {
+      window.gtag('event', 'cta_click', { event_label: String(label || ''), page_path: page });
+    }
   };
 
   // ── PostHog session replay (consented sessions only) ───────────────────────
@@ -108,6 +111,24 @@
     } catch (e) { return ''; }
   }
 
+  // ── Google Analytics (GA4, consented sessions only) ─────────────────────────
+  var GA_MEASUREMENT_ID = 'G-9J5WBBF43Q';
+  var gaLoaded = false;
+
+  function loadGA() {
+    if (gaLoaded) return;
+    gaLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', GA_MEASUREMENT_ID);
+
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+    document.head.appendChild(s);
+  }
+
   // ── Live presence heartbeat (consented sessions only) ──────────────────────
   var HEARTBEAT_MS = 20000;
   var heartbeatTimer = null;
@@ -131,6 +152,7 @@
   function initLiveTracking() {
     if (!isConsented()) return;
     loadPostHog(function () { sendHeartbeat(); });
+    loadGA();
     startHeartbeat();
   }
 

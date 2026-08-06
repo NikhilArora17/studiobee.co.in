@@ -154,12 +154,12 @@ const MIME = {
 // ── CSP header value ──────────────────────────────────────────────────────────
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://eu-assets.i.posthog.com",
+  "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://eu-assets.i.posthog.com https://www.googletagmanager.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com",
   "font-src https://fonts.gstatic.com",
   "img-src 'self' data: https://images.unsplash.com https://placehold.co https://*.supabase.co",
   "media-src 'self' blob: https://*.supabase.co",
-  "connect-src 'self' https://cdn.jsdelivr.net https://eu.i.posthog.com",
+  "connect-src 'self' https://cdn.jsdelivr.net https://eu.i.posthog.com https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com",
   "frame-ancestors 'self'",
 ].join('; ');
 
