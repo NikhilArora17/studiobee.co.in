@@ -468,8 +468,8 @@ export function renderDocument(
   .scope-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
   .scope-title { font-size: 22px; font-weight: 600; color: #2F48DF; letter-spacing: -0.01em; white-space: nowrap; }
   .scope-rule { flex: 1; height: 1px; background: #d8dcf5; }
-  .scope-section { margin-bottom: 22px; break-inside: avoid; page-break-inside: avoid; }
-  .scope-section:last-child { margin-bottom: 0; }
+  .scope-section { padding-top: 22px; margin-bottom: 0; break-inside: avoid; page-break-inside: avoid; }
+  .scope-section:first-child { padding-top: 0; }
   .scope-section strong { display: block; margin-bottom: 7px; color: #2F48DF; font-size: 12.5px; font-weight: 700; }
   .scope-section p { font-size: 11.5px; color: #555; line-height: 1.6; margin-bottom: 8px; }
   .scope-section p:last-child { margin-bottom: 0; }
