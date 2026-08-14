@@ -708,12 +708,12 @@ export function renderFooterTemplate(doc: PdfDocument) {
   const validityNote = doc.type === 'quote' && doc.validity_days
     ? esc(`Valid until ${displayValidUntil(doc)}`) + ' &middot; studiobee.co.in'
     : doc.type === 'receipt'
-    ? '<span style="color:#6ee;font-weight:600;">Payment Received</span> &middot; studiobee.co.in'
+    ? '<span style="color:#fff;font-weight:600;">Payment Received</span> &middot; studiobee.co.in'
     : 'studiobee.co.in';
 
   return `
   <style>* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }</style>
-  <div style="position:fixed;bottom:0;left:0;width:100%;height:${FOOTER_HEIGHT_PX}px;box-sizing:border-box;background:#0A0A0A;padding:0 40px;display:flex;justify-content:space-between;align-items:center;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;color:#999;">
+  <div style="position:fixed;bottom:0;left:0;width:100%;height:${FOOTER_HEIGHT_PX}px;box-sizing:border-box;background:#2F48DF;padding:0 40px;display:flex;justify-content:space-between;align-items:center;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.65);">
     <div>${validityNote}</div>
     <div>Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>
   </div>`;
