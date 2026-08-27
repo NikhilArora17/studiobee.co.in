@@ -86,6 +86,7 @@ export type QuoteDoc = {
   manager_id?: string | null;
   client_handler_id?: string | null;
   hide_pricing?: boolean;
+  round_total?: boolean;
   line_item_view?: "itemised" | "summary" | "grouped";
   summary_label?: string | null;
   summary_qty?: number | null;
@@ -161,6 +162,7 @@ export function QuoteEditor({
   const [editingIdx, setEditingIdx] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<"itemised" | "summary" | "grouped">(doc?.line_item_view ?? "itemised");
   const [hidePricing, setHidePricing] = useState(doc?.hide_pricing ?? false);
+  const [roundTotal, setRoundTotal] = useState(doc?.round_total ?? false);
   const [summaryLabel, setSummaryLabel] = useState(doc?.summary_label ?? "");
   const [summaryQty, setSummaryQty] = useState(doc?.summary_qty ?? 1);
   const [summaryRate, setSummaryRate] = useState(doc?.summary_rate?.toString() ?? "");
@@ -168,8 +170,8 @@ export function QuoteEditor({
   const [statusPending, startStatusTransition] = useTransition();
 
   const totals = useMemo(
-    () => computeDocumentTotals({ lineItems, discount, discountType, gstEnabled, gstRate }),
-    [lineItems, discount, discountType, gstEnabled, gstRate],
+    () => computeDocumentTotals({ lineItems, discount, discountType, gstEnabled, gstRate, roundTotal }),
+    [lineItems, discount, discountType, gstEnabled, gstRate, roundTotal],
   );
 
   // What the client owes before GST — the default for both the summary "Rate" and
@@ -303,6 +305,7 @@ export function QuoteEditor({
       doc_date: docDate,
       valid_until: docType === "quote" ? validUntilDate : null,
       hide_pricing: hidePricing,
+      round_total: roundTotal,
       line_item_view: viewMode,
       summary_label: viewMode === "summary" ? summaryLabel.trim() || null : null,
       summary_qty: viewMode === "summary" ? summaryQty : null,
@@ -718,6 +721,10 @@ export function QuoteEditor({
             <div className="flex items-center justify-between">
               <Label>Hide rate &amp; amount on PDF</Label>
               <Switch checked={hidePricing} onCheckedChange={setHidePricing} />
+            </div>
+            <div className="flex items-center justify-between">
+              <Label>Round total to nearest rupee</Label>
+              <Switch checked={roundTotal} onCheckedChange={setRoundTotal} />
             </div>
             {gstEnabled && (
               <div className="grid grid-cols-2 gap-3">

@@ -126,6 +126,41 @@ describe("computeDocumentTotals", () => {
     expect(totals.gstAmount).toBe(0);
     expect(totals.total).toBe(500);
   });
+
+  it("leaves the total exact when roundTotal is not set", () => {
+    const totals = computeDocumentTotals({
+      lineItems: [{ amount: 1000.4 }],
+      discount: 0,
+      gstEnabled: false,
+      gstRate: 18,
+    });
+    expect(totals.total).toBe(1000.4);
+  });
+
+  it("rounds the total to the nearest whole rupee when roundTotal is set, without touching subtotal/GST", () => {
+    const totals = computeDocumentTotals({
+      lineItems: [{ amount: 1000.4 }],
+      discount: 0,
+      gstEnabled: true,
+      gstRate: 18,
+      roundTotal: true,
+    });
+    // subtotal 1000.4, GST 180.07, raw total 1180.47 -> rounds to 1180
+    expect(totals.subtotal).toBe(1000.4);
+    expect(totals.gstAmount).toBe(180.07);
+    expect(totals.total).toBe(1180);
+  });
+
+  it("rounds up when the fractional part is 0.5 or more", () => {
+    const totals = computeDocumentTotals({
+      lineItems: [{ amount: 1000.6 }],
+      discount: 0,
+      gstEnabled: false,
+      gstRate: 18,
+      roundTotal: true,
+    });
+    expect(totals.total).toBe(1001);
+  });
 });
 
 describe("round2", () => {

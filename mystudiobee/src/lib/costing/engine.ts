@@ -91,7 +91,8 @@ export function computeDocumentTotals(input: DocumentTotalsInput): DocumentTotal
     input.discountType === "percent" ? round2(subtotal * (input.discount / 100)) : round2(input.discount);
   const afterDiscount = round2(subtotal - discountAmount);
   const gstAmount = input.gstEnabled ? round2(afterDiscount * (input.gstRate / 100)) : 0;
-  const total = round2(afterDiscount + gstAmount);
+  const rawTotal = round2(afterDiscount + gstAmount);
+  const total = input.roundTotal ? Math.round(rawTotal) : rawTotal;
 
   return { subtotal, discountAmount, gstAmount, total };
 }

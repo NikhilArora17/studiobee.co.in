@@ -86,6 +86,9 @@ export type DocumentTotalsInput = {
   discountType?: DiscountType;
   gstEnabled: boolean;
   gstRate: number;
+  /** Round the final total to the nearest whole rupee. Subtotal/discount/GST stay
+   * at 2-decimal precision — only the grand total is affected. */
+  roundTotal?: boolean;
 };
 
 export type DocumentTotals = {

@@ -33,7 +33,7 @@ export async function priceLineItem(input: {
   qty: number;
   cost: LineItemCostInput;
 }): Promise<LineItem> {
-  await requireBillingRole();
+  const profile = await requireBillingRole();
   const admin = createAdminClient();
 
   const [{ data: roles }, { data: overheads }] = await Promise.all([
@@ -47,7 +47,9 @@ export async function priceLineItem(input: {
   return {
     description: input.description,
     qty: input.qty,
-    cost_breakdown: breakdown,
+    // Only admin-tier sessions get the raw breakdown (hourly rates, overhead costs) —
+    // managers get description/rate/amount only, matching getDocumentForViewer's redaction.
+    cost_breakdown: canSeeCost(profile.role) ? breakdown : null,
     rate,
     amount: Math.round(rate * input.qty * 100) / 100,
   };
@@ -71,6 +73,7 @@ export async function createQuote(input: {
   doc_date?: string | null;
   valid_until?: string | null;
   hide_pricing?: boolean;
+  round_total?: boolean;
   line_item_view?: "itemised" | "summary" | "grouped";
   summary_label?: string | null;
   summary_qty?: number | null;
@@ -118,6 +121,7 @@ export async function updateDocument(
     doc_date: string | null;
     valid_until: string | null;
     hide_pricing: boolean;
+    round_total: boolean;
     line_item_view: "itemised" | "summary" | "grouped";
     summary_label: string | null;
     summary_qty: number | null;
