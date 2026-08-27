@@ -137,29 +137,40 @@ describe("computeDocumentTotals", () => {
     expect(totals.total).toBe(1000.4);
   });
 
-  it("rounds the total to the nearest whole rupee when roundTotal is set, without touching subtotal/GST", () => {
+  it("rounds the total UP to the next whole ₹1,000 when roundTotal is set, without touching subtotal/GST", () => {
     const totals = computeDocumentTotals({
-      lineItems: [{ amount: 1000.4 }],
+      lineItems: [{ amount: 149915.34 }],
       discount: 0,
       gstEnabled: true,
       gstRate: 18,
       roundTotal: true,
     });
-    // subtotal 1000.4, GST 180.07, raw total 1180.47 -> rounds to 1180
-    expect(totals.subtotal).toBe(1000.4);
-    expect(totals.gstAmount).toBe(180.07);
-    expect(totals.total).toBe(1180);
+    // subtotal 149915.34, GST 26984.76, raw total 176900.1 -> rounds up to 177000
+    expect(totals.subtotal).toBe(149915.34);
+    expect(totals.gstAmount).toBe(26984.76);
+    expect(totals.total).toBe(177000);
   });
 
-  it("rounds up when the fractional part is 0.5 or more", () => {
+  it("never rounds down, even a hair over a multiple of 1000", () => {
     const totals = computeDocumentTotals({
-      lineItems: [{ amount: 1000.6 }],
+      lineItems: [{ amount: 176000.01 }],
       discount: 0,
       gstEnabled: false,
       gstRate: 18,
       roundTotal: true,
     });
-    expect(totals.total).toBe(1001);
+    expect(totals.total).toBe(177000);
+  });
+
+  it("leaves an exact multiple of 1000 unchanged", () => {
+    const totals = computeDocumentTotals({
+      lineItems: [{ amount: 176000 }],
+      discount: 0,
+      gstEnabled: false,
+      gstRate: 18,
+      roundTotal: true,
+    });
+    expect(totals.total).toBe(176000);
   });
 });
 

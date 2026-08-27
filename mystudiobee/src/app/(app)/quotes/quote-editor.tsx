@@ -723,7 +723,7 @@ export function QuoteEditor({
               <Switch checked={hidePricing} onCheckedChange={setHidePricing} />
             </div>
             <div className="flex items-center justify-between">
-              <Label>Round total to nearest rupee</Label>
+              <Label>Round up total to nearest ₹1,000</Label>
               <Switch checked={roundTotal} onCheckedChange={setRoundTotal} />
             </div>
             {gstEnabled && (

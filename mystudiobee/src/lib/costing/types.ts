@@ -86,8 +86,8 @@ export type DocumentTotalsInput = {
   discountType?: DiscountType;
   gstEnabled: boolean;
   gstRate: number;
-  /** Round the final total to the nearest whole rupee. Subtotal/discount/GST stay
-   * at 2-decimal precision — only the grand total is affected. */
+  /** Round the final total UP to the next whole ₹1,000 (ceiling, never down/nearest).
+   * Subtotal/discount/GST stay at 2-decimal precision — only the grand total is affected. */
   roundTotal?: boolean;
 };
 

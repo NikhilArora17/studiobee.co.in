@@ -92,7 +92,7 @@ export function computeDocumentTotals(input: DocumentTotalsInput): DocumentTotal
   const afterDiscount = round2(subtotal - discountAmount);
   const gstAmount = input.gstEnabled ? round2(afterDiscount * (input.gstRate / 100)) : 0;
   const rawTotal = round2(afterDiscount + gstAmount);
-  const total = input.roundTotal ? Math.round(rawTotal) : rawTotal;
+  const total = input.roundTotal ? Math.ceil(rawTotal / 1000) * 1000 : rawTotal;
 
   return { subtotal, discountAmount, gstAmount, total };
 }
